@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$column.type_name}</title>
+    <meta name="keywords" content="{$column.keywords}">
+    <meta name="description" content="{$column.description}">
+    <link href="/public/css/index/sc_list_bz.css" rel="stylesheet" media="screen" type="text/css"/>
+    <link href="/public/css/index/article.css" rel="stylesheet" media="screen" type="text/css"/>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.js"></script>
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.lazyload.js"></script>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie插件-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/favicon.ico"/>
+</head>
+<body>
+<header>
+    <div class="content">
+        <div class="header">
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+        <div class="logo">
+            <img src="/public/png/logo1_2.png" alt="" style="height:60px;">
+        </div>
+        <div class="search"></div>
+    </div>
+</header>
+
+<div class='parent'>
+    <div class='slider'>
+        <button type="button" id='right' class='right' name="button">
+
+            <svg version="1.1" id="Capa_1" width='40px' height='40px ' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         viewBox="0 0 477.175 477.175" style="enable-background:new 0 0 477.175 477.175;" xml:space="preserve">
+       <g>
+        <path style='fill: #9d9d9d;' d="M360.731,229.075l-225.1-225.1c-5.3-5.3-13.8-5.3-19.1,0s-5.3,13.8,0,19.1l215.5,215.5l-215.5,215.5
+          c-5.3,5.3-5.3,13.8,0,19.1c2.6,2.6,6.1,4,9.5,4c3.4,0,6.9-1.3,9.5-4l225.1-225.1C365.931,242.875,365.931,234.275,360.731,229.075z
+          ">
+       </g>
+
+       </svg>
+
+        </button>
+        <button type="button" id='left' class='left' name="button">
+            <svg version="1.1" id="Capa_2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+         viewBox="0 0 477.175 477.175" style="enable-background:new 0 0 477.175 477.175;" xml:space="preserve">
+       <g>
+        <path style='fill: #9d9d9d;' d="M145.188,238.575l215.5-215.5c5.3-5.3,5.3-13.8,0-19.1s-13.8-5.3-19.1,0l-225.1,225.1c-5.3,5.3-5.3,13.8,0,19.1l225.1,225
+          c2.6,2.6,6.1,4,9.5,4s6.9-1.3,9.5-4c5.3-5.3,5.3-13.8,0-19.1L145.188,238.575z">
+       </g>
+       </svg>
+        </button>
+        <svg id='svg2' class='up2' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <circle id='circle1' class='circle1 steap' cx="34px" cy="49%" r="20"/>
+            <circle id='circle2' class='circle2 steap' cx="34px" cy="49%" r="100"/>
+            <circle id='circle3' class='circle3 steap' cx="34px" cy="49%" r="180"/>
+            <circle id='circle4' class='circle4 steap' cx="34px" cy="49%" r="260"/>
+            <circle id='circle5' class='circle5 steap' cx="34px" cy="49%" r="340"/>
+            <circle id='circle6' class='circle6 steap' cx="34px" cy="49%" r="420"/>
+            <circle id='circle7' class='circle7 steap' cx="34px" cy="49%" r="500"/>
+            <circle id='circle8' class='circle8 steap' cx="34px" cy="49%" r="580"/>
+            <circle id='circle9' class='circle9 steap' cx="34px" cy="49%" r="660"/>
+        </svg>
+        <svg id='svg1' class='up2' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <circle id='circle10' class='circle10 steap' cx="1170px" cy="49%" r="20"/>
+            <circle id='circle11' class='circle11 steap' cx="1170px" cy="49%" r="100"/>
+            <circle id='circle12' class='circle12 steap' cx="1170px" cy="49%" r="180"/>
+            <circle id='circle13' class='circle13 steap' cx="1170px" cy="49%" r="260"/>
+            <circle id='circle14' class='circle14 steap' cx="1170px" cy="49%" r="340"/>
+            <circle id='circle15' class='circle15 steap' cx="1170px" cy="49%" r="420"/>
+            <circle id='circle16' class='circle16 steap' cx="1170px" cy="49%" r="500"/>
+            <circle id='circle17' class='circle17 steap' cx="1170px" cy="49%" r="580"/>
+            <circle id='circle18' class='circle18 steap' cx="1170px" cy="49%" r="660"/>
+        </svg>
+        <div id='slide1' class='slide1 up1'>自然风景</div>
+        <div id='slide2' class='slide2'>高清游戏</div>
+        <div id='slide3' class='slide3'>美女壁纸</div>
+        <div id='slide4' class='slide4'>节日庆典</div>
+    </div>
+</div>
+<nav>
+    <div class="column">
+        <div class="title inline">
+            <div style="margin-top:20px;margin-left:60px;">
+                <div class="inline img"><img src="/public/png/column2.png" alt="" style="width:20px;height:20px;" /></div>
+                <div class="inline tt"><span class="inline" style="">壁纸分类</span></div>
+            </div>
+        </div>
+        <div class="content inline">
+            <ul class="inline">
+                <a href="/bz/bz_1.html"><li>全部</li></a>
+                {volist name="1|getColumn=### ,' id,type_name '" id="vo"}
+                <a href="{$vo.url}"><li>{$vo.type_name}</li></a>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="size">
+        <div class="title inline">
+            <div style="margin-top:20%;margin-left:60px;">
+                <div class="inline img"><img src="/public/png/size.png" alt="" style="width:20px;height:20px;" /></div>
+                <div class="inline tt"><span class="inline" style="">壁纸大小</span></div>
+            </div>
+        </div>
+        <div class="content inline">
+            <ul class="inline">
+                <a href=""><li>全部</li></a>
+                {volist name="$article_list|getImagesScrnList" id="vo"}
+                <a href=""><li>{$vo.scrn_size}</li></a>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="color">
+        <div class="title inline">
+            <div style="margin-top:10px;margin-left:60px;">
+                <div class="inline img"><img src="/public/png/color.png" alt="" style="width:20px;height:20px;" /></div>
+                <div class="inline tt"><span class="inline" style="">壁纸颜色</span></div>
+            </div>
+        </div>
+        <div class="content inline">
+            <ul class="inline">
+                <a href=""><li><div style="padding-left:10px;padding-right:10px;border-radius:10px;">全部</li></a>
+                {volist name="$article_list|getImagesColorList" id="vo"}
+                <a href=""><li ><div style="background:{$vo.color_code };border:0;width:20px;height:20px;"></div></li></a>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="info">
+        <div class="scrn">
+            <div class="inline"><img src="/public/png/scrn.png" alt="" style="width:20px;height:20px;"></div>
+            <div class="inline srcnf"></div>
+        </div>
+    </div>
+</nav>
+<article>
+    <div class="header">
+        <div class="title">最新壁纸</div>
+        <div class="more">更多>></div>
+    </div>
+    <div class="content">
+        <ul>
+            {volist name="article_list" id="vo" offset="0" length="10"}
+            <a href="{$vo.url}">
+                <li>
+                    <div class="item">
+                        <div class="i"><img src="{$vo.litpic}" alt="" style="width:200px;height:120px;"></div>
+                        <div class="t"><span>{$vo.title|cut_str="14"}</span></div>
+                    </div>
+                </li>
+            </a>
+            {/volist}
+        </ul>
+    </div>
+    {volist name="1|getColumn=###" id="vo" offset="0" length="6"}
+        <div class="header">
+            <div class="title">{$vo.type_name}</div>
+            <div class="more"><a href="/list?id={$vo.id}">更多>></a></div>
+        </div>
+        <div class="content">
+            <ul>
+                {volist name="vo.id|getArticleToColumn" id="v" offset="0" length="10"}
+                <a href="/article?id={$v.id}">
+                    <li>
+                        <div class="item">
+                            <div class="i"><img src="{$v.litpic}" alt="" style="width:200px;height:120px;"></div>
+                            <div class="t"><span>{$v.title|cut_str="14"}</span></div>
+                        </div>
+                    </li>
+                </a>
+                {/volist}
+            </ul>
+        </div>
+    {/volist}
+</article>
+<footer>
+
+</footer>
+</body>
+<input type="hidden" name="id" value="{$column.id}">
+<!--引入公共的文档js-->
+<script type="text/javascript" src="/public/js/index/list.js"></script>
+<!--引入壁纸列表js-->
+<script type="text/javascript" src="/public/js/index/sc_list_bz.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

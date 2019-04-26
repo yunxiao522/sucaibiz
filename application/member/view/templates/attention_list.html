@@ -1,0 +1,45 @@
+<div style="width:100%;height:150px;" class="load"></div>
+<div class="loader">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+<div class="content">
+    {if $list==[] }
+    <div class="blank"></div>
+    <div style="width:100%;text-align:center;">您还没有关注用户哦!</div>
+    {else /}
+    <div class="attention1" style="height:460px;">
+        <ul>
+            {volist name="list" id="vo"}
+                <li class="inline">
+                    <div class="face">
+                        <img src="{$vo.user.face}" alt="">
+                    </div>
+                    <div class="nickname">{$vo.user.nickname}</div>
+                    <div class="info">
+                        {$vo.user.fens_num}人已经关注
+                    </div>
+                    <a href="" class="att" data-uid="{$vo.user.id}"><div class="atten">已关注</div></a>
+                </li>
+            {/volist}
+        </ul>
+    </div>
+    <div id="paging">
+        {$paging}
+    </div>
+    {/if}
+
+</div>

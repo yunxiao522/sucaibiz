@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文档来源设置-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        body{
+            padding:0px;
+            margin:0px;
+        }
+        textarea{
+            width:100%;
+        }
+        button{
+            margin-left:45%;
+        }
+    </style>
+</head>
+<body style="width:400px;">
+<form action="" method="post">
+    <textarea name="soname" cols="30" rows="10" id="soname">{$source}</textarea>
+    <button type="button" class="layui-btn layui-btn-mini layui-btn-normal" align="center" id="btn">提交</button>
+</form>
+
+<script>
+    //提交按钮绑定事件
+    $(document).on('click','#btn',function(){
+        //发送ajax请求
+        //获取数据
+        var soname = $('#soname').val();
+        $.ajax({
+            url:"/admin/set_article_source.html",
+            type:"post",
+            data:{soname:soname},
+            success:function(e){
+                var data = JSON.parse(e);
+                layer.msg(data.msg,{time:1000},function () {
+                    if(data.errorcode == 0){
+                        location.href = "/admin/show_article_source.html";
+                    }
+                });
+            }
+        });
+        return false;
+    })
+</script>
+</body>
+</html>

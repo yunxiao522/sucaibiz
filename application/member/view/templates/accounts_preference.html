@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>偏好设置-会员中心-素材站</title>
+    <link rel="stylesheet" href="/public/css/member/account.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/accounts.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/accounts/left" /}
+    </div>
+    <div class="right inline">
+
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;">
+
+    </div>
+</article>
+<footer></footer>
+<input type="hidden" name="id" value="{$user_info.id}">
+</body>
+</html>

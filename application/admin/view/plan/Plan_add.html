@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建任务计划</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <script src="/public/plugins/jedate/js/jedate-test.js"></script>
+    <link type="text/css" rel="stylesheet" href="/public/plugins/jedate/skin/jedate.css">
+    <script src="/public/plugins/jedate/jquery.jedate.min.js"></script>
+    <link rel="stylesheet" href="/public/plugins/jedate/jeDate-test.css">
+</head>
+<body>
+<form class="layui-form" action="" style="margin-top:20px;" id="add">
+    <div class="layui-form-item">
+        <label class="layui-form-label">计划名称</label>
+        <div class="layui-input-block" style="width:200px;">
+            <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入计划名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">执行类型</label>
+            <div class="layui-input-block" style="width:200px;">
+                <select name="execute_type" lay-filter="execute_type">
+                    <option value="1">每小时</option>
+                    <option value="2">每天</option>
+                    <option value="3">每周</option>
+                    <option value="4">每月</option>
+                    <option value="5">每年</option>
+                    <option value="6">固定日期</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">执行时间</label>
+            <div class="layui-input-inline">
+                <input type="text" name="date" id="test04" lay-verify="time" placeholder="分钟数" autocomplete="off" class="layui-input jeinput">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">函数名称</label>
+            <div class="layui-input-block" style="width:200px;">
+                <input type="text" name="fun_name" lay-verify="fun_name" autocomplete="off" placeholder="请输入函数名称" class="layui-input ">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" name="condition" lay-skin="switch" lay-filter="condition" lay-text="启用|禁用">
+            </div>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">备注</label>
+        <div class="layui-input-block" style="width:800px;">
+            <textarea class="layui-textarea layui-hide" name="description" lay-verify="description" id="LAY_demo_editor"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">添加</button>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/Plan_add.js"></script>
+</html>

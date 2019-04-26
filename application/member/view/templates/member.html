@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-会员主页</title>
+    <meta name="keywords" content="会员中心">
+    <meta name="content" content="会员中心">
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/index.js"></script>
+    <link rel="stylesheet" href="/public/css/member/index.css">
+    <style>
+
+    </style>
+</head>
+<body>
+
+<header>
+
+</header>
+<div class="ground">
+    <div style="width:100%;height:120px;"></div>
+    <div class="info">
+        <div class="face">
+            <img src="{$info.face}" alt="" class="face">
+        </div>
+        <div class="name">{$info.nickname}</div>
+        <div class="more">
+            <div class="attention inline">关注：{$fens.attention}</div>
+            <div class="fens inline">粉丝：{$fens.fens_num}</div>
+        </div>
+    </div>
+    <div class="menu">
+        <div class="nav">
+            <ul>
+                <li class="inline this"><a href="" data-type="like">我的收藏</a></li>
+                <li class="inline"><a href="" data-type="article">我的文档</a></li>
+                <li class="inline"><a href="" data-type="attention">关注</a></li>
+                <li class="inline"><a href="" data-type="fens">粉丝</a></li>
+                <li class="inline"><a href="" data-type="upload">我的上传</a></li>
+            </ul>
+        </div>
+        <div style="clear:both;"></div>
+    </div>
+
+</div>
+<article id="main" style="background:#ffffff;">
+
+</article>
+<footer>
+
+</footer>
+<input type="hidden" name="id" value="{$info.id}">
+<input type="hidden" name="uid" value="{$user_info.id}">
+<script type="text/javascript">
+    $(function () {
+        var uid = $('input[name="uid"]').val();
+        $.ajax({
+           url:'/member/index/indexincr.html',
+           type:'post',
+           data:{uid:uid}
+        });
+    });
+</script>
+</body>
+</html>

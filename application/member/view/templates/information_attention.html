@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        我的关注的
+        {switch name=$class}
+        {case value="dynamic"}动态{/case}
+        {case value="member"}人{/case}
+        {case value="fens"}粉丝{/case}
+        {case value="like"}收藏夹{/case}
+        {default}{/default}
+        {/switch}
+        -素材站
+    </title>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/public/ico/favicon.ico"/>
+    <link rel="stylesheet" href="/public/css/member/information.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/information.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+    <style>
+        article .right .con ul {
+            -moz-column-count: 4; /* Firefox */
+            -webkit-column-count: 4; /* Safari 和 Chrome */
+            column-count: 4;
+        }
+
+        article .right .con ul li {
+            -moz-page-break-inside: avoid;
+            -webkit-column-break-inside: avoid;
+            break-inside: avoid;
+        }
+
+        article .right .con ul li .bottom .column {
+            width: 100%;
+            height: 15px;
+            line-height: 15px;
+            font-size: 8pt;
+            color: #BBBBBB;
+            margin-top: 5px;
+        }
+
+        article .right .con ul li .bottom .more {
+            width: 100%;
+            height: 40px;
+            line-height: 50px;
+        }
+
+        article .right .con ul li .bottom .more img {
+            margin-top: 15px;
+        }
+
+        article .right .con ul li .bottom .more .s {
+            padding-left: 2px;
+            padding-right: 5px;
+            float: left;
+            font-size: 8pt;
+        }
+        article .right .con ul li .user .userinfo {
+            width: 210px;
+            height: 280px;
+            background: #ffffff;
+            position: absolute;
+            margin-top: -280px;
+            margin-left: -15px;
+            border-radius: 3px;
+            box-shadow: 0px 0px 10px #888888;
+            text-align: center;
+        }
+
+        article .right .con ul li .user .userinfo .f {
+            width: 100%;
+            height: 80px;
+        }
+
+        article .right .con ul li .user .userinfo .n {
+            width: 100%;
+            height: 30px;
+            font-size: 14pt;
+            font-family: '微软雅黑';
+            margin-top: 10px;
+        }
+
+        article .right .con ul li .user .userinfo .m {
+            width: 100%;
+            margin-top: 20px;
+            height: 30px;
+        }
+
+        article .right .con ul li .user .userinfo .m .l .tt {
+            width: 100%;
+            height: 15px;
+            color: #BBBBBB;
+            font-size: 10pt;
+        }
+
+        article .right .con ul li .user .userinfo .m .l .dat {
+            width: 100%;
+            height: 15px;
+            color: #000000;
+            font-size: 8pt;
+            line-height: 20px;
+        }
+
+        article .right .con ul li .user .userinfo .b {
+            width: 100%;
+            height: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        article .right .con ul li .user .userinfo .b button {
+            height: 30px;
+            margin-left: 12.5px;
+            margin-right: 10px;
+            border-radius: 3px;
+            width: 80px;
+            cursor: pointer;
+        }
+        article .right .con ul li .memberinfo{
+            width:370px;
+            height:151px;
+        }
+        article .right .con ul li .memberinfo .le{
+            width:80px;
+            height:150px;
+        }
+        article .right .con ul li .memberinfo .le img{
+            width:80px;
+            height:80px;
+            border-radius:40px;
+        }
+        article .right .con ul li .memberinfo .ri{
+            width:200px;
+            height:150px;
+            margin-left:20px;
+        }
+        article .right .con ul li .memberinfo .ri .name{
+            width:100%;
+            height:20px;
+            line-height:20px;
+            font-size:12pt;
+            font-weight:900;
+        }
+        article .right .con ul li .memberinfo .ri .signature{
+            color:#BBBBBB;
+        }
+        article .right .con ul li .memberinfo .ri .more{
+            width:100%;
+            height:50px;
+        }
+        article .right .con ul li .memberinfo .ri .more .in{
+            width:100%;
+            height:20px;
+        }
+        article .right .con ul li .memberinfo .ri .more .in .ss{
+            padding-left:5px;
+            padding-right:5px;
+            font-weight:900;
+        }
+        article .right .con ul li .memberinfo .ri .more .description{
+            color:#BBBBBB;
+        }
+        article .right .con ul li .memberinfo .ri .operate{
+            width:100%;
+            height:35px;
+            margin-top:20px;
+        }
+        article .right .con ul li .memberinfo .ri .operate button{
+            float:left;
+            width:80px;
+            height:35px;
+            background:#ffffff;
+            border:1px solid #BBBBBB;
+            border-radius:5px;
+            margin-right:20px;
+        }
+        article .right .con ul li .memberinfo .ri .operate button:hover{
+            border:1px solid #000000;
+            cursor: pointer;
+        }
+        article .right .con ul li .memberlist{
+            width:450px;
+            height:150px;
+        }
+        article .right .con ul li .memberlist ul{
+            width:490px;
+            height:150px;
+            padding:0px;
+            margin:0px;
+        }
+        article .right .con ul li .memberlist ul li{
+            float:left;
+            width:225px;
+            height:150px;
+            margin-left:10px;
+            margin-right:10px;
+            display: block;
+        }
+        article .right .con ul li .memberlist ul li img{
+            width:225px;
+            height:150px;
+            display: block;
+        }
+        article .right .con ul li .mo{
+            width:12px;
+            height:50px;
+            float:right;
+            font-size:12pt;
+            color:#13A38C;
+            margin-top:40px;
+            cursor:pointer;
+        }
+        article .right .con ul li .mo:hover{
+            color:#000000;
+        }
+        article .right .con ul li .tag{
+            width:calc(100% - 140px);
+            height:30px;
+            line-height:30px;
+            padding:10px;
+            border-top:1px solid #EEEEEE;
+            padding-left:130px;
+            background:#ffffff;
+        }
+        article .right .con ul li .tag .add{
+            padding-top:5px;
+            padding-bottom:5px;
+            padding-left:10px;
+            padding-right:10px;
+            background:#ffffff;
+            border:1px solid #BBBBBB;
+            border-radius:5px;
+            cursor: pointer;
+        }
+        article .right .con ul li .tag .add:hover{
+            border:1px solid #000000;
+        }
+        article .right .con ul li .taglist{
+            width:340px;
+            padding:20px;
+            background:#ffffff;
+            position: absolute;
+            z-index:99;
+            margin-left:120px;
+            border-radius:5px;
+            box-shadow: rgba(0,0,0,0.2) 0px 0px 2px 2px;
+        }
+        article .right .con ul li .taglist ul{
+            width:340px;
+            height:max-content;
+            margin:0;
+            padding:0;
+        }
+        article .right .con ul li .taglist ul li{
+            float:left;
+            width:auto;
+            padding-top:10px;
+            padding-bottom:10px;
+            padding-left:10px;
+            padding-right:10px;
+            background:#ffffff;
+            border:1px solid #BBBBBB;
+            border-radius:5px;
+            cursor: pointer;
+            height:10px;
+            margin-bottom:10px;
+            line-height:10px;
+            margin-right:10px;
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/information/left" /}
+    </div>
+    <div class="right inline">
+        <div class="header">
+            <ul>
+                <a href="" class="seetingli" data-type="dynamic">
+                    <li class=" {if $class eq 'dynamic'}this t1{/if}">动态</li>
+                </a>
+                <a href="" class="seetingli" data-type="member">
+                    <li class=" {if $class eq 'member'}this{/if}">关注的人</li>
+                </a>
+                <a href="" class="seetingli" data-type="fens">
+                    <li class=" {if $class eq 'fens'}this{/if}">粉丝</li>
+                </a>
+                <a href="" class="seetingli" data-type="like">
+                    <li class=" {if $class eq 'like'}this{/if}">关注的收藏夹</li>
+                </a>
+            </ul>
+        </div>
+        <div class="interval">
+            {switch name="$class"}
+                {case value="dynamic"}
+                    关注的人发布的内容
+                {/case}
+                {case value="member"}
+                    共2个关注的人
+                {/case}
+                {default}{/default}
+            {/switch}
+        </div>
+        <div class="con">
+            <ul id="show">
+                {volist name="$list" id="vo"}
+                    {switch name=$class}
+                        {case value="dynamic"}
+                            <li style="margin-bottom:20px;margin-top:0;">
+                                <a href="{$vo.url}" class="url" data-column="{$vo.column_id}">
+                                    <div class="head">
+                                        <img src="{$vo.litpic}" alt="" width="100%">
+                                    </div>
+                                </a>
+                                <div class="bottom">
+                                    <a href="{$vo.url}" class="url" data-column="{$vo.column_id}">
+                                        <div class="name">
+                                            {$vo.title|cut_str=###,8}
+                                        </div>
+                                    </a>
+                                    <div class="column">
+                                        {$vo.column_info.type_name}
+                                    </div>
+                                    <div class="more">
+                                        <img src="/public/png/click.png" alt="浏览{$vo.click}次" width="20px" height="20px"
+                                             class="inline">
+                                        <div class="s">{$vo.click}</div>
+                                        <img src="/public/png/comment.png" alt="评论{$vo.comment_num}条" width="20px" height="20px"
+                                             class="inline">
+                                        <div class="s">{$vo.comment_num}</div>
+                                        <img src="/public/png/praise.png" alt="推荐{$vo.recommend}次" width="20px" height="20px"
+                                             class="inline">
+                                        <div class="s">{$vo.recommend}</div>
+                                    </div>
+                                </div>
+                                <div class="user">
+                                    <div class="info" data-uid="{$vo.user_info.id}" style="float:left;">
+                                        <img src="{$vo.user_info.face}" alt="" width="20px" height="20px" style="border-radius:10px;">
+                                        {$vo.user_info.nickname}
+                                    </div>
+                                    <div class="time">{$vo.pubdate|date='Y-m-d',###}</div>
+                                    <div class="userinfo">
+                                        <div style="width:100%;height:30px;"></div>
+                                        <div class="f">
+                                            <img src="{$vo.user_info.face}" alt="" width="80px" height="80px"
+                                                 style="border-radius:40px;margin:0 auto;">
+                                        </div>
+                                        <div class="n">
+                                            {$vo.user_info.nickname}
+                                        </div>
+                                        <div class="m">
+                                            <div class="l inline"
+                                                 style="border-right:1px solid #EEEEEE;height:30px;width:calc(50% - 1px)">
+                                                <div class="tt">创作</div>
+                                                <div class="dat">{$vo.user_info.create}</div>
+                                            </div>
+                                            <div class="l inline" style="width:50%;height:30px;">
+                                                <div class="tt">粉丝</div>
+                                                <div class="dat">{$vo.user_info.fens}</div>
+                                            </div>
+                                        </div>
+                                        <div class="b">
+                                            <button class="inline options" data-uid="{$vo.user_info.id}" data-type="1">关注</button>
+                                            <button class="inline private" data-uid="{$vo.user_info.id}">私信</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        {/case}
+                        {case value="member"}
+                            {volist name="$list" id="vo"}
+                                <li style="width:920px;height:260px;">
+                                    <div class="inf" style="width:860px;height:150px;padding:30px;">
+                                        <div class="inline memberinfo">
+                                            <div class="inline le">
+                                                <img src="{$vo.face}" alt="{$vo.nickname}">
+                                            </div>
+                                            <div class="inline ri">
+                                                <div class="name">{$vo.nickname}</div>
+                                                <div class="signature" style="width:100%;height:30px;">
+                                                    {$vo.signature}
+                                                </div>
+                                                <div class="more">
+                                                    <div class="in">
+                                                        <div class="inline">创作</div>
+                                                        <div class="inline ss">{$vo.create}</div>
+                                                        <div class="inline" style="padding-left:5px;padding-right:5px;"> | </div>
+                                                        <div class="inline">粉丝</div>
+                                                        <div class="inline ss">{$vo.fens}</div>
+                                                    </div>
+                                                    <div class="description">
+                                                        {$vo.description}
+                                                    </div>
+                                                    <div class="operate">
+                                                        <button class="options" data-uid="{$vo.id}" data-type="2">已关注</button>
+                                                        <button class="private" data-uid="{$vo.id}">私信</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="clear: both;width:100%;height:1px;"></div>
+                                        </div>
+                                        <div class="inline memberlist">
+                                                {volist name="$vo.article" id="v"}
+                                                    <a href="{$v.url}" class="url" data-column="{$v.column_id}"><div style="width:215px;height:150px;margin-left:5px;margin-right:5px;" class="inline"><img src="{$v.litpic}" alt="{$v.title}" width="215px" height="150px"></div></a>
+                                                {/volist}
+                                        </div>
+                                        <a href="/member/index.html?id={$vo.id}" target="_blank">
+                                            <div class="mo">
+                                                ● ● ●
+                                            </div>
+                                        </a>
+                                        <div style="clear: both;width:100%;height:1px;"></div>
+                                    </div>
+                                    <div class="tag">
+                                        标签： <button class="add">+标签</button>
+                                    </div>
+                                    <div class="taglist">
+                                        <ul>
+                                            <li>测试</li>
+                                            <li>壁纸</li>
+                                            <li>头像</li>
+                                            <li>资讯</li>
+                                            <li>+标签</li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                            {/volist}
+                        {/case}
+                    {/switch}
+                {/volist}
+            </ul>
+        </div>
+        <div style="clear:both;width:100%;height:1px;"></div>
+        <div class="paging" style="width:100%;height:30px;margin-top:20px;">
+            {$page}
+        </div>
+    </div>
+    <div style="clear:both;width:100%;height:1px;"></div>
+</article>
+<input type="hidden" value="{$member_info.id}" name="id">
+{include file="templates/accounts/footer" /}
+</body>
+<script>
+    $('.userinfo').hide();
+    $(function () {
+        $('.seetingli').on('click', function () {
+            var type = this.dataset.type;
+            window.location.href = '/member/information/attention.html?class=' + type;
+            return false;
+        });
+        //绑定用户头像及昵称鼠标移入及移出方法
+        $('.info').hover(function () {
+            var id = this.dataset.uid;
+            var that = $(this);
+            var option_btn = $(this).siblings('.userinfo').children('.b').children('.options');
+            //发送ajax请求，获取粉丝状态
+            $.ajax({
+                url: '/member/options/getfensstatus.html',
+                type: 'post',
+                data: {uid: id},
+                sync: true,
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    if (data.errorcode == 0) {
+                        if (data.status) {
+                            option_btn.css('background', '#13A38C');
+                            option_btn.css('border', '1px solid #13A38C');
+                            option_btn.css('color', '#ffffff');
+                            option_btn.html('已关注');
+                        } else {
+                            option_btn.css('background', '#ffffff');
+                            option_btn.css('border', '1px solid #000000');
+                            option_btn.css('color', '#000000');
+                            option_btn.html('关注');
+                        }
+                        that.siblings('.userinfo').show();
+                    } else {
+                        layer.msg('获取用户信息失败');
+                    }
+                }
+            });
+        }, function () {
+            $(this).siblings('.userinfo').hide();
+        });
+        //绑定关注按钮点击事件
+        $('.options').on('click', function () {
+            var uid = this.dataset.uid;
+            var fens = $('input[name="id"]').val();
+            var type = this.dataset.type;
+            var that = $(this);
+            //发送ajax请求
+            $.ajax({
+                url: '/member/options/attenOptions.html',
+                type: 'post',
+                data: {fensid: uid, uid: fens},
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    if (data.errorcode == 0) {
+                        if (data.status) {
+                            if(type == 1){
+                                that.css('background', '#13A38C');
+                                that.css('border', '1px solid #13A38C');
+                                that.css('color', '#ffffff');
+                                that.html('已关注');
+                            }else{
+                                that.css('background', '#ffffff');
+                                that.css('border', '1px solid #BBBBBB');
+                                that.css('color', '#000000');
+                                that.html('已关注');
+                            }
+
+                        } else {
+                            if(type == 1){
+                                that.css('background', '#ffffff');
+                                that.css('border', '1px solid #000000');
+                                that.html('关注');
+                                that.css('color', '#000000');
+                            }else{
+                                that.css('background', '#13A38C');
+                                that.css('border', '1px solid #13A38C');
+                                that.html('关注');
+                                that.css('color', '#ffffff');
+                            }
+
+                        }
+                    } else {
+                        layer.msg('获取用户信息失败');
+                    }
+                }
+            });
+            return false;
+        });
+        //绑定发送私信按钮事件
+        $('.private').on('click',function () {
+            var uid = this.dataset.uid;
+            layer.open({
+                type: 2,
+                title: '发送私信',
+                shadeClose: true,
+                shade: false,
+                maxmin: false, //开启最大化最小化按钮
+                area: ['510px', '400px'],
+                content: '/member/message/sendMessage.html?uid='+uid
+            });
+            return false;
+        });
+        //绑定.userinfo鼠标移入移出方法
+        $('.userinfo').hover(function () {
+            $(this).show();
+        }, function () {
+            $(this).hide();
+        });
+        //绑定文档跳转链接事件
+        $('.url').on('click', function () {
+            var column = this.dataset.column;
+            var href = this.href;
+            //发送ajax请求，获取文档所属栏目的父级栏目id
+            $.ajax({
+                url: '/member/information/getparentcolumns.html',
+                type: 'post',
+                data: {column: column},
+                async: true,
+                success: function (e) {
+                    var res = JSON.parse(e);
+                    if (res.errorcode == 0) {
+                        if (res.data == 54) {
+                            layer.msg('手机相关文档暂时不支持在电脑上查看', {time: 2000});
+                        } else {
+                            window.open(href, '_blank');
+                        }
+                    }
+                }
+            });
+            return false;
+        });
+        //绑定添加用户标签方法
+        $('.addtag').on('click' ,function () {
+            layer.open({
+                type: 2,
+                title: '添加标签',
+                shadeClose: true,
+                shade: false,
+                maxmin: false, //开启最大化最小化按钮
+                area: ['420px', '210px'],
+                content: '/member/options/addusertag.html'
+            });
+            return false;
+        })
+    });
+
+
+
+</script>
+</html>

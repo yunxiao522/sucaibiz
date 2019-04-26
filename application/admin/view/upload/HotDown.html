@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>热门下载-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <!--引入jquery-zclip文件-->
+    <script src="/public/plugins/jquery-zclip/jquery.zclip.js"></script>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>热门下载</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+        <button class="layui-btn  layui-btn-small add-column layui-btn-normal" id="upload">上传文件</button>
+    </div>
+</header>
+<!-- 表格 -->
+<div id="dateTable" lay-filter="test" style="margin-top:-10px;"></div>
+
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript">
+
+    // layui方法
+    layui.use(['table', 'form', 'layer', 'vip_table','upload'], function () {
+
+        // 操作对象
+        var form = layui.form
+            , table = layui.table
+            , layer = layui.layer
+            , vipTable = layui.vip_table
+            , upload = layui.upload
+            , $ = layui.jquery;
+
+        // 表格渲染
+        var tableIns = table.render({
+            elem: '#dateTable'                  //指定原始表格元素选择器（推荐id选择器）
+            , height: vipTable.getFullHeight(32)    //容器高度
+            , cols: [[                  //标题栏
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', width: 80}
+                , {field: 'article_title', title: '文档名称', width: 350}
+                , {field: 'page', title:'page' ,width:100}
+                , {field: 'source_file', title: '附件地址', width:600 , align:'center'}
+                , {field: 'num' ,title:'下载次数' ,width:100 ,align:'center'}
+                , {field: 'end_time', title:'最后下载时间', width:200 ,align:'center'}
+            ]]
+            , id: 'dataCheck'
+            , url: '/admin/getHotDown.html'
+            , parseData:function (res) {
+                return {
+                    'code':res.data.code,
+                    'msg':res.msg,
+                    'count':res.data.count,
+                    "data":res.data.data
+                }
+            }
+            , method: 'get'
+            , page: true
+            , limits: [50, 100, 150, 200, 250]
+            , limit: 50 //默认采用30
+            , loading: true
+        });
+        // 刷新
+        $('#btn-refresh').on('click', function () {
+            tableIns.reload();
+        });
+        //监听工具条事件
+        table.on('tool(test)', function(obj){
+            switch(obj.event){
+                case 'copy':
+                    var copy_state = this.dataset.copy;
+                    $(this).zclip({
+                        path:'/public/plugins/jquery-zclip/ZeroClipboard.swf',
+                        copy: function(){
+                            //复制内容
+                            return obj.data.url;
+                        },
+                        afterCopy: function(){ //复制成功
+                            layer.msg('复制成功',{time:2000});
+                        }
+                    });
+                    break;
+                case 'show':
+                    layer.msg('预览');
+                    break;
+                case 'del':
+                    layer.msg('删除');
+                    break;
+            };
+        });
+    });
+</script>
+</body>
+</html>

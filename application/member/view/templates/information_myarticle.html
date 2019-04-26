@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的文章</title>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/public/ico/favicon.ico"/>
+    <link rel="stylesheet" href="/public/css/member/information.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/information.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+    <!--引入echart插件-->
+    <script type="text/javascript" src="/public/plugins/echart/echarts.min.js"></script>
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/information/left" /}
+    </div>
+    <div class="right inline">
+        <div class="header">
+            <ul>
+                <a href="" class="seetingli" data-type="article"><li class=" {if $class eq 'article'}this t1{/if}">我的文档</li></a>
+                <a href="" class="seetingli" data-type="atlas"><li class=" {if $class eq 'atlas'}this{/if}">我的图集</li></a>
+                <a href="" class="seetingli" data-type="resource"><li class=" {if $class eq 'resource'}this{/if}">我的资源</li></a>
+            </ul>
+        </div>
+        <div class="nav">
+            <div class="column">
+                <div class="tt inline">分类</div>
+                <div class="list inline" data-column="999">
+                    <ul>
+                        {volist name="column" id="vo"}
+                        <a href="" data-column="{$vo.id}"><li class="{if $vo.id eq $column_id}that{/if}">{$vo.type_name}</li></a>
+                        {/volist}
+                        <div style="clear:both"></div>
+                    </ul>
+                </div>
+            </div>
+            <div class="status">
+                <div class="tt inline">状态</div>
+                <div class="list inline" data-status="1">
+                    <ul>
+                        <a href="" data-status="1"><li class="{if $status eq 1}that{/if}">全部</li></a>
+                        <a href="" data-status="2"><li class="{if $status eq 2}that{/if}">待审核</li></a>
+                        <a href="" data-status="3"><li class="{if $status eq 3}that{/if}">已通过</li></a>
+                        <a href="" data-status="4"><li class="{if $status eq 4}that{/if}">未通过</li></a>
+                        <a href="" data-status="5"><li class="{if $status eq 5}that{/if}">草稿</li></a>
+                    </ul>
+                </div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <div class="reminder">
+            <div class="tt inline">
+                {if $class eq 'article'}
+                    共发布0篇文章
+                {else /}
+                    共发布0篇图集
+                {/if}
+            </div>
+        </div>
+        <div class="article" style="">
+            {if condition="$article_list == []"}
+            <div style="background:url(/public/png/empty-msg.png) center no-repeat;width:100%;height:350px;"><div style="width:100%;height:1px;"></div><div style="text-align:center;margin-top:250px;font-size:12pt;">没有相关文档哦</div></div>
+            {else /}
+                <table>
+                    <tr class="thead">
+                        <td>标题</td>
+                        <td>发布时间</td>
+                        <td>评论</td>
+                        <td>浏览量</td>
+                    </tr>
+                    {volist name="$article_list" id="vo"}
+                    <tr class="lis"  data-id="{$vo.id}">
+                        <td class="tit">{$vo.title}</td>
+                        <td class="pubdate">{$vo.pubdate|date='Y-m-d H:i:s',###}</td>
+                        <td class="comment">{$vo.comment_num}</td>
+                        <td class="click">{$vo.click}</td>
+                    </tr>
+                    {/volist}
+                </table>
+                <div class="padding">
+                    {$page}
+                </div>
+            {/if}
+
+            <div style="clear: both;display: block;width:100%;height:1px;">
+
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;">
+
+    </div>
+</article>
+<div class="top"><img src="" alt=""></div>
+{include file="templates/accounts/footer" /}
+<input type="hidden" name="id" value="{$user_info.id}">
+<input type="hidden" name="class" value="{$class}">
+</body>
+<script type="text/javascript">
+$(function(){
+    function skip() {
+        var column = $('.column').children('.list')[0].dataset.column;
+        var status = $('.status').children('.list')[0].dataset.status;
+        var ss = $('input[name="class"]').val();
+        window.location.href = '/member/information/myarticle.html?class='+ ss +'&column='+ column +'&status='+status;
+    }
+    //绑定栏目分类一栏的点击事件
+    $('.column').children('.list').children('ul').children('a').on('click' ,function () {
+        var column_id = this.dataset.column;
+        $(this).parent().parent('.list')[0].dataset.column = column_id;
+        skip();
+        return false;
+    });
+    //绑定状态一栏的点击事件
+    $('.status').children('.list').children('ul').children('a').on('click' ,function () {
+        var status = this.dataset.status;
+        $(this).parent().parent('.list')[0].dataset.status = status;
+        skip();
+        return false;
+    });
+    //绑定文档列表点击事件
+    $('.lis').on('click' ,function () {
+        //发送ajax获取文档访问链接
+        var id = this.dataset.id;
+        $.ajax({
+            url:'/member/information/geturl.html',
+            type:'post',
+            data:{type:'article',id:id},
+            beforeSend: function () {
+                loading = layer.load(0, {shade: false});
+            },
+            success: function (e) {
+                var data = JSON.parse(e);
+                layer.close(loading);
+                if (data.errorcode == 0) {
+                    window.open(data.url, '_blank').location;
+                }else{
+                    layer.msg('获取数据失败，请联系管理员');
+                }
+            }
+        });
+        return false;
+    });
+});
+</script>
+</html>

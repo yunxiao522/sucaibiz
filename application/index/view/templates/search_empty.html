@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-搜索</title>
+    <script src="/public/jquery.js"></script>
+    <script src="/public/layer/layer.js"></script>
+    <link rel="stylesheet" href="/public/css/index/search.css">
+    <script src="/public/js/index/search.js"></script>
+</head>
+<body>
+<header>
+    <div class="site"><a href="/">素材站</a></div>
+    <ul class="more">
+        <li><a href="/bz">桌面壁纸</a></li>
+        <li><a href="/wap">手机壁纸</a></li>
+        <li><a href="/zx">素材资讯</a></li>
+        <li><a href="/tx">头像</a></li>
+        <li><a href="/sszd">数字之道</a></li>
+    </ul>
+    <div class="handle"><a href="" id="login">登录</a> | <a href="/register.html">注册</a></div>
+</header>
+<form action="">
+    <article>
+        <div class="logo">
+            <img src="/public/png/logo1_2.png" alt="">
+        </div>
+        <div class="type">
+            <ul>
+                <li data-type="0"><a href="" class="t">全部</a></li>
+                {volist name='type_list' id='list'}
+                    <li data-type="{$list.id}"><a href="" class="t">{$list.name}</a></li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="so">
+            <input type="hidden" name="type" value="{$type}">
+            <input type="text" name="keyword" id="keyword">
+            <button>搜索</button>
+        </div>
+    </article>
+</form>
+<footer>
+
+</footer>
+</body>
+<script type="text/javascript" src="/public/jquery.cookie.js"></script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

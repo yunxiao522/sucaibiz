@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>素材站-后台主页</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <style>
+        #clickDiscributeSelect option {
+            height: 18px;
+            line-height: 18px;
+        }
+
+        #clickDiscributeSelect {
+            height: 20px;
+        }
+    </style>
+</head>
+<body class="body" style="background:#E6E6E6">
+
+<div class="layui-row layui-col-space10 my-index-main">
+    <div class="layui-col-xs4 layui-col-sm2 layui-col-md2">
+        <div class="my-nav-btn layui-clear" data-href="./demo/btn.html">
+            <div class="layui-col-md5">
+                <button class="layui-btn layui-btn-big layui-btn-danger layui-icon">&#xe60a;</button>
+            </div>
+            <div class="layui-col-md7 tc" style="background:#ffffff;">
+                <p class="my-nav-text">{$info.article_count}</p>
+                <p class="my-nav-text layui-elip">文档总数</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm2 layui-col-md2">
+        <div class="my-nav-btn layui-clear" data-href="./demo/form.html">
+            <div class="layui-col-md5">
+                <button class="layui-btn layui-btn-big layui-btn-warm layui-icon">&#xe770;</button>
+            </div>
+            <div class="layui-col-md7 tc" style="background:#ffffff;">
+                <p class="my-nav-text">{$info.member_count}</p>
+                <p class="my-nav-text layui-elip">会员数量</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm2 layui-col-md2">
+        <div class="my-nav-btn layui-clear" data-href="./demo/table.html">
+            <div class="layui-col-md5">
+                <button class="layui-btn layui-btn-big layui-icon">&#xe655;</button>
+            </div>
+            <div class="layui-col-md7 tc" style="background:#ffffff;">
+                <p class="my-nav-text">{$info.upload_count}</p>
+                <p class="my-nav-text layui-elip">附件数量</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm2 layui-col-md2">
+        <div class="my-nav-btn layui-clear" data-href="./demo/tab-card.html">
+            <div class="layui-col-md5">
+                <button class="layui-btn layui-btn-big layui-btn-normal layui-icon">&#xe63a;</button>
+            </div>
+            <div class="layui-col-md7 tc" style="background:#ffffff;">
+                <p class="my-nav-text">{$info.comment_count}</p>
+                <p class="my-nav-text layui-elip">评论数量</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm2 layui-col-md2">
+        <div class="my-nav-btn layui-clear" data-href="./demo/progress-bar.html">
+            <div class="layui-col-md5" style="background:#ffffff;">
+                <button class="layui-btn layui-btn-big layui-bg-cyan layui-icon">&#xe607;</button>
+            </div>
+            <div class="layui-col-md7 tc" style="background:#ffffff;">
+                <p class="my-nav-text">{$info.queue_count}</p>
+                <p class="my-nav-text layui-elip">未执行队列</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs4 layui-col-sm2 layui-col-md2">
+        <div class="my-nav-btn layui-clear" data-href="./demo/folding-panel.html">
+            <div class="layui-col-md5">
+                <button class="layui-btn layui-btn-big layui-bg-black layui-icon">&#xe600;</button>
+            </div>
+            <div class="layui-col-md7 tc" style="background:#ffffff;">
+                <p class="my-nav-text">{$info.upload_size}G</p>
+                <p class="my-nav-text layui-elip">附件占用空间</p>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:100%;padding:0;">
+        <div class="layui-collapse" style="background:#ffffff;border:none;border-radius:5px;height:200px;padding:0;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-content layui-show" style="padding:0px;">
+
+                    <div id="click" style="height:200px;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:100%;padding:0;height:440px;margin-top:5px;">
+        <div class="layui-collapse"
+             style="background:#ffffff;border:none;border-radius:5px;height:440px;padding:0;width:500px;">
+            <div class="" style="width:calc(100% - 20px);height:20px;line-height:20px;padding:10px;">
+                <div style="float:left;">点击分布</div>
+                <select style="float:right" name="" id="clickDiscributeSelect">
+
+                </select>
+            </div>
+            <div id="clickDiscribute" style="width:500px;height:400px;"></div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:50%;">
+        <div class="layui-collapse" style="background:#ffffff;border:none;border-radius:5px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-content layui-show">
+
+                    <div id="article" style="height:400px;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:50%;">
+        <div class="layui-collapse" style="background:#ffffff;border:none;border-radius:5px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-content layui-show">
+
+                    <div id="upload" style="height:400px;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:50%;">
+        <div class="layui-collapse" style="background:#ffffff;border:none;border-radius:5px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>文档id</th>
+                            <th>发布时间</th>
+                            <th>标题</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="info.article_list" id="vo"}
+                        <tr>
+                            <td>{$vo.id}</td>
+                            <td>{$vo.create_time}</td>
+                            <td>{$vo.title}</td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:50%;">
+        <div class="layui-collapse" style="background:#ffffff;border:none;border-radius:5px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-content layui-show">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th style="width:150px;">发布时间</th>
+                            <th>发表用户</th>
+                            <th>发表内容</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {volist name="info.comment_list" id="vo"}
+                        <tr>
+                            <td>{$vo.create_time}</td>
+                            <td>{$vo.nickname}</td>
+                            <td>{$vo.content}</td>
+                        </tr>
+                        {/volist}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-col-xs12 layui-col-sm6 layui-col-md4" style="width:100%;">
+        <div class="layui-collapse" style="background:#ffffff;border:none;border-radius:5px;">
+            <div class="layui-colla-item">
+                <div class="layui-colla-content layui-show">
+
+                    <div id="upload_sum" style="height:400px;"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/public/js/admin/index.js"></script>
+<script type="text/javascript">
+    $(function () {
+        layui.use(['element', 'form', 'table', 'layer', 'vip_tab'], function () {
+            day = '';
+            click = '';
+            var form = layui.form
+                , table = layui.table
+                , layer = layui.layer
+                , vipTab = layui.vip_tab
+                , element = layui.element
+                , $ = layui.jquery;
+
+            // 基于准备好的dom，初始化echarts实例
+            var myChart = echarts.init(document.getElementById('article'));
+
+            // 使用刚指定的配置项和数据显示图表。
+            myChart.setOption({
+                title: {
+                    text: '文档统计'
+                },
+                tooltip: {},
+                legend: {
+                    data: ['数量']
+                },
+                xAxis: {
+                    data: [{$info.article_week}]
+                },
+                yAxis: {},
+                color: ['#FF5722'],
+                series: [{
+                    name: '数量',
+                    type: 'bar',
+                    data: [{$info.article_sum}]
+                }]
+            });
+
+            var upload = echarts.init(document.getElementById('upload'));
+            upload.setOption({
+                title: {
+                    text: '附件占用空间'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['空间']
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    //坐标轴颜色
+                    axisLine: {
+                        lineStyle: {
+                            color: 'red'
+                        }
+                    },
+                    data: [{$info.article_week}],
+                },
+                yAxis: {},
+                color: ['#01AAED'],
+                series: [{
+                    name: '空间',
+                    type: 'line',
+                    symbolSize: 4,
+                    smooth: true,
+                    itemStyle: {
+                        normal: {
+                            label: {
+                                show: true,
+                                formatter:'{c}Gb'
+                            }
+                        }
+                    },
+                    data: [{$info.upload_sum}]
+                }]
+            });
+
+            var upload_sum = echarts.init(document.getElementById('upload_sum'));
+            upload_sum.setOption({
+                title: {
+                    text: '附件上传数量'
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['数量']
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    //坐标轴颜色
+                    axisLine: {
+                        lineStyle: {
+                            color: 'red'
+                        }
+                    },
+                    data: [],
+                    //x轴文字旋转
+                    axisLabel: {
+                        rotate: 30,
+                        interval: 0
+                    },
+                },
+                yAxis: {},
+                color: ['#01AAED'],
+                series: [{
+                    name: '空间',
+                    type: 'line',
+                    symbolSize: 4,
+                    smooth: true,
+                    data: []
+                }]
+            });
+            var click = echarts.init(document.getElementById('click'));
+            click.setOption({
+                tooltip: {
+                    trigger: 'axis'
+                },
+                grid: {
+                    left: 60,
+                    top: 40,
+                    right: 50,
+                    bottom: 50
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        type: 'category',
+                        name: '时间',
+                        boundaryGap: false,
+                        data: day,
+                        nameGap: 5,
+                        axisLabel: {
+                            interval: 0,
+                            rotate: 30,
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '点击量'
+                    }
+                ],
+                series: [
+                    {
+                        name: '点击量',
+                        type: 'line',
+                        data: click,
+                        label: {
+                            show: true,
+                        },
+                        itemStyle: {
+                            color: '#13A38C',
+                        },
+                        lineStyle: {
+                            color: '#13A38C',
+                        }
+                    },
+                ]
+            });
+            getclick();
+            getupload();
+
+            //获取点击次数方法
+            function getclick() {
+                $.ajax({
+                    url: '/admin/getclick',
+                    type: 'get',
+                    beforeSend: function () {
+                        click.showLoading();
+                    },
+                    success: function (res) {
+                        var data = JSON.parse(res);
+                        if (data.success) {
+                            var options = click.getOption();
+                            options.xAxis[0].data = data.data.day;
+                            options.series[0].data = data.data.click;
+                            click.setOption(options);
+                        }
+                    },
+                    complete: function () {
+                        click.hideLoading();
+                    }
+                });
+            }
+
+            //获取附件上传数量
+            function getupload() {
+                $.ajax({
+                    url: '/admin/getupload',
+                    type: 'get',
+                    beforeSend: function () {
+                        upload_sum.showLoading();
+                    },
+                    success: function (res) {
+                        var data = JSON.parse(res);
+                        if (data.success) {
+                            var options1 = upload_sum.getOption();
+                            options1.xAxis[0].data = data.data.mounth;
+                            options1.series[0].data = data.data.mounth_sum;
+                            upload_sum.setOption(options1);
+                        }
+                    },
+                    complete: function () {
+                        upload_sum.hideLoading();
+                    }
+                });
+            }
+
+            //点击分布配置选项
+            click_distribute_option = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    x: 'left',
+                    data: []
+                },
+                series: [
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        selectedMode: 'single',
+                        radius: [0, '30%'],
+
+                        label: {
+                            normal: {
+                                position: 'inner',
+                                formatter:'{d}%'
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                show: false
+                            }
+                        },
+                        data: []
+                    },
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        radius: ['40%', '55%'],
+                        label:{
+                            normal: {
+                                position: 'outside',
+                                formatter:'{b}月:{d}%'
+                            }
+                        },
+                        data: []
+                    }
+                ]
+            };
+
+            var clickDistribute = echarts.init($('#clickDiscribute')[0]);
+
+            function getClickDistribute(type) {
+                //获取点击分布数据
+                $.ajax({
+                    url: '/admin/index/clickDistribute',
+                    type: 'get',
+                    data: {
+                        type: type
+                    }, success: function (e) {
+                        var data = JSON.parse(e);
+                        if (data.success) {
+                            if ($('#clickDiscributeSelect option').length == 0) {
+                                $('#clickDiscributeSelect').empty();
+                                $.each(data.data.select, function () {
+                                    var text = '<option value="' + this.id + '">' + this.time + '</option>';
+                                    $('#clickDiscributeSelect').append(text);
+                                });
+                            }
+                            $.each(data.data.year, function () {
+                                click_distribute_option.legend.data.push(this.name);
+                            });
+                            $.each(data.data.month, function () {
+                                click_distribute_option.legend.data.push(this.name);
+                            });
+                            click_distribute_option.series[0].data = data.data.year;
+                            click_distribute_option.series[1].data = data.data.month;
+                            clickDistribute.setOption(click_distribute_option);
+                        }
+
+                    }
+                });
+            }
+
+            getClickDistribute('click');
+            //点击分散图选择年份点击事件
+            $("#clickDiscributeSelect").on('change', function () {
+                var value = $(this).find('option:selected').val();
+                getClickDistribute(value);
+            });
+
+            // you code ...
+            //定时刷新页面
+            setInterval(function () {
+                getclick();
+                // getupload();
+                var type = $('#clickDiscributeSelect').find('option:selected').val();
+                getClickDistribute(type);
+
+            }, 30000)
+
+        });
+    });
+</script>
+</html>

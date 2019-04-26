@@ -1,0 +1,270 @@
+*{
+    margin:0;
+    padding:0;
+    border:0;
+}
+body{
+    width:100%;
+    min-width:1200px;
+    height:max-content;
+    background:#F4F4F4;
+    font-family: '微软雅黑';
+}
+.main{
+    color:#000000;
+}
+.main a{
+    color:#000000;
+    text-decoration:none;
+}
+article{
+    width:1200px;
+    margin:0 auto;
+    margin-top:20px;
+    min-height:500px;
+}
+.inline{
+    float:left;
+}
+.left{
+    width:260px;
+}
+.header{
+    width:100%;
+    height:270px;
+    background:#ffffff;
+    border-radius:5px;
+}
+.header a{
+    text-decoration:none;
+}
+
+.face{
+    width:100%;
+    height:80px;
+    text-align:center;
+}
+.face img{
+    width:80px;
+    height:80px;
+    border-radius:40px;
+    margin:0 auto;
+}
+.nickname{
+    width:100%;
+    height:30px;
+    line-height:30px;
+    text-align:center;
+    margin-top:20px;
+    font-size:12pt;
+    font-weight:600;
+}
+.nickname a{
+    color:#000000;
+}
+.nickname a:hover{
+    color:#000000;
+}
+.level{
+    width:100%;
+    height:20px;
+    color:#BBBBBB;
+    text-align:center;
+    font-size:10pt;
+}
+.contribute{
+    width:80%;
+    height:40px;
+    line-height:40px;
+    background:#13A38C;
+    margin:0 auto;
+    text-align:center;
+    border-radius:5px;
+    margin-top:10px;
+}
+.contribute:hover{
+    background:#00C9A9;
+}
+.content{
+    width:100%;
+    height:max-content;
+    background:#ffffff;
+    margin-top:10px;
+    border-radius:5px;
+}
+.content .list{
+    width:calc(100% - 4px);
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    border:2px #ffffff solid;
+}
+.content .list:hover{
+    background:#13A38C;
+    color:#ffffff;
+}
+.content a{
+    text-decoration:none;
+    color:#000000;
+}
+.content a:hover{
+    color:#000000;
+}
+.content .this{
+
+    border-left:2px #13A38C solid;
+}
+.right{
+    width:calc(100% - 280px);
+    margin-left:20px;
+    background:#ffffff;
+    border-radius:5px;
+    padding-bottom: 20px;
+    height:max-content;
+}
+.right .header{
+    width:100%;
+    height:62px;
+    border-bottom:1px #EEEEEE solid;
+    line-height:60px;
+}
+.logh{
+    padding-left:20px;
+    width:calc(100% - 20px);
+}
+.right .header ul{
+    margin:0;
+    padding:0;
+}
+.right .header ul li{
+    margin:0;
+    padding:0;
+    float:left;
+    margin-left:50px;
+    list-style:none;
+    border-bottom:2px #ffffff solid;
+}
+.right .header ul a{
+    color:#000000;
+    text-decoration:none;
+}
+.right .header ul a:hover{
+    color:#000000;
+}
+.right .header ul .this{
+    border-bottom:2px #000000 solid;
+}
+.right .matter{
+    width:calc(100% - 40px) !important ;
+    padding-left:20px;
+    padding-right:20px;
+    height:max-content !important ;
+}
+.right .matter .mlist{
+    list-style:none;
+    padding:0;
+    margin:0;
+    width:100%;
+    height:max-content;
+}
+.right .matter .mlist li {
+    list-style:none;
+    padding:0;
+    margin:0;
+    width:100%;
+    height:max-content;
+}
+.right .matter .mlist li .list{
+    width:calc(100% - 40px);
+    padding-top:20px;
+    padding-bottom:20px;
+    border-bottom:1px #EEEEEE solid;
+    height:max-content;
+}
+.right .matter .mlist li .list .left{
+    width:70px;
+    text-align:center;
+    height:max-content;
+    overflow:hidden;
+}
+.right .matter .mlist li .list .left img{
+    width:50px;
+    height:50px;
+    border-radius:25px;
+}
+.right .matter .mlist li .list .right{
+    width:calc(100% - 90px) !important ;
+    height:max-content;
+}
+.right .matter .mlist li .list .right .head{
+    width:100%;
+    height:30px;
+    margin-bottom:20px;
+    color:#BBBBBB;
+    margin-top:-10px;
+}
+.right .matter .mlist li .list .right .head .time{
+    margin-left:20px;
+    height:100%;
+    line-height:45px;
+    font-size:8pt;
+}
+.right .matter .mlist li .list .right .head .nickna{
+    height:100%;
+    line-height:30pt;
+    font-weight:800;
+    font-size:10pt;
+}
+.right .matter .mlist li .list .right .cont{
+    width:100%;
+    height:max-content;
+    color:#000000;
+}
+.right .matter .empty{
+    width:100%;
+    height:500px;
+    background:url('/public/png/empty-msg.png') center no-repeat;
+}
+.paging{
+    margin:0 auto;
+    padding:0;
+    width:max-content;
+    height:max-content;
+}
+.paging li{
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    text-align:center;
+    background:#ffffff;
+    border-radius:2px;
+    font-size:10pt;
+    border:0.5px #DDDDDD solid;
+    height:26px;
+    line-height:26px;
+    font-family: '微软雅黑';
+    color:#DDDDDD;
+
+}
+.paging a:hover{
+    color:#428BCA;
+}
+.paging .this{
+    background:#428BCA;
+    color:#fff;
+    border:1px #428BCA solid;
+}
+.disable{
+    color:#E2E2E2;
+    background:#ffffff;
+}
+.disable:hover{
+    color:#E2E2E2;
+    background:#ffffff;
+}
+footer{
+    width:100%;
+    height:500px;
+    background:#282828;
+    margin-top:20px;
+}

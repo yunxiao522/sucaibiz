@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加文档属性-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body style="background:#ffffff;z-index:1000;">
+<form class="layui-form layui-form-pane" action="" style="margin-top:20px;margin-left:20px;" id="alterform">
+    <div class="layui-form-item">
+        <label class="layui-form-label">属性名称</label>
+        <div class="layui-input-block">
+            <input type="text" name="att_name" autocomplete="off" placeholder="请输入属性名称" class="layui-input" style="width:400px;">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">属性值</label>
+        <div class="layui-input-block">
+            <input type="text" name="att" autocomplete="off" placeholder="请输入属性值" class="layui-input" style="width:200px;">
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align:center;margin-top:50px;">
+        <input type="hidden" id="sortid" name="id">
+        <button class="layui-btn" lay-submit="" lay-filter="demo2" id="btn">修改</button>
+    </div>
+</form>
+<script>
+    $('#btn').on('click',function () {
+        $.ajax({
+            url:'/admin/add_article_attribute.html',
+            type:'post',
+            data:$('#alterform').serialize(),
+            beforeSend: function () {
+                loading = layer.load(0, {shade: false});
+            },
+            success: function (e) {
+                var data = JSON.parse(e);
+                layer.msg(data.msg, {time: 1000}, function () {
+                    layer.close(loading);
+                    if (data.errorcode == 0) {
+                        parent.location.href="/admin/article/attribute.html";
+                    }
+                });
+            }
+        });
+        return false;
+    })
+</script>
+</body>
+</html>

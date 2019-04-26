@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>权限管理-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <link rel="stylesheet" href="/public/css/admin/rbac.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>用户管理</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>权限管理</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+
+    </div>
+</header>
+<article>
+    <form action="" class="layui-form" style="margin:10px;">
+        <div class="layui-input-inline" style="text-align: center">
+            <label class="layui-form-label">查询权限</label>
+            <div class="layui-input-inline">
+                <div class="layui-input-block role">
+                    <select name="interest" lay-filter="aihao">
+                        <option value="">选择角色</option>
+                        {volist name="level" id="vo"}
+                        <option value="{$vo.id}">{$vo.name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                <div class="layui-input-block user">
+                    <select name="interest" lay-filter="aihao" lay-search="">
+                        <option value="">选择管理员</option>
+                        {volist name="user" id="vo"}
+                        <option value="{$vo.id}">{$vo.user_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit="" lay-filter="demo3">查找</button>
+            </div>
+        </div>
+    </form>
+</article>
+<aside>
+
+</aside>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/rbac.js"></script>
+</html>

@@ -1,0 +1,724 @@
+*{
+    margin:0;
+    padding:0;
+    border:0;
+}
+body{
+    width:100%;
+    min-width:1200px;
+    height:max-content;
+    background:#F4F4F4;
+    font-family: '微软雅黑';
+}
+.main{
+    color:#000000;
+}
+.main a{
+    color:#000000;
+    text-decoration:none;
+}
+article{
+    width:1200px;
+    margin:0 auto;
+    margin-top:20px;
+    min-height:500px;
+    height:max-content;
+}
+.inline{
+    float:left;
+}
+.left{
+    width:260px;
+}
+.header{
+    width:100%;
+    height:270px;
+    background:#ffffff;
+    border-radius:5px;
+    margin-bottom:10px;
+}
+.header a{
+    text-decoration:none;
+}
+
+.face{
+    width:100%;
+    height:80px;
+    text-align:center;
+}
+.face img{
+    width:80px;
+    height:80px;
+    border-radius:40px;
+    margin:0 auto;
+}
+.nickname{
+    width:100%;
+    height:30px;
+    line-height:30px;
+    text-align:center;
+    margin-top:20px;
+    font-size:12pt;
+    font-weight:600;
+}
+.nickname a{
+    color:#000000;
+}
+.nickname a:hover{
+    color:#000000;
+}
+.level{
+    width:100%;
+    height:20px;
+    color:#BBBBBB;
+    text-align:center;
+    font-size:10pt;
+}
+.contribute{
+    width:80%;
+    height:40px;
+    line-height:40px;
+    background:#13A38C;
+    margin:0 auto;
+    text-align:center;
+    border-radius:5px;
+    margin-top:10px;
+}
+.contribute:hover{
+    background:#00C9A9;
+}
+.content{
+    width:100%;
+    height:max-content;
+    background:#ffffff;
+    border-radius:5px;
+}
+.content .list{
+    width:calc(100% - 4px);
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    border:2px #ffffff solid;
+    border-radius:5px;
+}
+.content .list:hover{
+    background:#13A38C;
+    color:#ffffff;
+}
+.content a{
+    text-decoration:none;
+    color:#000000;
+}
+.content a:hover{
+    color:#000000;
+}
+.content .this{
+
+    border-left:2px #13A38C solid;
+}
+.right{
+    width:calc(100% - 280px);
+    margin-left:20px;
+    border-radius:5px;
+    padding-bottom: 20px;
+    height:max-content;
+    float:left;
+}
+.right .header{
+    width:100%;
+    height:62px;
+    border-bottom:1px #EEEEEE solid;
+    line-height:60px;
+}
+.logh{
+    padding-left:20px;
+    width:calc(100% - 20px);
+}
+.right .header ul{
+    margin:0;
+    padding:0;
+}
+.right .header ul li{
+    margin:0;
+    padding:0;
+    float:left;
+    margin-left:50px;
+    list-style:none;
+    border-bottom:2px #ffffff solid;
+}
+.right .header ul a{
+    color:#000000;
+    text-decoration:none;
+}
+.right .header ul a:hover{
+    color:#000000;
+}
+.right .header ul .this{
+    border-bottom:2px #000000 solid;
+}
+article .right .interval .classify{
+    float:right;
+    height:60px;
+    line-height:60px;
+}
+article .right .interval .classifymenu{
+    width:120px;
+    background:#ffffff;
+    padding-top:5px;
+    padding-bottom:5px;
+    z-index:10;
+    position: absolute;
+    float:right;
+    border-radius:3px;
+    margin-left:800px;
+    margin-top:-1px;
+}
+article .right .interval .classifymenu .list{
+    width:100%;
+    height:40px;
+    text-align:center;
+    line-height:40px;
+    cursor: pointer;
+}
+article .right .interval .classifymenu .list:hover{
+    background:#F2F2F2;
+    color:red;
+}
+.right .cont{
+    width:100%;
+    height:max-content;
+}
+.right .cont .mydata{
+    width:100%;
+    height:170px;
+    margin-top:10px;
+    background:#ffffff;
+    border-radius:5px;
+}
+.right .cont .mydata .head{
+    width:calc(100% - 30px);
+    height:20px;
+    padding:15px;
+    line-height:20px;
+    border-bottom:1px #EEEEEE solid;
+}
+.right .cont .mydata .data{
+    width:100%;
+    height:70px;
+    padding:20px;
+}
+.right .cont .mydata .data .list{
+    width:calc(25% - 1px);
+    height:60px;
+    padding-top:10px;
+    border-right:1px #EEEEEE dashed;
+    float:left;
+    text-align:center;
+}
+.right .cont .mydata .data .list .h{
+    font-size:15pt;
+    font-weight:900;
+    width:100%;
+    height:30px;
+}
+.right .cont .mydata .data .list .t{
+    width:100%;
+    height:30px;
+    line-height:35px;
+    color:#999999;
+}
+.right .cont .trend{
+    width:100%;
+    height:360px;
+    margin-top:10px;
+    background:#ffffff;
+    border-radius:5px;
+}
+.right .cont .trend .head{
+    width:calc(100% - 30px);
+    height:20px;
+    padding:15px;
+    line-height:20px;
+    border-bottom:1px #EEEEEE solid;
+    overflow: hidden;
+}
+.head .title{
+    float:left;
+}
+.head .select{
+    float:right;
+}
+.right .cont .trend .head .n ul{
+    width:380px;
+    height:32px;
+    margin:0 auto;
+}
+.right .cont .trend .head .n ul li{
+    float:left;
+    height:32px;
+    margin-left:20px;
+    margin-right:20px;
+}
+.right .cont .trend .head .n .this{
+    border-bottom:2px #000000 solid;
+}
+.right .cont .trend .data{
+    width:100%;
+    height:310px;
+}
+.head .smenu{
+    position:absolute;
+    margin-top:20px;
+    margin-left:calc(920px - 160px);
+    width:120px;
+    z-index:99;
+    background:#ffffff;
+    box-shadow:0px 0px  10px 5px #aaa;
+    padding-top:5px;
+    padding-bottom:5px;
+    border-radius:5px;
+}
+.head .smenu li{
+    padding:10px;
+    padding-left:30px;
+    width:calc(100% - 40px);
+    cursor:pointer;
+}
+.head .smenu li:hover{
+    background:#EEEEEE;
+    cursor:pointer;
+}
+.right .cont .myarticle{
+    width:100%;
+    margin-top:10px;
+    height:480px;
+    background:#ffffff;
+    border-radius:5px;
+}
+.right .cont .myarticle .head{
+    width:calc(100% - 30px);
+    height:20px;
+    padding:15px;
+    line-height:20px;
+    border-bottom:1px #EEEEEE solid;
+    overflow: hidden;
+}
+.right .cont .myarticle .data table{
+    width:100%;
+    text-align:center;
+}
+.right .cont .myarticle .data table tr{
+    width:100%;
+    height:50px;
+    border-bottom:1px #EEEEEE solid;
+}
+.right .cont .myarticle .data table tr td{
+    text-align:center;
+    border-right:1px #EEEEEE solid;
+}
+.right .cont .myarticle .data table tr .title{
+    width:400px;
+}
+.right .cont .myarticle .data table tr .pop{
+    width:80px;
+}
+.right .cont .myarticle .data table tr .recommend{
+    width:80px;
+}
+.right .cont .myarticle .data table tr .tren{
+    width:80px;
+}
+.right .cont .myarticle .data .articlehint{
+    width:100%;
+    height:20px;
+    margin-top:280px;
+    text-align:center;
+}
+.right .cont .myarticle .data .push{
+    border:none;
+    background:#13A38C;
+    width:150px;
+    height:40px;
+    text-align:center;
+    line-height:40px;
+    border-radius:5px;
+    color:#ffffff;
+    display:inline;
+    margin:0 auto;
+    margin-top:20px;
+    margin-left:calc(50% - 75px);
+}
+.right .cont .youlike{
+    width:100%;
+    height:420px;
+    margin-top:10px;
+}
+.right .cont .youlike .head{
+    width:calc(100% - 30px);
+    height:20px;
+    padding:15px;
+    background:#ffffff;
+    margin-bottom:20px;
+    line-height:20px;
+    border-radius:5px;
+}
+.right .cont .youlike .data{
+    width:100%;
+    height:350px;
+    background:#ffffff;
+    border-radius:5px;
+}
+.right .nav{
+    width:100%;
+    min-height:55px;
+    background:#ffffff;
+    padding-top:20px;
+    padding-bottom:20px;
+    height:max-content;
+}
+.right .nav .column{
+    width:100%;
+    min-height:20px;
+}
+.right .nav .column .tt{
+    margin-left:50px;
+    height:30px;
+    width:50px;
+    line-height:30px;
+    color:#BBBBBB;
+}
+.right .nav .column .list{
+    width:calc(100% - 180px);
+    min-height:20px;
+}
+.right .nav .column .list ul{
+    width:100%;
+    min-height:30px;
+    height:max-content;
+}
+.right .nav .column .list ul li{
+    float:left;
+    margin-right:20px;
+    height:30px;
+    padding-left:10px;
+    padding-right:10px;
+    border-radius:5px;
+    line-height:30px;
+}
+.right .nav .column .list ul li:hover{
+    background:#F2F2F2;
+}
+.right .nav .status{
+    width:100%;
+    min-height:20px;
+}
+.right .nav .status .tt{
+    margin-left:50px;
+    height:30px;
+    width:50px;
+    line-height:30px;
+    color:#BBBBBB;
+}
+.right .nav .status .list ul{
+    width:100%;
+    min-height:30px;
+    height:max-content;
+}
+.right .nav .status .list ul li{
+    float:left;
+    margin-right:20px;
+    height:30px;
+    padding-left:10px;
+    padding-right:10px;
+    border-radius:5px;
+    line-height:30px;
+}
+.right .nav .status .list ul li:hover{
+    background:#F2F2F2;
+}
+.right .reminder{
+    width:100%;
+    margin-top:10px;
+    height:30px;
+    line-height:30px;
+}
+.right .reminder .tt{
+
+}
+.right .article{
+    margin-top:10px;
+    background:#ffffff;
+    border-radius:5px;
+    width:calc(100% - 40px);
+    padding:20px;
+}
+.right .article table{
+    width:100%;
+}
+.right .article table .thead{
+    height:50px;
+    text-align:center;
+    background:#F3F3F3;
+    font-size:12pt;
+}
+.right .article table .lis{
+    height:30px;
+    line-height:30px;
+    border-bottom:1px #f3f3f3 solid;
+    cursor:pointer;
+}
+.right .article table .lis .tit{
+    padding-left:20px;
+    width:250px;
+}
+.right .article table .lis .pubdate{
+    text-align:center;
+}
+.right .article table .lis .comment{
+    text-align:center;
+}
+.right .article table .lis .click{
+    text-align: center;
+}
+.right .article .padding{
+    width:100%;
+    margin-top:10px;
+}
+.right .header {
+    width: calc(100% - 40px);
+    padding-left: 20px;
+    padding-right: 20px;
+}
+article .right .con ul {
+    width:calc(100% + 20px);
+    height:max-content;
+}
+article .right .con ul li{
+    float:left;
+    margin-right:20px;
+    width:215px;
+    background:#ffffff;
+    border-radius:3px;
+}
+article .right .con ul li .head{
+    width:100%;
+    height:max-content;
+    background:#DFDFDF;
+    border-radius:3px;
+}
+article .right .con ul li .head img{
+    border-radius:3px;
+}
+article .right .con ul li .bottom{
+    width:calc(100% - 30px);
+    padding:15px;
+    border-bottom:1px solid #eeeeee;
+}
+article .right .con ul li .bottom .name{
+    font-size:10pt;
+}
+article .right .con ul li .bottom .operate{
+    width:100%;
+    height:40px;
+    line-height:40px;
+    margin-top:10px;
+}
+article .right .con ul li .bottom .operate button{
+    float:left;
+    margin-left:0px;
+    margin-top:5px;
+}
+article .right .con ul li .bottom .operate .type{
+    float:right;
+}
+article .right .con ul li .user{
+    width:calc(100% - 30px);
+    padding:15px;
+    height:20px;
+    line-height:20px;
+}
+article .right .con ul li .user .time{
+    float:right;
+    font-size:8pt;
+}
+.createlikeclass {
+    float: right;
+    color: red;
+}
+
+.interval {
+    width:100%;
+    height: 60px;
+    line-height:60px;
+}
+.body{
+    width:100%;
+    min-height:500px;
+}
+.body ul {
+    width: calc(100% + 40px);
+    height: 200px;
+
+    margin-left: -20px;
+    padding: 0;
+}
+
+.body ul li {
+    float: left;
+    width: 215px;
+    background: #ffffff;
+    margin-left: 20px;
+    border-radius: 3px;
+}
+
+.body ul li .item {
+    width: 100%;
+    height: 100%;
+}
+
+.body ul li .item .head {
+    width: calc(100% - 30px);
+    height: 200px;
+    padding: 15px;
+}
+
+.body ul li .item .head .img {
+    width: 100%;
+    height: 130px;
+    background: #DDDDDD;
+    border-radius: 3px;
+}
+
+.body ul li .item .head .name {
+    margin-top: 10px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 8pt;
+}
+
+.body ul li .item .head .name .lock {
+    float: right;
+    width: 20px;
+    height: 20px;
+}
+
+.body ul li .item .head .description {
+    width: 100%;
+    height: 30px;
+    color: #BBBBBB;
+    font-size: 8pt;
+}
+
+.body ul li .item .head .info {
+    width: 100%;
+    height: 20px;
+    line-height: 20px;
+}
+
+.body ul li .item .head .edit {
+    width: 35px;
+    height: 20px;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+    position: absolute;
+    margin-top: -130px;
+    margin-left: 150px;
+    z-index: 99;
+    color: #FFFFFF;
+    line-height: 20px;
+    text-align: center;
+}
+
+.body ul li .item .head .editmenu {
+    width: 130px;
+    height: 85px;
+    background: #ffffff;
+    position: absolute;
+    margin-top: -111px;
+    margin-left: 50px;
+    z-index: 98;
+    padding-top: 5px;
+    border: none;
+    border-radius: 3px;
+}
+
+.body ul li .item .head .editmenu .l {
+    width: calc(100% - 20px);
+    height: 40px;
+    line-height: 40px;
+    font-size: 10pt;
+    cursor: pointer;
+    padding-left: 20px;
+}
+
+.body ul li .item .head .editmenu .l:hover {
+    background: #F2F2F2;
+}
+
+.body ul li .item .head .info .num {
+    height: 20px;
+    line-height: 20px;
+    padding-left: 5px;
+    padding-right: 5px;
+    font-size: 8pt;
+    color: #BBBBBB;
+}
+
+.body ul li .item .more {
+    border-top: 1px solid #EEEEEE;
+    width: calc(100% - 30px);
+    height: 20px;
+    padding: 15px;
+    line-height: 20px;
+    color: #BBBBBB;
+    font-size: 8pt;
+}
+
+.body ul li .item .more .create {
+    float: left;
+}
+
+.body ul li .item .more .alter {
+    float: right;
+}
+.that{
+    color:#D36F16;
+}
+.paging{
+    margin:0 auto;
+    padding:0;
+    width:max-content;
+    height:max-content;
+}
+.paging li{
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    text-align:center;
+    background:#ffffff;
+    border-radius:2px;
+    font-size:10pt;
+    border:0.5px #DDDDDD solid;
+    height:26px;
+    line-height:26px;
+    font-family: '微软雅黑';
+    color:#DDDDDD;
+
+}
+.paging a:hover{
+    color:#428BCA;
+}
+.paging .this{
+    background:#428BCA;
+    color:#fff;
+    border:1px #428BCA solid;
+}
+.disable{
+    color:#E2E2E2;
+    background:#ffffff;
+}
+.disable:hover{
+    color:#E2E2E2;
+    background:#ffffff;
+}

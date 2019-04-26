@@ -1,0 +1,644 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #F1F1F1;
+    min-width: 1200px;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    padding: 0;
+    height: 0;
+    list-style: none;
+}
+
+.inline {
+    float: left;
+}
+
+header {
+    width: 100%;
+    height: 500px;
+    background: #13A38C;
+}
+
+nav {
+    width: 1200px;
+    height: 30px;
+    margin: 0 auto;
+    text-decoration:none;
+    line-height:30px;
+    color:#fff;
+}
+nav .logo{
+    width:30px;
+    height:30px;
+}
+nav .nav{
+    margin-left:20px;
+}
+.nav ul{
+    height:30px;
+    width:800px;
+
+}
+.nav ul li{
+    padding-left:10px;
+    padding-right:10px;
+    float:left;
+    margin-left:10px;
+    width:max-content;
+    height:30px;
+}
+nav .handle{
+    float:right;
+    margin-right:10px;
+}
+nav a {
+    color: #fff;
+}
+
+nav a:hover {
+
+}
+
+article {
+    width: 1200px;
+    height:max-content;
+    margin: 0 auto;
+    margin-top: 20px;
+}
+article .header{
+    width:100%;
+    height:1000px;
+}
+
+.header .left{
+    height:1000px;
+    width:800px;
+}
+.left .show{
+    width:800px;
+    height:450px;
+    background:#fff;
+}
+
+.header .right{
+    width:380px;
+    height:max-content;
+    margin-left:20px;
+    border-radius:2px;
+}
+.share{
+    width:100%;
+    height:60px;
+    background:orangered;
+    margin-bottom:10px;
+    line-height:60px;
+    color:#ffffff;
+    border-radius:2px;
+}
+.share img{
+    width:30px;
+    height:30px;
+    margin-top:15px;
+    float:left;
+    margin-left:10px;
+}
+.share span{
+    float:left;
+    margin-left:20px;
+}
+
+.collect{
+    color:#fff;
+}
+.collect a a:hover{
+    color:#fff;
+}
+footer {
+    width: 100%;
+    height: 200px;
+    margin-top: 20px;
+    background: #13A38C;
+}
+
+.hot{
+    width:100%;
+    background:#ffffff;
+    border:1px #E5E5E5 solid;
+}
+.hot .title{
+    width:380px;
+    height:30px;
+    padding:10px;
+    border-bottom:1px #E5E5E5 solid;
+    line-height:30px;
+}
+.title .tit{
+    float:left;
+    width:150px;
+    height:30px;
+    font-size:16pt;
+    padding-left:10px;
+}
+.title .more{
+    float:right;
+    width:80px;
+    height:30px;
+    font-size:8pt;
+    text-align:right;
+    line-height:40px;
+    margin-right:10px;
+}
+.hot .content{
+    padding:20px;
+    width:100%;
+}
+.hot .tcontent{
+    padding:20px;
+    padding-top:0;
+    width:100%;
+    overflow:hidden;
+}
+.hot .tcontent .htag{
+    width:70px;
+    height:20px;
+    border-radius:10px;
+    border:1px #11A28B solid;
+    font-size:8pt;
+    text-align:center;
+    line-height:20px;
+}
+.hot .tcontent ul li{
+    float:left;
+    height:20px;
+    margin-top:20px;
+    margin-left:5px;
+    margin-right:8px;
+    display:block;
+}
+.hot .tcontent .htag:hover{
+    background:#11A28B;
+    color:#ffffff;
+}
+.hot .content ul li{
+    padding:0;
+    margin:0;
+    display:inline-block;
+    margin-bottom:5px;
+    width:100%;
+    height:15px;
+}
+.hot .content ul li .prefix{
+    width:15px;
+    height:15px;
+    background:#C8C8C8;
+    text-align:center;
+    line-height:15px;
+    font-size:8pt;
+    float:left;
+    color:#fff;
+}
+.hot .content ul li .tit{
+    float:left;
+    height:15px;
+    line-height:15px;
+    font-size:10pt;
+    margin-left:10px;
+}
+.hot a{
+    color:#000;
+}
+.hot a:hover{
+    color:#000;
+}
+.main{
+    width:1200px;
+    margin:0 auto;
+    display:block;
+}
+footer .content{
+    width:1200px;
+    height:200px;
+    margin:0 auto;
+}
+.content .logo{
+    width:250px;
+    height:75px;
+    margin-top:55px;
+    float:left;
+}
+.content .miniapp{
+    width:100px;
+    height:100px;
+    float:left;
+    margin-left:20px;
+    margin-top:50px;
+}
+footer .content .more{
+    width:100%;
+    height:20px;
+    text-align:center;
+}
+footer .content .more a{
+    color:#ffffff;
+    text-decoration:underline;
+}
+footer .content .more a:link{
+    color:#ffffff;
+    text-decoration:underline;
+}
+footer .content .more a:hover{
+    color:#ffffff;
+    text-decoration:underline;
+}
+footer  .content .more ul{
+    margin:0 auto;
+    display:inline-block
+}
+footer .content .more ul li{
+    float:left;
+    margin-top:-17px;
+}
+.link{
+    width:1200px;
+    height:100px;
+    margin:0 auto;
+    margin-top:20px;
+}
+.link .tt{
+    width:1200px;
+    height:30px;
+    border-bottom:1px #11A28B solid;
+}
+.content .info{
+    width:650px;
+    height:150px;
+    float:left;
+    margin-left:50px;
+    margin-top:25px;
+    color:#fff;
+    font-size:10pt;
+}
+.info .cory{
+    margin-top:80px;
+    width:100%;
+    text-align:center;
+    height:20px;
+}
+.info .icp{
+    width:100%;
+    text-align:center;
+    height:20px;
+}
+.main{
+    margin-top:40px;
+    overflow: hidden;
+}
+.main .title{
+    width:100%;
+    height:50px;
+}
+.main .title .tt{
+    height:50px;
+    width:200px;
+    float:left;
+    margin-left:20px;
+    line-height:60px;
+    font-size:16pt;
+}
+.main .title .more{
+    height:50px;
+    float:right;
+    margin-right:10px;
+    line-height:60px;
+    color:#000;
+}
+.more a{
+    text-decoration:none;
+    color:#000;
+}
+.more a:hover{
+    color:#000;
+}
+.list{
+    width:1200px;
+}
+.list ul{
+    width:1200px;
+    margin-left:5px;
+    height:-moz-max-content;
+    height:max-content;
+    height:-webkit-max-content;
+    overflow: hidden;
+    clear:both;
+}
+.list ul li{
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+    float: left;
+    margin-right: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    background: #fff;
+    height:-moz-max-content;
+    height:max-content;
+    height:-webkit-max-content;
+}
+.list ul a {
+    color: #000;
+}
+
+.list ul a:link {
+    color: #000;
+}
+
+.list ul a:active {
+    color: #000;
+}
+
+.list ul a:hover {
+    color: #000;
+}
+
+.list ul a:visited {
+    color: #000;
+}
+.list ul li:hover {
+    box-shadow: 5px 5px 5px #D7D7D7;
+}
+
+.c-item {
+    width: 260px;
+    height: 260px;
+}
+
+.c-img {
+    width: 100%;
+    height: 146px;
+}
+
+.c-title {
+    width: 100%;
+    height: 114px;
+    text-align: center;
+    line-height: 114px;
+    font-size: 12pt;
+}
+
+
+
+
+
+
+
+/* Navigation styling */
+.nav {
+    position:relative;
+    display:inline-block;
+    font-size:14px;
+    font-weight:900;
+}
+.nav-list {
+    font-family:"微软雅黑";
+    background:#34495E;
+    width:800px;
+    height:50px;
+    padding:0px;
+}
+.nav-item {
+    float:left;margin-left:0px;
+    *display:inline;
+    zoom:1;
+    border-right:1px #2C3E50 solid;
+}
+.nav-item a {
+    display:block;
+    padding:15px 20px;
+    color:#FFF;
+    background:#34495E;
+}
+.nav-item:first-child a {
+    border-radius:5px 0 0 5px;
+}
+.nav-item:last-child a {
+    border-radius:0 5px 5px 0;
+}
+.nav-list{
+    border-radius:5px;
+}
+.nav-item a:hover {
+    background:#2C3E50;
+}
+/* Mobile Navigation */
+.nav-mobile {
+    display:none; /* Hide from browsers that don't support media queries */
+    cursor:pointer;
+    position:absolute;
+    top:0;
+    right:0;
+    background:#34495E url(../img/nav.svg) no-repeat center center;
+    height:40px;
+    width:40px;
+    border-radius:5px;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+}
+
+/*------------------------------------*\
+    Media Queries
+\*------------------------------------*/
+
+@media only screen and (min-width: 320px) and (max-width: 800px) {
+    .nav-mobile {
+        display:block;
+    }
+    .nav {
+        width:100%;
+        padding:40px 0 0;
+    }
+    .nav-list {
+        display:none;
+    }
+    .nav-item {
+        width:100%;
+        float:none;
+    }
+    .nav-item a {
+        background:#34495E;
+        padding:10px;
+    }
+    .nav-item:first-child a {
+        border-radius:5px 0 0;
+    }
+    .nav-item:last-child a {
+        border-radius:0 0 5px 5px;
+    }
+    .nav-active {
+        display:block;
+    }
+    .nav-mobile-open {
+        border-radius:5px 5px 0 0;
+        -webkit-border-radius:5px 5px 0 0;
+        -moz-border-radius:5px 5px 0 0;
+    }
+}
+
+#slider {
+    position:relative;
+    width:800px;
+    height:450px;
+    background:url(http://t1.sucai.biz/image/list-bz/loading.gif) no-repeat 50% 50%;
+}
+#slider img {
+    position:absolute;
+    top:0px;
+    left:0px;
+    display:none;
+    width:800px;
+    height:450px;
+}
+#slider a {
+    border:0;
+    display:block;
+}
+.nivo-controlNav {
+    position:absolute;
+    left:320px;
+    bottom:42px;
+}
+.nivo-controlNav a {
+    display:block;
+    width:22px;
+    height:22px;
+    background:url(http://t1.sucai.biz/image/list-bz/bullets.png) no-repeat;
+    text-indent:-9999px;
+    border:0;
+    margin-right:3px;
+    float:left;
+}
+.nivo-controlNav a.active {
+    background-position:0 -22px;
+}
+
+.nivo-directionNav a {
+    display:block;
+    width:30px;
+    height:30px;
+    background:url(http://t1.sucai.biz/image/list-bz/arrows.png) no-repeat;
+    text-indent:-9999px;
+    border:0;
+}
+a.nivo-nextNav {
+    background-position:-30px 0;
+    right:15px;
+}
+a.nivo-prevNav {
+    left:15px;
+}
+
+.nivo-caption {
+    text-shadow:none;
+    font-family: Helvetica, Arial, sans-serif;
+}
+.nivo-caption a {
+    color:#efe9d1;
+    text-decoration:underline;
+}
+.clear {
+    clear:both;
+}
+/*
+ * jQuery Nivo Slider v2.3
+ * http://nivo.dev7studios.com
+ *
+ * Copyright 2010, Gilbert Pellegrom
+ * Free to use and abuse under the MIT license.
+ * http://www.opensource.org/licenses/mit-license.php
+ *
+ * March 2010
+ */
+
+
+/* The Nivo Slider styles */
+.nivoSlider {
+    position:relative;
+    width:800px;
+    height:450px;
+}
+.nivoSlider img {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:800px;
+    height:450px;
+}
+/* If an image is wrapped in a link */
+.nivoSlider a.nivo-imageLink {
+    position:absolute;
+    top:0px;
+    left:0px;
+    width:800px;
+    height:450px;
+    border:0;
+    padding:0;
+    margin:0;
+    z-index:60;
+    display:none;
+}
+/* The slices in the Slider */
+.nivo-slice {
+    display:block;
+    position:absolute;
+    z-index:50;
+    height:100%;
+}
+/* Caption styles */
+.nivo-caption {
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    background:#000;
+    color:#fff;
+    opacity:0.8; /* Overridden by captionOpacity setting */
+    width:100%;
+    z-index:89;
+}
+.nivo-caption p {
+    padding:5px;
+    margin:0;
+}
+.nivo-caption a {
+    display:inline !important;
+}
+.nivo-html-caption {
+    display:none;
+}
+/* Direction nav styles (e.g. Next & Prev) */
+.nivo-directionNav a {
+    position:absolute;
+    top:45%;
+    z-index:99;
+    cursor:pointer;
+}
+.nivo-prevNav {
+    left:0px;
+}
+.nivo-nextNav {
+    right:0px;
+}
+/* Control nav styles (e.g. 1,2,3...) */
+.nivo-controlNav a {
+    position:relative;
+    z-index:99;
+    cursor:pointer;
+}
+.nivo-controlNav a.active {
+    font-weight:bold;
+}

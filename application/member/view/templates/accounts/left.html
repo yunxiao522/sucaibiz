@@ -1,0 +1,22 @@
+<div class="header">
+    <div style="width:100%;height:40px;"></div>
+    <div class="face">
+        <img src="{$user_info.face}" alt="" class="faceimg">
+    </div>
+    <div class="nickname">
+        <a href="/member/index.html?id={$user_info.id}" target="_blank">{$user_info.nickname}</a>
+    </div>
+    <div class="level">
+        {$user_info.level_info}
+    </div>
+    <a href="/member/contribute/add.html" target="_blank">
+        <div class="contribute">投稿</div>
+    </a>
+</div>
+<div class="content">
+    <a href="/member/accounts/setting.html"><div class="list {if $type eq 'setting'}this{/if}">个人资料</div></a>
+    <a href="/member/accounts/password.html"><div class="list {if $type eq 'password'}this{/if}">修改密码</div></a>
+    <a href="/member/accounts/relevance.html"><div class="list {if $type eq 'relevance'}this{/if}">账号关联</div></a>
+    <a href="/member/accounts/preference.html"><div class="list {if $type eq 'preference'}this{/if}">偏好设置</div></a>
+    <a href="/member/accounts/loginrecord.html"><div class="list {if $type eq 'loginrecord'}this{/if}">登录记录</div></a>
+</div>

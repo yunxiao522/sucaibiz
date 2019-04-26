@@ -1,0 +1,73 @@
+header{
+    width:100%;
+    height:100px;
+    line-height:30px;
+}
+header .content{
+    width:1200px;
+    height:80px;
+    margin:0 auto;
+}
+header .content .header{
+    width:100%;
+    height:20px;
+}
+header .handle {
+    float:right;
+    color:#000;
+    margin-right:20px;
+    line-height:20px;
+    font-size:8pt;
+    text-align:right;
+}
+header .content .logo{
+    float:left;
+}
+header .content .search{
+    width:500px;
+    height:40px;
+    float:right;
+    margin-top:20px;
+    background:#ffffff;
+}
+header .content .search .search-input{
+    float:left;
+    height:38px;
+    border:1px solid #000000;
+    width:378px;
+    background:url("/public/png/search-list.png");
+    background-repeat: no-repeat;
+    background-size:20px 20px;
+    background-position:left 10px center;
+    border-radius:2px;
+    padding-left:40px;
+}
+header .content .search .search-input input{
+    width:100%;
+    height:36px;
+    line-height:38px;
+    font-size:14px;
+    border:none;
+    outline: none;
+}
+
+header .content .search button{
+    float:left;
+    width:80px;
+    height:40px;
+    border-top-right-radius:2px;
+    border-bottom-right-radius:2px;
+    border:0;
+    outline:none;
+    -webkit-appearance: none;
+    line-height:40px;
+    background:#13A38C;
+    color:#ffffff;
+    cursor: pointer;
+}
+footer{
+    width:100%;
+    height:100px;
+    background:#000000;
+    margin-top:20px;
+}

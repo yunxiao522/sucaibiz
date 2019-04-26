@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增模块-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <link rel="stylesheet" href="/public/css/admin/rbac.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">模块名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入模块名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <label class="layui-form-label">父级模块</label>
+            <div class="layui-input-block parent">
+                <select name="parent_id" lay-filter="aihao" lay-search="">
+                    <option value="0">顶级模块</option>
+                    {volist name="$list" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-input-inline" style="margin-left:120px;">
+            <label class="layui-form-label">模块类型</label>
+            <div class="layui-input-block type">
+                <select name="type" lay-verify="required" lay-search="">
+                    <option value="1">外部访问</option>
+                    <option value="2">内部调用</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图标地址</label>
+        <div class="layui-input-block ico">
+            <input type="text" name="ico" lay-verify="ico" placeholder="请输入图标地址" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属应用</label>
+        <div class="layui-input-block name">
+            <input type="text" name="app" lay-verify="app" autocomplete="off" placeholder="请输入应用名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">控制器名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="controller" lay-verify="controller" autocomplete="off" placeholder="请输入控制器名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">方法名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="method" lay-verify="method" autocomplete="off" placeholder="请输入方法名称" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">访问链接</label>
+        <div class="layui-input-block url">
+            <input type="text" name="url" lay-verify="url" autocomplete="off" placeholder="请输入url访问地址" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否启用</label>
+        <div class="layui-input-block">
+            <input type="checkbox"  name="state" lay-skin="switch" lay-filter="switchTest" lay-text="启用|禁用">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">模块描述</label>
+        <div class="layui-input-block description">
+            <textarea placeholder="请输入内容" class="layui-textarea" name="description"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-inline" style="text-align:center;">
+        <div class="layui-input-inline">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">新增</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/rbac.js"></script>
+</html>

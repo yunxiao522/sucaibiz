@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>备份和回滚-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <!--必要样式-->
+    <link rel="stylesheet" type="text/css" href="/public/plugins/loading/css/component.css"/>
+    <link rel="stylesheet" type="text/css" href="/public/plugins/loading/css/custom-bars.css"/>
+
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>文档生成</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>更新文档HTML</li>
+        </a>
+    </ul>
+</header>
+<div style="min-width: 1200px;width:100%;">
+    <form class="layui-form layui-form-pane" action="">
+        <div style="width:500px;margin:0 auto;margin-top:20px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">选择栏目</label>
+                <div class="layui-input-block">
+                    <select name="column" lay-filter="column" lay-verify="column">
+                        <option value="0" selected>选择栏目</option>
+                        {volist name="column" id="vo"}
+                        <option value="{$vo.id}">{$vo.type_name}</option>
+                        {/volist}
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">起始ID</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="start" lay-verify="start" placeholder="请输入" autocomplete="off"
+                           class="layui-input" value="0">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">截止ID</label>
+                <div class="layui-input-inline">
+                    <input type="number" name="end" lay-verify="end" placeholder="请输入" autocomplete="off"
+                           class="layui-input" value="0">
+                </div>
+            </div>
+            <input type="hidden" name="token" value="{$token}">
+            <div class="layui-form-item" align="center">
+                <button class="layui-btn" lay-submit="" lay-filter="demo2" style="margin:0 auto;">开始生成html</button>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" style="text-align:center;">执行状态</label>
+            <div class="layui-input-block" style="height:400px;border:1px #E6E6E6 solid">
+                <div id="loading" style="">
+                    <article style="margin-top:50px;">
+                        <h3 id="info" align="center"></h3>
+                        <div class="flexy-column">
+                            <div class="progress-factor flexy-item">
+                                <div class="progress-bar">
+                                    <div class="bar has-rotation has-colors navy ruler" role="progressbar"
+                                         aria-valuenow="1"
+                                         aria-valuemin="0" aria-valuemax="100" id="bar">
+                                        <div class="tooltip white"></div>
+                                        <div class="bar-face face-position roof percentage"></div>
+                                        <div class="bar-face face-position back percentage"></div>
+                                        <div class="bar-face face-position floor percentage volume-lights"></div>
+                                        <div class="bar-face face-position left"></div>
+                                        <div class="bar-face face-position right"></div>
+                                        <div class="bar-face face-position front percentage volume-lights shine"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/html_article.js"></script>
+</body>
+</html>

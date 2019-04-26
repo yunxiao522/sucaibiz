@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增模块-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <link rel="stylesheet" href="/public/css/admin/rbac.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">模块名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入模块名称" class="layui-input" value="{$info.name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-inline">
+            <label class="layui-form-label">父级模块</label>
+            <div class="layui-input-block parent">
+                <select name="parent_id" lay-filter="aihao">
+                    <option value="0">顶级</option>
+                    {volist name="$list" id="vo"}
+                    <option value="{$vo.id}" {if $info.parent_id eq $vo.id}selected{/if}>{$vo.name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-input-inline" style="margin-left:120px;">
+            <label class="layui-form-label">模块类型</label>
+            <div class="layui-input-block type">
+                <select name="type" lay-filter="aihao">
+                    <option value="1" {if $info.type eq 1}selected{/if}>外部访问</option>
+                    <option value="2" {if $info.type eq 2}selected{/if}>内部调用</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">图标地址</label>
+        <div class="layui-input-block ico">
+            <input type="text" name="ico" lay-verify="ico" placeholder="请输入图标地址" class="layui-input" value="{$info.ico}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属应用</label>
+        <div class="layui-input-block name">
+            <input type="text" name="app" lay-verify="app" autocomplete="off" placeholder="请输入应用名称" class="layui-input" value="{$info.app}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">控制器名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="controller" lay-verify="controller" autocomplete="off" placeholder="请输入控制器名称" class="layui-input" value="{$info.controller}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">方法名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="method" lay-verify="method" autocomplete="off" placeholder="请输入方法名称" class="layui-input" value="{$info.method}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">访问链接</label>
+        <div class="layui-input-block url">
+            <input type="text" name="url" lay-verify="url" autocomplete="off" placeholder="请输入url访问地址" class="layui-input"  value="{$info.url}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否启用</label>
+        <div class="layui-input-block">
+            <input type="checkbox"  name="state" {if $info.state eq 1}checked{/if} lay-skin="switch" lay-filter="switchTest" lay-text="启用|禁用" >
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">模块描述</label>
+        <div class="layui-input-block description">
+            <textarea placeholder="请输入内容" class="layui-textarea" name="description">{$info.description}</textarea>
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-inline" style="text-align:center;">
+        <div class="layui-input-inline">
+            <button class="layui-btn" lay-submit="" lay-filter="demo2">立即提交</button>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/rbac.js"></script>
+</html>

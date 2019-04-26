@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>账号中心-会员中心-素材站</title>
+    <link rel="stylesheet" href="/public/css/member/information.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/information.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+    <!--引入echart插件-->
+    <script type="text/javascript" src="/public/plugins/echart/echarts.min.js"></script>
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/information/left" /}
+    </div>
+    <div class="right inline">
+        <div class="header">
+            <div class="logh">我的统计</div>
+        </div>
+        <div class="cont">
+            <div class="mydata">
+                <div class="head">
+                    <div class="title">我获得的数据</div>
+                    <div class="select" >全部 ∨</div>
+                    <div class="smenu" data-type="4">
+                        <ul>
+                            <li data-type="4">全部</li>
+                            <li data-type="1">昨天</li>
+                            <li data-type="2">近一周</li>
+                            <li data-type="3">近一月</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="data">
+                    <div class="list pop">
+                        <div class="h">{$mydata.pop}</div>
+                        <div class="t">总人气</div>
+                    </div>
+                    <div class="list fens">
+                        <div class="h">{$mydata.fens}</div>
+                        <div class="t">粉丝数</div>
+                    </div>
+                    <div class="list index">
+                        <div class="h">{$mydata.index_num}</div>
+                        <div class="t">主页访问</div>
+                    </div>
+                    <div class="list production" style="border:none">
+                        <div class="h">{$mydata.recommend}</div>
+                        <div class="t">作品推荐</div>
+                    </div>
+                </div>
+            </div>
+            <div class="trend">
+                <div class="head">
+                    <div class="title">趋势</div>
+                    <div class="n">
+                        <ul>
+                            <a href="" class="tli" data-class="pop">
+                                <li class="this">人气</li>
+                            </a>
+                            <a href="" class="tli" data-class="fens">
+                                <li>粉丝数</li>
+                            </a>
+                            <a href="" class="tli" data-class="index_num">
+                                <li>主页访问</li>
+                            </a>
+                            <a href="" class="tli" data-class="production">
+                                <li>作品推荐</li>
+                            </a>
+                        </ul>
+                    </div>
+                    <div class="select" style="margin-top:-32px;">近一周 ∨</div>
+                    <div class="smenu" style="margin-top:-11px;" data-type="1">
+                        <ul>
+                            <li data-type="1">近一周</li>
+                            <li data-type="2">近一月</li>
+                            <li data-type="3">近三月</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="data" id="trend"></div>
+            </div>
+            <div class="myarticle">
+                <div class="head">
+                    <div class="title">近30天文档数据变化</div>
+                </div>
+                <div class="data">
+                    <table>
+                        <tr>
+                            <td class="title">作品</td>
+                            <td class="pop">人气</td>
+                            <td class="recommend">推荐</td>
+                            <td class="tren">趋势</td>
+                            <td class="like">推荐此作品的人</td>
+                        </tr>
+                        <div class="empty"></div>
+                    </table>
+                </div>
+            </div>
+            <div class="youlike">
+                <div class="head">他们喜欢过你的作品</div>
+                <div class="data"></div>
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;">
+
+    </div>
+</article>
+<div class="top"><img src="" alt=""></div>
+{include file="templates/accounts/footer" /}
+<input type="hidden" name="id" value="{$user_info.id}">
+<script type="text/javascript">
+    $(function () {
+        //实例化趋势图
+        var trend = echarts.init($('#trend')[0]);
+
+        function showTrend(data) {
+            //配置图像相关信息
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: data.showtext,
+                    x: 5,
+                    textStyle: {
+                        fontSize: 14,
+                        fontWeight: 'lighter',
+                        color: '#000000',
+                        fontFamily: '微软雅黑'
+                    }
+
+                },
+                grid: {
+                    x: 50,
+                    y: 50,
+                    x2: 50,
+                    y2: 40
+                },
+                calculable: true,
+                xAxis: [
+                    {
+                        splitLine: {
+                            show: true,
+                            color: '#EEEEEE'
+                        },
+                        type: 'category',
+                        boundaryGap: false,
+                        data: data.day,
+                        axisLine: {
+                            lineStyle: {
+                                'color': '#EEEEEE'
+                            }
+                        },
+                        axisLabel: {
+                            color: '#000000'
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        splitLine: {
+                            show: true,
+                            color: '#EEEEEE'
+                        },
+                        type: 'value',
+                        axisLabel: {
+                            color: '#000000'
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                'color': '#EEEEEE'
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name: data.showtext,
+                        type: 'line',
+                        data: data.data,
+                        symbolSize: 10,
+                        itemStyle: {
+                            normal: {
+                                label: {
+                                    show: true
+                                },
+                                color: '#00C9A9',
+                                lineStyle: {
+                                    color: '#13A38C',
+                                    width: 2
+                                }
+                            }
+                        }
+
+                    }
+                ]
+            };
+            console.log(option);
+            // 使用刚指定的配置项和数据显示图表。
+            trend.setOption(option);
+        }
+
+        function trendLoad(ss, type, text) {
+            //发送ajax请求获取数据
+            $.ajax({
+                url: '/member/information/getmydata.html',
+                type: 'post',
+                data: {class: ss, type: type},
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    if (data.errorcode == 0) {
+                        showTrend({showtext: text, day: data.data.day, data: data.data.data})
+                    }
+                }
+            });
+        }
+
+        trendLoad('fens', 1, '粉丝');
+        //绑定导航按钮事件
+        $('.tli').on('click', function () {
+            var ss = this.dataset.class;
+            var type = $('.smenu')[1].dataset.type;
+            var text = $(this).children('li').html();
+            trendLoad(ss, type, text);
+            return false;
+        });
+        //绑定选择时间类型事件
+        $('.trend').children('.head').children('.smenu').children('ul').children('li').on('click', function () {
+            var type = this.dataset.type;
+            $(this).parent().parent('.smenu')[0].dataset.type = type;
+            var ss = $('.this').parent('a')[0].dataset.class;
+            var text = $('.this').html();
+            $('.smenu').hide();
+            trendLoad(ss, type, text);
+            $(this).parent().parent('.smenu').siblings('.select').html($(this).html() + ' ∨');
+
+        });
+
+        //获取我获得的数据函数
+        function getObtainData() {
+            var type = $('.mydata').children('.head').children('.smenu')[0].dataset.type;
+            //发送ajax请求获取数据
+            $.ajax({
+                url: '/member/information/getobtaindata.html',
+                type:'post',
+                data:{type:type},
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    if (data.errorcode == 0) {
+                        $('.pop').children('.h').html(data.data.pop);
+                        $('.fens').children('.h').html(data.data.fens);
+                        $('.index').children('.h').html(data.data.index_num);
+                        $('.production').children('.h').html(data.data.recommend);
+                    }
+                }
+            });
+        }
+        //绑定获取我的数据事件选择事件
+        $('.mydata').children('.head').children('.smenu').children('ul').children('li').on('click' ,function () {
+            var type = this.dataset.type;
+            $(this).parent().parent('.smenu')[0].dataset.type = type;
+            $(this).parent().parent('.smenu').siblings('.select').html($(this).html() + ' ∨');
+            getObtainData();
+            $('.smenu').hide();
+        });
+        getObtainData();
+        //获取我的文档数据
+        function loadMyArticle(limit ,page ,url) {
+            //发送ajax请求,获取数据
+            $.ajax({
+                url:url,
+                type:'post',
+                date:{limit:limit,page:page},
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    if (data.errorcode == 2) {
+                        $('.empty').css('background','url(/public/png/empty-msg.png) center no-repeat');
+                        $('.empty').css('width','920px');
+                        $('.empty').css('height','350px');
+                        $('.empty').css('z-index','2');
+                        $('.empty').css('position','absolute');
+                        $('.empty').html('<div class="articlehint">您还没有发表过文档</div><button class="push">发布文档</button>')
+                    }else if(data.errorcode == 0){
+                        showMyArticleTable(data.data ,data.paging);
+                    }
+                }
+            })
+        }
+        //显示我的文档表格内容方法
+        function showMyArticleTable(list ,paging) {
+            var length = list.length;
+            console.log(list[0]);
+            var tablelist = [];
+            //组合数据
+            var tr = '';
+            for(var i = 0;i < length ;i++){
+               var title = list[i].title;
+               var comment_num = list[i].comment_num;
+               var recommend = 0;
+               var trend = 0;
+               var fens = 0;
+               tr += "<tr><td>"+ title +"</td><td>"+ comment_num +"</td><td>"+ recommend +"</td><td>"+ trend +"</td><td>"+ fens +"</td></tr>";
+            }
+            $('.myarticle').children('.data').children('table').children('tbody').append(function () {
+                return tr;
+            });
+            $('.myarticle').children('.data').children('table').children('tbody').append(function () {
+                return paging;
+            });
+        }
+        loadMyArticle(1,1 ,'/member/information/getarticledata.html');
+        //绑定发布文档按钮事件
+        $('body').on('click' ,'.push' ,function () {
+            console.log(1);
+            var url = '/member/contribute/add.html';
+            window.open(url, '_blank');
+            return false;
+        });
+        //绑定文档分页点击事件
+        $('body').on('click' ,'.paging a' ,function () {
+            var url = $(this).attr('href');
+            loadMyArticle(1,1,url);
+            return false;
+        });
+    })
+</script>
+</body>
+</html>

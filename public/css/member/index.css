@@ -1,0 +1,327 @@
+* {
+    margin: 0px;
+    padding: 0px;
+    border: 0px;
+}
+body{
+    margin:0;
+    padding:0;
+    width:100%;
+    min-width:1200px;
+    height:auto;
+}
+a{
+    color:#000000;
+    text-decoration: none;
+}
+a:active{
+    color:#000000;
+}
+a:visited{
+    color:#000000;
+}
+header{
+    width:100%;
+    height:90px;
+    background:#ffffff;
+}
+.ground{
+    width:100%;
+    height:380px;
+    background-image: url("/public/jpg/member/member_background.jpg");
+    position: relative;
+}
+.face{
+    width:100px;
+    height:100px;
+    border-radius:50px;
+    margin:0 auto;
+}
+.info{
+    margin:0 auto;
+    width:200px;
+    height:200px;
+    text-align:center;
+}
+.name{
+    width:100%;
+    height:40px;
+    margin-top:10px;
+    text-align: center;
+    color:#ffffff;
+    font-size:17pt;
+    font-weight:600;
+    line-height:40px;
+}
+.more{
+    width:100%;
+    height:30px;
+    line-height:30px;
+    color:#ffffff;
+}
+.inline{
+    float:left;
+}
+.attention{
+    width:50%;
+    height:30px;
+    text-align: center;
+}
+.fens{
+    width:50%;
+    height:30px;
+    text-align: center;
+}
+.menu{
+    width:100%;
+    background:rgba(0,0,0,0.5);
+    height:50px;
+    bottom:0;position: absolute;
+}
+.nav{
+    width:1200px;
+    height:50px;
+    margin:0 auto;
+    color:#ffffff;
+    line-height:50px;
+}
+.nav li{
+    padding-right:100px;
+}
+.nav li a{
+    color:#ffffff;
+}
+.nav li a:active{
+    color:#ffffff;
+}
+.nav li a:visited{
+    color:#ffffff;
+}
+ul{
+    margin:0;
+    padding:0;
+    list-style: none;
+}
+li{
+    list-style: none;
+}
+.this{
+    color:#13A38C;
+}
+#main{
+    margin:0 auto;
+    width:1200px;
+    height:500px;
+    background:#ffffff;
+}
+footer{
+    width:100%;
+    height:500px;
+    background:#000000;
+}
+.loader {
+    margin:0 auto;
+    width: 175px;
+    height: 100px;
+}
+.loader span {
+    display: block;
+    background: #ccc;
+    width: 7px;
+    height: 10%;
+    border-radius: 14px;
+    margin-right: 5px;
+    float: left;
+    margin-top: 25%;
+}
+.loader span:last-child {
+    margin-right: 0px;
+}
+.loader span:nth-child(1) {
+    animation: load 2.5s 1.4s infinite linear;
+}
+.loader span:nth-child(2) {
+    animation: load 2.5s 1.2s infinite linear;
+}
+.loader span:nth-child(3) {
+    animation: load 2.5s 1s infinite linear;
+}
+.loader span:nth-child(4) {
+    animation: load 2.5s 0.8s infinite linear;
+}
+.loader span:nth-child(5) {
+    animation: load 2.5s 0.6s infinite linear;
+}
+.loader span:nth-child(6) {
+    animation: load 2.5s 0.4s infinite linear;
+}
+.loader span:nth-child(7) {
+    animation: load 2.5s 0.2s infinite linear;
+}
+.loader span:nth-child(8) {
+    animation: load 2.5s 0s infinite linear;
+}
+.loader span:nth-child(9) {
+    animation: load 2.5s 0.2s infinite linear;
+}
+.loader span:nth-child(10) {
+    animation: load 2.5s 0.4s infinite linear;
+}
+.loader span:nth-child(11) {
+    animation: load 2.5s 0.6s infinite linear;
+}
+.loader span:nth-child(12) {
+    animation: load 2.5s 0.8s infinite linear;
+}
+.loader span:nth-child(13) {
+    animation: load 2.5s 1s infinite linear;
+}
+.loader span:nth-child(14) {
+    animation: load 2.5s 1.2s infinite linear;
+}
+.loader span:nth-child(15) {
+    animation: load 2.5s 1.4s infinite linear;
+}
+@keyframes load {
+    0% {
+        background: #ccc;
+        margin-top: 25%;
+        height: 10%;
+    }
+    50% {
+        background: #444;
+        height: 100%;
+        margin-top: 0%;
+    }
+    100% {
+        background: #ccc;
+        height: 10%;
+        margin-top: 25%;
+    }
+}
+.blank{
+    width:300px;
+    height:300px;
+    background-image: url("/public/jpg/member/blank.png");
+    margin:0 auto;
+    background-size:cover;
+}
+.likenav{
+    width:100%;
+    height:40px;
+    line-height:40px;
+}
+.likenav ul li{
+    padding-right:50px;
+}
+.likelist{
+    width:100%;
+    height:460px;
+    background:#ffffff;
+}
+.liketable{
+    width:100%;
+    max-height:410px;
+    border-width:0;
+    font-family:'微软雅黑';
+}
+.liketable .left{
+    padding-left:20px;
+}
+.liketable .right{
+    padding-right:20px;
+}
+.liketh{
+    background:#FBFBFD;
+    color:#808080;
+    height:50px;
+}
+.liketr{
+    height:30px;
+}
+.attention1{
+    width:1200px;
+    height:460px;
+}
+.attention1 ul li{
+    width:220px;
+    margin:10px;
+    height:400px;
+    background:#FBFBFD;
+}
+.attention1 ul li .face{
+    width:100%;
+    height:150px;
+    text-align:center;
+    margin-top:28px;
+}
+.attention1 ul li .face img{
+    width:150px;
+    height:150px;
+    border-radius:75px;
+}
+.attention1 ul li .nickname{
+    width:100%;
+    height:40px;
+    text-align:center;
+    margin-top:40px;
+    line-height: 50px;
+}
+.attention1 ul li .info{
+    width:100%;
+    height:40px;
+    text-align:center;
+    line-height:40px;
+    color:#808080;
+}
+.attention1 ul li .atten{
+    width:120px;
+    height:40px;
+    margin:0 auto;
+    margin-top:20px;
+    border:1px #000000 solid;
+    text-align:center;
+    border-radius: 2px;
+    line-height:40px;
+}
+.attention1 ul li .atten:hover{
+    background:#ededed;
+}
+#paging{
+    width:1200px;
+    margin:0 auto;
+    height:30px;
+    text-align:center;
+}
+.padding .paging{
+    margin:0 auto;
+    padding:0;
+    width:max-content;
+    height:max-content;
+}
+.padding .paging li{
+    float:left;
+    padding:10px;
+    text-align:center;
+    background:#F5F5F5;
+    border-radius:2px;
+    font-size:10pt;
+    border:1px #E2E2E2 solid;
+
+}
+.padding .paging a:hover{
+    color:#11A28B;
+}
+.padding .paging .this{
+    background:#11A28B;
+    color:#fff;
+    border:1px #11A28B solid;
+}
+.disable{
+    color:#E2E2E2;
+    background:#F5F5F5;
+}
+.disable:hover{
+    color:#E2E2E2;
+    background:#F5F5F5;
+}

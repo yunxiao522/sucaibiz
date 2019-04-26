@@ -1,0 +1,16 @@
+body{
+    padding:0;
+    margin:0;
+}
+form{
+    margin-top:40px;
+}
+.name{
+    width:400px;
+}
+.content{
+    width:500px;
+}
+.palcename{
+    width:500px;
+}

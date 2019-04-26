@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的收藏</title>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/public/ico/favicon.ico"/>
+    <link rel="stylesheet" href="/public/css/member/information.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/information.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/information/left" /}
+    </div>
+    <div class="right inline">
+        <div class="header">
+            我的收藏
+            <a href="" class="createlikeclass">创建收藏夹</a>
+        </div>
+        <div class="interval">共{$count}个收藏夹
+            <div  class="classify">
+                {if $class eq 'all'}
+                    全部 ∨
+                {elseif $class eq 'privacy'}
+                    私密 ∨
+                {elseif $class eq 'open'}
+                    公开 ∨
+                {/if}
+            </div>
+            <div class="classifymenu">
+                <div class="list" data-class="all">全部</div>
+                <div class="list" data-class="open">公开</div>
+                <div class="list" data-class="privacy">私密</div>
+            </div>
+        </div>
+        <div class="body" {if $count == 0}style="background:url(/public/png/empty-msg.png) center no-repeat;background-color:#ffffff;"{/if}>
+            <ul>
+                {volist name="$like_list" id="vo"}
+                <li>
+                    <div class="item">
+                        <div class="head">
+                            <a href="" class="show" data-id="{$vo.id}">
+                                <div class="img">
+                                    {volist name="$vo.litpic" id="v"}
+                                        <img src="{$v}" alt="" width="50%" height="50%" style="float:left">
+                                    {/volist}
+                                </div>
+                            </a>
+                            {if $vo.create_type eq 2}
+                            <div class="edit" data-id="{$vo.id}">•••</div>
+                            <div class="editmenu">
+                                <div class="l" data-type="edit" data-id="{$vo.id}">编辑收藏夹</div>
+                                <div class="l" data-type="delete" data-id="{$vo.id}">删除</div>
+                            </div>
+                            {/if}
+                            <div class="name">
+                                <a href="" class="show" data-id="{$vo.id}">{$vo.name}</a>
+                                {if $vo.type eq 1}
+                                <div class="lock">
+                                    <img src="/public/png/lock.png" alt="" style="width:15px;height:15px;">
+                                </div>
+                                {/if}
+                            </div>
+                            <div class="description">{$vo.description}</div>
+                            <div class="info">
+                                <img src="/public/png/atlas.png" alt="" style="width:20px;height:20px;" class="inline">
+                                <div class="num inline">{$vo.num}</div>
+                                <img src="/public/png/star.png" alt="" style="width:20px;height:20px;" class="inline">
+                                <div class="num inline">{$vo.praise}</div>
+                            </div>
+                        </div>
+                        <div class="more">
+                            {if $vo.create_type eq 1}
+                            系统创建
+                            {else /}
+                            <div class="create">{$vo.create_time}</div>
+                            <div class="alter">{$vo.alter_time}</div>
+                            {/if}
+                        </div>
+                    </div>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+        <div style="clear: both;display: block;width:100%;height:1px;"></div>
+        {if $like_list neq []}
+            <div class="padding">
+                {$page}
+            </div>
+        {/if}
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;"></div>
+</article>
+<div class="top"><img src="" alt=""></div>
+{include file="templates/accounts/footer" /}
+<input type="hidden" name="id" value="{$user_info.id}">
+</body>
+<script>
+    $('.editmenu').hide();
+    $('.classifymenu').hide();
+    $(function () {
+        //绑定创建收藏夹事件
+        $('.createlikeclass').on('click', function () {
+            var create = layer.open({
+                type: 2,
+                title: '创建收藏夹',
+                shadeClose: true,
+                shade: 0.8,
+                area: ['510px', '370px'],
+                content: '/member/information/createlikeclass.html' //iframe的url
+            });
+            return false;
+        });
+        //绑定编辑收藏夹点鼠标放上去事件
+        $('.edit').hover(function () {
+            $(this).siblings('.editmenu').show();
+        }, function () {
+            $(this).siblings('.editmenu').hide();
+        });
+        //绑定编辑收藏夹菜单鼠标放上去事件
+        $('.editmenu').hover(function () {
+            $(this).show();
+        }, function () {
+            $(this).hide();
+        });
+        //绑定编辑菜单点击事件
+        $('.l').on('click', function () {
+            var type = this.dataset.type;
+            var id = this.dataset.id;
+            var that = $(this);
+            if (type == 'edit') {
+                layer.open({
+                    type: 2,
+                    title: '编辑收藏夹',
+                    shadeClose: true,
+                    shade: 0.8,
+                    area: ['510px', '370px'],
+                    content: '/member/information/editlikeclass.html?id=' + id //iframe的url
+                });
+            } else if (type == 'delete') {
+                layer.confirm('确定要删除此收藏夹吗？', {
+                    btn: ['确定', '取消'] //按钮
+                },{title:'删除收藏夹'}
+                ,function () {
+                    //发送ajax请求
+                    $.ajax({
+                        url:'/member/information/dellikeclass.html',
+                        type:'post',
+                        data:{id:id},
+                        beforeSend: function () {
+                            loading = layer.load(0, {shade: false});
+                        },
+                        success: function (e) {
+                            var data = JSON.parse(e);
+                            layer.close(loading);
+                            layer.msg(data.msg ,{time:2000} ,function () {
+                                that.parent().parent().parent().parent('li').hide();
+                                layer.closeAll();
+                            });
+                        }
+                    })
+                }, function () {
+                    //关闭 layer弹出层
+                    layer.closeAll();
+                });
+            }
+            return false;
+        });
+        //绑定跳转收藏夹详细信息链接
+        $('.show').on('click' ,function () {
+            var id = this.dataset.id;
+            window.location.href = '/member/information/showlikeclass.html?id='+id;
+            return false;
+        });
+        //绑定收藏夹类型文件鼠标放上去事件
+        $('.classify').hover(function () {
+            $('.classifymenu').show();
+        },function () {
+            $('.classifymenu').hide();
+        })
+        //绑定收藏夹类型菜单鼠标放上去事件
+        $('.classifymenu').hover(function () {
+            $('.classifymenu').show();
+        },function () {
+            $('.classifymenu').hide();
+        })
+        //绑定收藏夹类型菜单点击事件
+        $.each($('.classifymenu').children('.list') ,function () {
+            $(this).on('click' ,function () {
+                var ss = this.dataset.class;
+                window.location.href = '/member/information/mylike.html?type='+ss;
+            });
+        })
+    })
+</script>
+</html>

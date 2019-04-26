@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>栏目管理-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        .main {
+            width: 100%;
+            height: auto;
+        }
+
+        article {
+            width: 300px;
+            height: 500px;
+            float: left;
+        }
+
+        aside {
+            width: 100%;
+            float: left;
+            height: 500px;
+            padding: 10px;
+            padding-top: 0px;
+            padding-left: 0px;
+        }
+
+        .nav-tree {
+            width: 390px;
+            margin-left: 10px;
+            margin-top: 10px;
+            height: auto;
+            border: 1px solid #e2e2e2;
+            border-bottom:0px;
+            border-right: 0px;
+        }
+
+        .manage-main {
+            width: 100%;
+            border: 1px solid #e2e2e2;
+        }
+
+        .tree-main {
+            margin-left: 40px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>核心</li>
+        </a>
+        <li>|</li>
+        <a href="">
+            <li>栏目管理</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+        <button class="layui-btn layui-btn-sm add-column">增加顶级栏目</button>
+        <button class="layui-btn layui-btn-sm update-html">更新栏目HTML</button>
+    </div>
+</header>
+<div class="main">
+    <article id="article">
+        <div class="nav-tree">
+            <div class="tree-main">
+                <ul id="tree"></ul>
+            </div>
+        </div>
+    </article>
+    <aside id="aside">
+        <div class="manage-main" lay-filter="demo">
+
+        </div>
+    </aside>
+</div>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script>
+    $(document).ready(function () {
+            $(aside).width(($('body').width() - $('article').width()) - 10);
+            $.ajax({
+                url: '/admin/getcolumntree.html',
+                type: 'get',
+                async:false,
+                success: function (data) {
+                    node = $.parseJSON(data);
+                }
+            });
+        }
+    );
+    layui.use(['table', 'form', 'layer', 'vip_table', 'tree', 'vip_tab'], function () {
+
+        var form = layui.form
+            , table = layui.table
+            , layer = layui.layer
+            , vipTable = layui.vip_table
+            , viptab = layui.vip_tab;
+
+        // 表格渲染
+        tableIns = table.render({
+            elem: '.manage-main'                  //指定原始表格元素选择器（推荐id选择器）
+            , height: vipTable.getFullHeight(45)    //容器高度
+            , cols: [[                  //标题栏
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', align: 'center', title: '栏目ID', width: 80}
+                , {field: 'type_name', align: 'center', title: '栏目名称', width: 120}
+                , {field: 'sort_rank', align: 'center', title: '栏目排序', width: 120}
+                , {field: 'type_dir', align: 'left', title: '栏目目录', width: 120}
+                , {field: 'index', align: 'left', title: '栏目首页', width: 300}
+                , {fixed: 'right', title: '操作', width: 600, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
+            ]]
+            , id: 'dataCheck'
+            , url: '/admin/getcolumnlistjson.html'
+            , method: 'post'
+            , page: true
+            , limits: [30, 60, 90, 150, 300]
+            , limit: 30 //默认采用30
+            , loading: true
+        });
+
+        //监听工具条
+        table.on('tool(demo)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'show') {
+                //预览
+                var host = window.location.hostname;
+                $(this).attr('target', '_blank');
+                $(this).attr('href', ('http://' + host + '/list?id=' + data.id));
+            } else if (obj.event === 'content') {
+                //内容
+                // 添加选项卡[自身对象,标题,url地址]
+                viptab.add($(this), '内容', '/admin/get_column_info.html?id='+data.id); // 有传入三个参数，第一个参数完全没有作用了，就是站位
+            } else if (obj.event === 'add') {
+                //增加子类
+                layer.open({
+                    type: 2,
+                    title: '增加子类',
+                    skin: 'addheader',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: false, //开启最大化最小化按钮
+                    area: ['893px', '600px'],
+                    content: '/admin/add_child_column.html?parent_id=' + data.id
+                });
+            } else if (obj.event === 'edit') {
+                //更改
+                layer.open({
+                    type: 2,
+                    title: '修改栏目',
+                    skin: 'addheader',
+                    shadeClose: true,
+                    shade: false,
+                    maxmin: false, //开启最大化最小化按钮
+                    area: ['893px', '600px'],
+                    content: '/admin/alter_Column.html?id=' + data.id
+                });
+            } else if (obj.event === 'mv') {
+                //移动
+                layer.prompt({title: '请输入新的栏目排序编号', formType: 0}, function (pass, index) {
+                    $.ajax({
+                        url: '/admin/alter_Column_sort_rank.html',
+                        type: 'post',
+                        data: {id: data.id, sort_num: pass},
+                        beforeSend: function () {
+                            loading = layer.load(0, {shade: false});
+                        },
+                        success: function (e) {
+                            var data = JSON.parse(e);
+                            layer.msg(data.msg, {time: 1000}, function () {
+                                if (data.errorcode == 0) {
+                                    location.href = "/admin/column/show.html";
+                                }
+                            });
+                        }
+                    })
+                });
+            } else if (obj.event === 'del') {
+                //删除
+                //询问框
+                layer.confirm('确定要删除吗？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.ajax({
+                        url: '/admin/del_column.html',
+                        type: 'post',
+                        data: {id: data.id},
+                        beforeSend: function () {
+                            loading = layer.load(0, {shade: false});
+                        },
+                        success: function (e) {
+                            var data = JSON.parse(e);
+                            layer.msg(data.msg, {time: 1000}, function () {
+                                if (data.errorcode == 0) {
+                                    location.href = "/admin/column/show.html";
+                                }
+                            });
+                        }
+                    })
+                }, function () {
+                    layer.closeAll('dialog');
+                });
+            } else if(obj.event =='publish'){
+                viptab.add($(this), '发布文档', '/admin/article/publish.html?column='+data.id); // 有传入三个参数，第一个参数完全没有作用了，就是站位
+                return false;
+            } else if(obj.event == 'html'){
+                $.ajax({
+                    url: '/admin/html_column.html',
+                    type: 'post',
+                    data: {column: data.id},
+                    beforeSend: function () {
+                        loading = layer.load(0, {shade: false});
+                    },
+                    success: function (e) {
+                        layer.close(loading);
+                        var data = JSON.parse(e);
+                        layer.msg(data.msg, {time: 1000});
+                    }
+                })
+            }
+        });
+        setTimeout(1000);
+        layui.tree({
+            elem: '#tree' //传入元素选择器
+            , click: function (data) { //点击节点回调
+                // 加载中...
+                var loadIndex = layer.load(1, {shade: false});
+                // 关闭加载
+                layer.close(loadIndex);
+                // 刷新表格
+                tableIns.reload({
+                    where: {
+                        parent_id: data.id,
+                    }
+                });
+            }
+            , nodes: node
+        });
+
+    });
+
+
+    //绑定增加顶级栏目按钮事件
+    $('.add-column').on('click', function () {
+        layer.open({
+            type: 2,
+            title: '增加顶级栏目',
+            skin: 'addheader',
+            shadeClose: true,
+            shade: false,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['893px', '600px'],
+            content: '/admin/add_top_column.html'
+        });
+        return false;
+    });
+    $('update-html').on('click', function () {
+        return false;
+    });
+</script>
+<!-- 表格操作按钮集 -->
+<script type="text/html" id="barOption">
+    <a class="layui-btn layui-btn-sm" lay-event="show">预览</a>
+    <a class="layui-btn layui-btn-sm" lay-event="publish">发布文档</a>
+    <a class="layui-btn layui-btn-sm layui-btn-cyan" lay-event="html">更新html</a>
+    <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="content">内容</a>
+    <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add">增加子类</a>
+    <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="edit">更改</a>
+    <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="mv">移动</a>
+    <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del">删除</a>
+</script>
+</body>
+</html>

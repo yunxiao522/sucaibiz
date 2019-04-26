@@ -1,0 +1,23 @@
+header {
+    border-bottom: 1px solid #e2e2e2;
+    text-align: center;
+}
+
+.bread-nav {
+    margin-left: 20px;
+    font-size: 10pt;
+}
+
+.bread-nav li {
+    padding: 0px;
+    margin: 0px;
+    float: left;
+    margin-right: 10px;
+}
+
+.top-btn {
+    float: right;
+    height: 60px;
+    margin-right: 20px;
+    line-height:60px;
+}

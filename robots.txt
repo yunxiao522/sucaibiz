@@ -1,0 +1,10 @@
+Disallow: /admin
+Disallow: /extend
+Disallow: /runtime
+Disallow: /templates
+Disallow: /thinkphp
+Disallow: /vendor
+Disallow: /plus
+Disallow: /application
+Disallow: /*?*
+User-agent:360Spider Disallow: /*?*

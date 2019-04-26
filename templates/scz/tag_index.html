@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-TAG标签</title>
+    <link rel="stylesheet" href="http://n.sucai.biz/public/css/index/sc_tag.css">
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="http://t1.sucai.biz/image/sucaiz-logo.ico"/>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+</head>
+<body>
+<header>
+    <div class="header">
+        <div class="head">
+            <ul>
+                <li>素材站首页</li>
+                <li>桌面壁纸</li>
+                <li>动漫壁纸</li>
+                <li>自然风景</li>
+                <li>城市壁纸</li>
+                <li>美女壁纸</li>
+                <li>素材资讯</li>
+                <li>信息图</li>
+            </ul>
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+    </div>
+    <nav>
+        <div class="content">
+            <img src="/public/png/logo1_2.png" alt="" >
+            <div class="search"></div>
+        </div>
+    </nav>
+</header>
+<article>
+    <div class="content">
+        <div class="left">
+            <div class="title">
+                <img src="/public/png/bz.png" alt="">
+                <div class="tt">桌面壁纸</div>
+            </div>
+        </div>
+        <div class="center">
+            {volist name="1|tag='column',###" id="vo" key="k" offset="0" length="10"}
+                <div class="item">
+                    <a href="/tag?id={$vo.tag_id}">
+                        <div class="title">
+                            <img src="/public/png/hot{if $k >2}1{/if}.png" alt="">
+                            <div class="tt">{$vo.tag_name}</div>
+                        </div>
+                    </a>
+                    <div class="description">
+                        {volist name="$vo.tag_id|tag='article',###" id="v" offset="0" length="2"}
+                        <a href="/article?id={$v.id}"><div>{$v.title|cut_str=###,10}</div></a>
+                        {/volist}
+                    </div>
+                </div>
+            {/volist}
+        </div>
+        <div class="right"><div style="width:100%;height:60px;"></div>更多︾</div>
+    </div>
+    <div class="content">
+        <div class="left">
+            <div class="title">
+                <img src="/public/png/zx.png" alt="">
+                <div class="tt">资讯壁纸</div>
+            </div>
+        </div>
+        <div class="center">
+            {volist name="24|tag='column',###" id="vo" key="k" offset="0" length="10"}
+            <div class="item">
+                <a href="/tag?id={$vo.tag_id}">
+                    <div class="title">
+                        <img src="/public/png/hot{if $k >2}1{/if}.png" alt="">
+                        <div class="tt">{$vo.tag_name}</div>
+                    </div>
+                </a>
+                <div class="description">
+                    {volist name="$vo.tag_id|tag='article',###" id="v" offset="0" length="2"}
+                    <a href="/article?id={$v.id}"><div>{$v.title|cut_str=###,10}</div></a>
+                    {/volist}
+                </div>
+            </div>
+            {/volist}
+        </div>
+        <div class="right"><div style="width:100%;height:60px;"></div>更多︾</div>
+    </div>
+    <div class="content">
+        <div class="left">
+            <div class="title">
+                <img src="/public/png/tb.png" alt="">
+                <div class="tt">数字之道</div>
+            </div>
+        </div>
+        <div class="center">
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+        </div>
+        <div class="right"><div style="width:100%;height:60px;"></div>更多︾</div>
+    </div>
+    <div class="content">
+        <div class="left">
+            <div class="title">
+                <img src="/public/png/phone.png" alt="">
+                <div class="tt">手机壁纸</div>
+            </div>
+        </div>
+        <div class="center">
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+            <div class="item">
+                <div class="title">
+                    <img src="/public/png/hot1.png" alt="">
+                    <div class="tt">美女</div>
+                </div>
+                <div class="description">
+                    <div>二次元动漫美少女唯美图片</div>
+                    <div>二次元动漫美少女唯美图片</div>
+                </div>
+            </div>
+        </div>
+        <div class="right"><div style="width:100%;height:60px;"></div>更多︾</div>
+    </div>
+    <div class="content">
+        <div class="left"></div>
+        <div class="center">
+
+        </div>
+        <div class="right"></div>
+    </div>
+</article>
+<footer>
+
+</footer>
+
+</body>
+<!--引入共有列表文件-->
+<script type="text/javascript" src="/public/js/index/list.js"></script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

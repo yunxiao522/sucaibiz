@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增分类</title>
+    <script src="/public/jquery.js"></script>
+    <script src="/public/layer/layer.js"></script>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <script type="text/javascript" src="/public/layui/layui.js"></script>
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            width:100%;
+            height:100vh;
+        }
+        header{
+            width:100%;
+            height:50px;
+            text-align:center;
+            line-height:50px;
+            font-size:16px;
+        }
+        header .left,header .right{
+            float:left;
+            width:calc(50% - 75px);
+            height:50px;
+        }
+        article{
+            width:100%;
+            height:calc(100vh - 50px);
+        }
+        .inline{
+            float:left;
+        }
+        article .left{
+            width:calc(50% - 75px);
+            height:100%;
+        }
+        article .right{
+            width:calc(50% - 75px);
+            height:100%;
+        }
+        article .center{
+            width:150px;
+            height:100%;
+        }
+        article .center button{
+            display: block;
+            border:none;
+            outline:none;
+            border-radius:2px;
+            width:80px;
+            height:30px;
+            margin:0 auto;
+            cursor:pointer;
+        }
+        article .list{
+            width:250px;
+            height:300px;
+            border:1px solid #e8e8e8;
+            margin:0;
+            padding:0;
+            margin:0 auto;
+            margin-top:20px;
+            overflow-x:hidden;
+            overflow-y:scroll;
+        }
+        article .list li{
+            list-style:none;
+            font-size:16px;
+            width:100%;
+            height:40px;
+            text-align:center;
+            line-height:40px;
+            cursor:pointer;
+        }
+        article .list .this{
+            background:#13A38C;
+        }
+        .shade{
+            width:100%;
+            height:100vh;
+            background:rgba(0,0,0,0.2);
+            position:absolute;
+            top:0;
+            z-index: 100;
+        }
+        .shade .content{
+            background:#ffffff;
+            width:500px;
+            height:300px;
+            margin:0 auto;
+            margin-top:50px;
+            font-size:16px;
+            padding-top:1px;
+        }
+        .content .list{
+            width:100%;
+            height:40px;
+            margin-top:10px;
+            line-height:40px;
+        }
+        .content .list .left{
+            float:left;
+            width:100px;
+            text-align:right;
+        }
+        .content .list .right{
+            float:left;
+        }
+        .content .list .right input{
+            border:none;
+            border-bottom:1px solid #e8e8e8;
+            margin-left:10px;
+            text-align:center;
+        }
+        .content .list .right input:read-only{
+            background:#ffffff;
+            width:50px;
+            text-align:center;
+            padding:0;
+        }
+        .content .operate{
+            width:100%;
+            height:50px;
+            margin-bottom:20px;
+        }
+        .content button{
+            margin:0 auto !important;
+            display:inline-block !important;
+        }
+        .layui-unselect{
+            margin-top:-5px;
+            margin-left:10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="left" style="float:left;">文档分类</div>
+    <div class="right" style="float:right;">搜索分类</div>
+</header>
+<article>
+    <div class="left inline">
+        <ul class="list article">
+            {volist name='article_column' id='value'}
+                <li class="l" data-id="{$value.id}" data-type="{$value.channel_type}" data-name="{$value.type_name}">{$value.type_name}</li>
+            {/volist}
+        </ul>
+    </div>
+    <div class="center inline">
+        <button id="del" style="margin-top:150px;"><<</button>
+        <button id="add" style="margin-top:20px;">>></button>
+    </div>
+    <div class="right inline">
+        <ul class="list search">
+
+        </ul>
+    </div>
+    <input type="hidden" name="delid" value="0">
+</article>
+<div class="shade">
+    <form action="" class="layui-form" id="addform">
+        <div class="content">
+            <div class="list" style="margin-top:30px;">
+                <div class="left">分类id</div>
+                <div class="right"><input type="number" name="cid" value="0" readonly></div>
+            </div>
+            <div class="list">
+                <div class="left">栏目类型</div>
+                <div class="right"><input type="number" name="tid" value="0" readonly></div>
+            </div>
+            <div class="list">
+                <div class="left">栏目名称</div>
+                <div class="right"><input type="text" name="name" maxlength="10"></div>
+            </div>
+            <div class="list">
+                <div class="left">是否启用</div>
+                <div class="right"><input type="checkbox" name="status" style="margin-top:-10px !important;" lay-skin="switch" lay-text="启用|禁用"></div>
+            </div>
+
+            <div class="operate" style="margin-top:20px;">
+                <button id="btn" class="layui-btn" style="margin-left:150px !important;">保存</button>
+                <button id="close" class="layui-btn layui-btn-normal" style="margin-left:70px !important;">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    $(function(){
+        layui.use('form', function(){
+            var form = layui.form;
+        });
+        $('.shade').hide();
+        $(document).on('click','.l',function(){
+            var list = $(this).siblings();
+            list.each(function(){
+                $(this).removeClass('this');
+            });
+            $(this).addClass('this');
+            if($(this).parent('ul').hasClass('article')){
+                var cid = this.dataset.id;
+                var tid = this.dataset.type;
+                var name = this.dataset.name;
+                $("input[name='cid']").val(cid);
+                $("input[name='tid']").val(tid);
+                $("input[name='name']").val(name);
+            }else{
+                var id = this.dataset.id;
+                $("input[name='delid']").val(id);
+            }
+        });
+        $('#add').on('click',function(){
+            var cid = $("input[name='cid']").val();
+            if(cid == 0){
+                layer.msg('请选择文档分类');
+                return false;
+            }
+            $('.shade').show();
+        });
+        $('#del').on('click',function(){
+            var id = $("input[name='delid']").val();
+            if(id == 0){
+                layer.msg('请选择要删除的搜索分类');
+                return false;
+            }
+            var that = this;
+            $.ajax({
+                url:'/admin/search/delcolumn.html',
+                type:'post',
+                data:{
+                    id:id
+                },
+                beforeSend:function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success:function (e) {
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg,{time:1000},function(){
+                        if(data.success) {
+                            var list = $('.search').children('li');
+                            list.each(function(){
+                                var cid = this.dataset.id;
+                                if(cid == id){
+                                    var name = this.dataset.name;
+                                    var tid = this.dataset.type;
+                                    $(this).hide();
+                                    $('.article').append('<li class="l" data-id="'+ id +'" data-type="'+ tid +'" data-name="' + name + '">' + name + '</li>');
+                                }
+                            });
+
+                        }
+                    });
+                },
+                complete:function () {
+                    layer.close(loading);
+                }
+            })
+        });
+        $('#close').on('click',function () {
+            $('.shade').hide();
+            return false;
+        });
+        $('#btn').on('click',function(){
+            $.ajax({
+                url:'',
+                type:'post',
+                data:$('#addform').serialize(),
+                beforeSend:function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success:function (e) {
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg,{time:1000},function(){
+                        if(data.success) {
+                            $('.shade').hide();
+                            var cid = $("input[name='cid']").val();
+                            var list = $('.article').children('li');
+                            list.each(function(){
+                                var id = this.dataset.id;
+                                if(id == cid){
+                                    $(this).hide();
+                                }
+                            });
+                            $('.search').append('<li class="l" data-id="' + cid + '" data-type= "' + $("input[name='tid']").val() + '" data-name="' + $("input[name='name']").val() + '">' + $("input[name='name']").val() + '</li>')
+                            $("input[name='cid']").val(0);
+                            $("input[name='tid']").val(0);
+                            $("input[name='name']").val(0);
+                        }
+                    });
+                },
+                complete:function () {
+                    layer.close(loading);
+                }
+            });
+            return false;
+        })
+    });
+</script>
+</html>

@@ -1,0 +1,46 @@
+<div style="width:100%;height:150px;" class="load load1"></div>
+<div class="loader loader1">
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+</div>
+<div class="content1">
+    {if $list==[] }
+    <div class="blank"></div>
+    <div style="width:100%;text-align:center;">什么也没有，去 <a href="/" style="color:#11A28B">首页</a> 去看看吧！</div>
+    {else /}
+    <table class="liketable">
+        <tr class="liketh">
+            <th class="left" style="text-align:left;">文档</th>
+            <th>作者</th>
+            <th>栏目</th>
+            <th class="right">发布时间</th>
+        </tr>
+        {volist name="list" id="vo"}
+        <tr class="liketr">
+            <td class="left"><a href="/member/index/redirecturl.html?aid={$vo.article.id}" target="_blank">{$vo.article.title}</a>
+            </td>
+            <td style="text-align:center;">{$vo.article.user}</td>
+            <td style="text-align:center;"><a href="/member/index/redirecturl.html?cid={$vo.article.column_id}"
+                                              target="_blank">{$vo.article.column}</a></td>
+            <td class="right" style="text-align:center;">{$vo.article.pubdate|date='Y-m-d H:i:s',###}</td>
+        </tr>
+        {/volist}
+    </table>
+    <div id="paging">
+        {$paging}
+    </div>
+    {/if}
+</div>

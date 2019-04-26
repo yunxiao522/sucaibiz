@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$article_info.title}</title>
+    <meta name="keywords" content="{$article_info.keywords}"/>
+    <meta name="description" content="{$article_info.description}"/>
+    <link rel="shortcut icon" href="http://t1.sucai.biz/image/sucaiz-logo.ico"/>
+    <link href="/public/css/index/sc_images.css" rel="stylesheet" media="screen" type="text/css"/>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery-1.11.1.js"></script>
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--引入jquery插件-->
+    <script type="text/javascript" src="/public/plugins/jquery.jcarousellite.min.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<header>
+    <nav>
+        <div class="header">{$article_info.site}</div>
+        <div class="user_info">
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+    </nav>
+</header>
+<article>
+    <div class="tit">{$article_info.title}（{$page}/{$num}）</div>
+    <div class="info1">
+        <div class="related" align="center">
+            <div class="time inline">{$article_info.pubdate|date="Y-m-d H:i:s",###}</div>
+            <div class="source inline">来源：{$article_info.source}</div>
+            <div class="author inline">作者：{$article_info.author}</div>
+            <div class="author inline">浏览：{$article_info.click}</div>
+            <div class="cnum inline">评论：0</div>
+        </div>
+        <div class="down"><a href="javascript:;" id="down"><i><img src="/public/png/down.png" alt="" style=""></i>壁纸下载</a></div>
+    </div>
+    <div class="imgz">
+        <a href='{$imgurl}'>
+            <img src='{$imgurl}' width="1178" alt='{$article_info.title}' border='0'/>
+            <input type="hidden" name="imgurl" value="{$imgurl}">
+            <img id='downImg' src='' style='display: none;' />
+        </a>
+        <div class="pnm">
+            <a href='{$article_info.pubdate|getUrl=###,$article_info.article_id,$page-1,$article_info.column_id}'>
+                <div class="page"></div>
+            </a>
+            <a href='{$article_info.pubdate|getUrl=###,$article_info.article_id,$page+1,$article_info.column_id}'>
+                <div class="next"></div>
+            </a>
+        </div>
+    </div>
+    <div class="thumb">
+        <div class="inline left">
+            <div class="article_i">
+                <a href="/article?id={$page_article.0.id}"><img src="{$page_article.0.litpic}" alt=""  style="width:162px;height:102px;"></a>
+            </div>
+            <div class="article_t">
+                <span>{$page_article.0.title}</span>
+            </div>
+        </div>
+        <div class="inline center">
+            <a href="javascript:void(0);">
+                <div class="inline v_l"></div>
+            </a>
+            <div class="inline view">
+                <ul>
+                    {volist name="$article_info.smallimgurlsinfo" id="vo" key="k"}
+                    <li class="item {if $k eq $page}this{/if}">
+                        <div class="article_i">
+                            <a href="{$vo.url}"><img src="{$vo.imgurl}" alt="" style="width:162px;height:102px;"></a>
+                        </div>
+                        <div class="article_t">
+                            <span>{$k}/{$num}</span>
+                        </div>
+                    </li>
+                    {/volist}
+                </ul>
+
+            </div>
+            <a href="javascript:void(0);">
+                <div class="inline v_r"></div>
+            </a>
+        </div>
+        <div class="inline right">
+            <div class="article_i">
+                <a href="/article?id={$next_article.0.id}"><img src="{$next_article.0.litpic}" alt="" style="width:162px;height:102px;"></a>
+            </div>
+            <div class="article_t">
+                <span>{$next_article.0.title}</span>
+            </div>
+        </div>
+    </div>
+    <div style="background:#ffffff;">
+        <div class="tag">
+            <div class="icon"><img src="/public/png/tag.png" alt="" style="width:20px;height:20px;"></div>
+            <div class="tt inline">标签：</div>
+            <div class="inline con">
+                <ul>
+                    {volist name="$tag" id="vo"}
+                    <li><a href="/tags?id={$vo.id}"><div class="tag_l">{$vo.tag_name}</div></a></li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="referral">
+            <div class="icon"><img src="/public/png/referral.png" alt="" style="width:20px;height:20px;"></div>
+            <div class="tt inline">介绍：</div>
+            <div class="inline con">
+                {$article_info.description}
+            </div>
+        </div>
+    </div>
+</article>
+<div class="like">
+    <div class="t">
+        <div class="inline title">相关壁纸</div>
+        <div class="more"><a href="/list?id={$article_info.column_id}">更多>></a></div>
+    </div>
+    <div class="content">
+        <ul>
+            {volist name="$concern_articleList" id="vo" offset="0" length="8"}
+            <a href="{$vo.url}">
+                <li>
+                    <div class="c-item">
+                        <div class="c-img"><img src="{$vo.litpic}" alt="{$vo.title}" style="width:260px;height:146px;">
+                        </div>
+                        <div class="c-title"><span>{$vo.title|cut_str=###,12}</span></div>
+                    </div>
+                </li>
+            </a>
+            {/volist}
+
+        </ul>
+    </div>
+</div>
+
+<footer>
+
+</footer>
+<input type="hidden" id="page" value="{$page}">
+<input type="hidden" id="num" value="{$num}">
+<input type="hidden" id="id" name="id" value="{$article_info.article_id}">
+</body>
+<!--引入公共的文档js-->
+<script type="text/javascript" src="/public/js/index/article.js"></script>
+<!--引入图集js-->
+<script type="text/javascript" src="/public/js/index/sc_images.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

@@ -1,0 +1,43 @@
+<header>
+    <div class="header">
+        <div class="logo inline">
+            <a href="/"><img src="/public/png/login.png" alt=""></a>
+        </div>
+        <div class="nav inline">
+            <ul>
+                <a href="/"><li>首页</li></a>
+                <a href="/member/index.html?id={$user_info.id}"><li>个人中心</li></a>
+                <a href="/bz/index.html"><li>桌面壁纸</li></a>
+                <a href="/zx/index.html"><li>素材资讯</li></a>
+            </ul>
+        </div>
+        <div class="my inline">
+            <div class="search inline">
+                <img src="/public/png/search1.png" alt="">
+            </div>
+            <div class="msg inline" data-type="hide">
+                <img src="/public/png/msg1.png" alt="">
+                <div class="hint"></div>
+            </div>
+            <div class="myinfo inline">
+                <img src="{$user_info.face}" alt="" style="border-radius:10px;">
+            </div>
+        </div>
+        <div class="msglist">
+            <div class="head">消息盒</div>
+            <div class="main"></div>
+            <div class="bottom">查看全部</div>
+        </div>
+        <div class="mymenu">
+            <ul>
+                <a href="/member/index.html?id={$user_info.id}"><li class="nick implot">{$user_info.nickname}</li></a>
+                <a href="/member/accounts/setting.html"><li class="h">账号&资料</li></a>
+                <a href="/member/information/myarticle.html"><li class="h">我的投稿</li></a>
+                <a href="/member/information/attention.html"><li class="h">我的关注</li></a>
+                <a href="/member/information/mylike.html"><li class="h">我的收藏</li></a>
+                <a href="/member/information/index.html"><li class="h implot">我的统计</li></a>
+                <a href="/loginout.html"><li class="h">退出登录</li></a>
+            </ul>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改会员等级</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+</head>
+<body>
+<form class="layui-form" id="mod" action="" style="margin-left:0px;">
+<div class="layui-form-item" style="margin-left:0px;margin-top:20px;">
+    <label class="layui-form-label" style="margin-left:0px;">会员等级</label>
+    <div class="layui-input-block" style="width:150px;">
+        <select name="level" lay-filter="level" >
+            {volist name="$member_level" id="vo" }
+            <option value="{$vo.id}">{$vo.level_name}</option>
+            {/volist}
+        </select>
+    </div>
+</div>
+    <input type="hidden" name="id" value="{$uid}">
+    <button class="layui-btn" lay-submit="" lay-filter="demo1" id="btn" style="margin:20px 0 0 120px">修改</button>
+</form>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script src="/public/js/admin/mod_member_level.js"></script>
+</body>
+</html>

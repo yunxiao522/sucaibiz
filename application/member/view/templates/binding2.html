@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定账号</title>
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <link rel="stylesheet" href="/public/css/member/binding.css">
+    <!--引入sha1加密文件-->
+    <script src="/public/plugins/sha1/sha1.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<article>
+    <header>
+
+    </header>
+    <div class="title">请登录您要关联的帐号</div>
+    <form action="" id="log">
+        <input type="text" name="name" placeholder="账号/邮箱/手机号">
+        <input type="password" name="password" placeholder="密码">
+        <input type="hidden" name="type" value="{$type}">
+        <input type="hidden" name="code" value="{$code}">
+        <input type="hidden" name="token" value="{$token}">
+        <input type="hidden" name="flow" value="2">
+        <div class="operate1">
+            <a href="/register.html">注册账号</a>
+            <a href="">忘记密码</a>
+        </div>
+        <button style="width:320px;margin-top:50px;" id="login">登录</button>
+    </form>
+</article>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $('#login').on('click' ,function(){
+            $('input[name="password"]').val(hex_sha1($('input[name="password"]').val()));
+            $.ajax({
+                url:'/binding.html',
+                type:'post',
+                data:$('#log').serialize(),
+                success:function(e){
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg ,{time:2000} ,function(){
+                        if(data.errorcode == 0){
+                            window.location.href = '/';
+                        }
+                    })
+                }
+            });
+            return false;
+        })
+    })
+</script>
+</html>

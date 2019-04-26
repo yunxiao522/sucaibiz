@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>管理员列表-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>用户管理</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>管理员列表</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+
+    </div>
+</header>
+<div class="search" style="width:100%;height:50px;margin-top:20px;">
+    <form action="" class="layui-form">
+        <div class="layui-inline" style="margin-left:20px;">
+            <button class="layui-btn add">添加</button>
+            <button class="layui-btn del">删除</button>
+        </div>
+        <div class="layui-inline"></div>
+        <div class="layui-inline">
+            <label class="layui-form-label">账号id</label>
+            <div class="layui-input-inline" style="width:150px;">
+                <input type="text" name="uid" placeholder="请输入账号id" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">账号</label>
+            <div class="layui-input-inline" style="width:150px;">
+                <input type="text" name="user_name" placeholder="请输入账号" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">邮箱</label>
+            <div class="layui-input-inline" style="width:150px;">
+                <input type="text" name="email" placeholder="请输入邮箱" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">账号等级</label>
+            <div class="layui-input-inline" style="width:150px;">
+                <select name="level" lay-verify="">
+                    <option value="0" selected>选择等级</option>
+                    {volist name="$level" id="vo"}
+                    <option value="{$vo.id}">{$vo.name}</option>
+                    {/volist}
+                </select>
+
+            </div>
+        </div>
+        <div class="layui-inline">
+            <button class="layui-btn" lay-submit="" lay-filter="demo2"><i class="layui-icon"><img src="/public/png/refresh.png" alt="" style="width:20px;height:20px;margin-top:2px;"></i></button>
+        </div>
+    </form>
+</div>
+<!-- 表格 -->
+<div id="dateTable" style="margin-top:-10px;" lay-filter="demo"></div>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/user_list.js"></script>
+<!-- 表格操作按钮集 -->
+<script type="text/html" id="barOption">
+    <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="power">改类型</a>
+    <a class="layui-btn layui-btn-sm" lay-event="alter">编辑</a>
+    <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="state">改状态</a>
+    <a class="layui-btn layui-btn-sm layui-btn-normal " lay-event="password">改密码</a>
+    <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="del">删除</a>
+</script>
+</html>

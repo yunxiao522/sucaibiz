@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$column.type_name}</title>
+    <meta name="keywords" content="{$column.keywords}">
+    <meta name="description" content="{$column.description}">
+    <link href="/public/css/index/sc_list_zx.css" rel="stylesheet" media="screen" type="text/css"/>
+    <link href="/public/css/index/article.css" rel="stylesheet" media="screen" type="text/css"/>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.js"></script>
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.lazyload.js"></script>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie插件-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/favicon.ico"/>
+</head>
+<body>
+<header>
+    <div class="content">
+        <div class="header">
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+        <div class="logo">
+            <img src="/public/png/logo1_2.png" alt="" style="height:60px;">
+        </div>
+        <div class="search"></div>
+    </div>
+    <nav>
+        <div class="nav">
+            <ul>
+                <ul>
+                    <a href="/list?id=36"><li>壁纸资讯</li></a>
+                    <a href="/list?id=35"><li>矢量资讯</li></a>
+                    <a href="/list?id=34"><li>图标资讯</li></a>
+                    <a href="/list?id=33"><li>logo资讯</li></a>
+                    <a href="/list?id=32"><li>模板资讯</li></a>
+                    <a href="/list?id=31"><li>主题资讯</li></a>
+                    <a href="/list?id=30"><li>PSD资讯</li></a>
+                    <a href="/list?id=29"><li>jquery资讯</li></a>
+                    <a href="/list?id=28"><li>UI设计</li></a>
+                    <a href="/list?id=27"><li>技术资讯</li></a>
+                    <a href="/list?id=26"><li>字体资讯</li></a>
+                    <a href="/list?id=25"><li>酷站资讯</li></a>
+                </ul>
+
+            </ul>
+        </div>
+    </nav>
+    <div class="stance"></div>
+</header>
+<div class="content">
+    <article>
+        <div class="head">
+            <div class="crumb">当前位置：{$column.id|getArticleSite=###,$column.type_name}</div>
+        </div>
+        <div class="content">
+            <ul>
+                {volist name="article_list" id="vo"}
+                <li>
+                    <div class="item">
+                        <div class="title">
+                            <a href="{$vo.url}">{$vo.title}</a>
+                            <div class="column">
+                                <img class="inline" src="/public/png/column1.png" alt="" style="width:20px;height:20px;margin-top:15px;">
+                                <div class="inline" style="margin-left:10px;font-size:9pt;">{$vo.column_info}</div>
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="time inline">
+                                <img class="inline" src="/public/png/time.png" alt="" style="width:20px;height:20px;">
+                                <div class="t inline">{$vo.pubdate|date="Y-m-d",###}</div>
+                            </div>
+                            <div class="inline click">
+                                <img class="inline" src="/public/png/click.png" alt="" style="width:20px;height:20px;">
+                                <div class="c inline">{$vo.click}</div>
+                            </div>
+                        </div>
+                        <div class="litpic"><a href="{$vo.url}"><img src="{$vo.litpic}" alt="" style="width:800px;height:305px;"></a></div>
+                        <div class="description">{$vo.description}<a href="{$vo.url}">阅读全文>></a></div>
+                    </div>
+                </li>
+                {/volist}
+            </ul>
+        </div>
+        <div id="paging">
+            {$paging}
+        </div>
+    </article>
+    <aside>
+        <div class="hot">
+            <div class="title">
+                <div class="tit">热门资讯</div>
+                <div class="more"><a href="/">更多>></a></div>
+            </div>
+            <div class="content">
+                <ul>
+                    {volist name="$column.id|hot='article',###" key="k" id="vo" offset="0" length="10"}
+
+                    <li>
+                        <div class="prefix" {if $k elt 3}style="background:#FF8773"{/if}>{$k}</div>
+            <a href="{$vo.url}">
+                <div class="tit"><span>{$vo.title|cut_str=16}</span></div>
+            </a>
+            </li>
+
+            {/volist}
+            </ul>
+        </div>
+        <div class="hot" style="margin-top:20px;">
+            <div class="title" >
+                <div class="tit">热门标签</div>
+                <div class="more"><a href="">更多>></a></div>
+            </div>
+            <div class="tcontent">
+                <ul>
+                    {volist name="$column.id|hot='tag',###" id="vo" offset="0" length="20"}
+                    <li>
+                        <a href="/tag_list?id={$vo.id}"><div class="htag"><span>{$vo.tag_name|cut_str=4}</span></div></a>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+    </aside>
+</div>
+<input type="hidden" name="id" value="{$column.id}">
+<!--引入公共的文档js-->
+<script type="text/javascript" src="/public/js/index/list.js"></script>
+<!--引入js文件-->
+<script type="text/javascript" src="/public/js/index/sc_list_zx.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</body>
+</html>

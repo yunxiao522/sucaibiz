@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登录记录-会员中心-素材站</title>
+    <link rel="stylesheet" href="/public/css/member/account.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/accounts.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/accounts/left" /}
+    </div>
+    <div class="right inline" style="background:none;">
+        <div class="header"><div class="logh">登录日志</div></div>
+        <div class="log">
+            <div style="width:100%;height:1px;"></div>
+            <table>
+                <tr class="theader">
+                    <th class="time">时间</th>
+                    <th class="ip">IP</th>
+                    <th class="browser">浏览器</th>
+                    <th class="method">登录方式</th>
+                </tr>
+                {volist name="list" id="vo"}
+                <tr>
+                    <td class="time">{$vo.create_time}</td>
+                    <td class="ip">{$vo.login_ip}</td>
+                    <td class="browser">{$vo.browser}</td>
+                    <td class="method">{$vo.method}</td>
+                </tr>
+                {/volist}
+            </table>
+            <div class="padding">
+                {$paging}
+            </div>
+        </div>
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;">
+
+    </div>
+</article>
+{include file="templates/accounts/footer" /}
+<input type="hidden" name="id" value="{$user_info.id}">
+</body>
+</html>

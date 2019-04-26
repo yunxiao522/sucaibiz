@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-手机壁纸</title>
+    <meta name="keyword" content="{$column.keywords}">
+    <meta name="description" content="{$column.description}">
+    <link rel="stylesheet" href="">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/public/css/index/sc_list_sj.css">
+    <link rel="stylesheet" href="/public/css/index/list.css">
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="/public/js/jquery.lazyload.min.js"></script>
+    <!--引入jquery-cookie-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+</head>
+<body>
+{include file='./templates/scz/list_header.html'}
+<nav>
+    <div class="column">
+        <div class="nav-title"><img src="/public/png/phone_bz_column.png" alt="">壁纸分类</div>
+        <div class="nav-list">
+            <ul>
+                <li data-id="999" {if empty($id)}class="this"{/if}>全部</li>
+                {volist name="54|getColumn=### ,' id,type_name '" id="vo"}
+                <a href="{$vo.url}"><li {if $id == $vo.id}class="this"{/if}>{$vo.type_name}</li></a>
+                {/volist}
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="color">
+        <div class="nav-title"><img src="/public/png/phone_bz_color.png" alt="">壁纸颜色</div>
+        <div class="nav-list">
+            <ul>
+                <li data-id="999" {if empty($id)}class="this"{/if}>全部</li>
+                {volist name="$column|getImagesColorList" id="vo"}
+                <a href=""><li ><div style="background:{$vo.color_code };border:0;width:20px;height:20px;border-radius:2px;"></div></li></a>
+                {/volist}
+                <div class="clear"></div>
+            </ul>
+        </div>
+    </div>
+    <div class="nav-more">
+        <div class="size">您的屏幕大小是</div>
+    </div>
+</nav>
+<div class="nav-ad">
+    {$column|ad=12,###}
+</div>
+<div class="main">
+    <article>
+        <div class="article-title">
+            <div class="title">最新壁纸</div>
+            <div class="more"><a href="">更多</a></div>
+        </div>
+        <div class="article-list">
+            <ul>
+                {volist name="$article_list" id="vo"}
+                <a href="{$vo.url}">
+                    <li>
+                        <img src="{$vo.litpic}" alt="{$vo.title}" class="litpic">
+                        <div class="info">
+                            <div class="title">
+                                {$vo.title}
+                            </div>
+                            <div class="column_info">
+                                桌面壁纸-卡通
+                            </div>
+                            <div class="more-info">
+                                <div class="click">
+                                    <img src="/public/png/sj-list-show.png" alt="">{$vo.click}
+                                </div>
+                                <div class="comment">
+                                    <img src="/public/png/sj-list-comment.png" alt="">{$vo.comment_num}
+                                </div>
+                                <div class="praise">
+                                    <img src="/public/png/sj-list-praise.png" alt="">0
+                                </div>
+                            </div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user">
+                                <!--<img src="$vo.user_info.face" class="face" alt="">-->
+                                <!--$vo.user_info.nickname-->
+                            </div>
+                            <div class="time">{$vo.pubdate|date='Y-m-d',###}</div>
+                        </div>
+                    </li>
+                </a>
+                {/volist}
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div id="pagging">
+            {$paging}
+        </div>
+    </article>
+    <aside>
+        <div class="column_tag">
+            <div class="title">热门标签</div>
+            <ul>
+                {volist name="hot_tag" id="vo"}
+                <li >{$vo.tag_name}</li>
+                {/volist}
+                <div class="clear"></div>
+            </ul>
+        </div>
+        <div class="hot_article">
+            <div class="title">热门壁纸</div>
+            <ul>
+                {volist name="hot" id="vo" key="k" length="10"}
+                <li><div class="rank">{$k}</div><a href="{$vo.url}">{$vo.title}</a></li>
+                {/volist}
+            </ul>
+        </div>
+        <div class="ad">
+            {$column|ad=11,###}
+        </div>
+    </aside>
+    <div class="clear"></div>
+</div>
+<div class="bottom-nav">
+    {$column|ad=13,###}
+</div>
+{include file='./templates/scz/list_footer.html'}
+<input type="hidden" value="{$column.id}" name="id">
+</body>
+<!--引入公共文件-->
+<script type="text/javascript" src="/public/js/index/list.js"></script>
+<!--引入手机列表js文件-->
+<script type="text/javascript" src="/public/js/index/sc_list_sj.js"></script>
+<!--百度统计代码-->
+<script>
+    $(function () {
+        $("img").lazyload({skip_invisible:false});
+    });
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

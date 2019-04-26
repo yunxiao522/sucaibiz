@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$article_info.title}</title>
+    <meta name="keywords" content="{$article_info.keywords}"/>
+    <meta name="description" content="{$article_info.description}"/>
+    <link rel="stylesheet" href="/favicon.ico">
+    <link rel="stylesheet" href="/public/css/index/sc_sj.css">
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <!--引入图片懒加载-->
+    <script type="text/javascript" src="/public/js/jquery.lazyload.min.js"></script>
+    <!--引入jquery-cookie-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/public/plugins/jquery.base64.js"></script>
+    <script>
+        //判断是否是移动端访问,如果是移动动访问则跳转至wap站
+        $(document).ready(function () {
+            var sUserAgent = navigator.userAgent.toLowerCase();
+            var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+            var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+            var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+            var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+            var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+            var bIsAndroid = sUserAgent.match(/android/i) == "android";
+            var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+            var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+            if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+                window.location.href="http://m.sucai.biz/html/sj_detail.html?id={$article_info.article_id}&p=0";
+            }
+        });
+    </script>
+</head>
+<body>
+<header>
+    <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+</header>
+<div class="hint">
+    <div class="operate">
+        <div class="title">{$article_info.title}</div>
+        <div class="btn">
+            <button class="collect">收藏</button>
+            <button class="down" data-aid="{$article_info.article_id}" data-page="{$page - 1}" data-url="{$imgurl}">下载原图</button>
+        </div>
+    </div>
+</div>
+<article>
+    <div class="title">{$article_info.title}</div>
+    <div class="info">
+        <div class="related" align="center">
+            <div class="time inline">{$article_info.pubdate|date="Y-m-d H:i:s",###}</div>
+            <div class="source inline">来源：{$article_info.source}</div>
+            <div class="author inline">作者：{$article_info.author}</div>
+            <div class="author inline">浏览：{$article_info.click}</div>
+            <div class="cnum inline">评论：0</div>
+        </div>
+        <div class="down" data-aid="{$article_info.article_id}" data-page="{$page - 1}" data-url="{$imgurl}">下载原图</div>
+    </div>
+    <div style="position: relative">
+        <img src="{$imgurl}" alt="{$article_info.title}" class="images">
+        <div class="page">
+            {if $page > 1}
+                <a href="{$article_info.pubdate|getUrl=###,$article_info.article_id,$page-1,$article_info.column_id}">
+                    <div class="page-prev" style="float:left;width:200px;height:500px;background-color: rgba(0, 0, 0, 0.4);display: none">
+                        <div class="flip  prev"></div>
+                    </div>
+                </a>
+            {/if}
+            {if $page < $num}
+                <a href="{$article_info.pubdate|getUrl=###,$article_info.article_id,$page+1,$article_info.column_id}">
+                    <div class="page-next"  style="float:right;width:200px;height:500px;background-color: rgba(0, 0, 0, 0.4);display:none">
+                        <div class="flip next"></div>
+                    </div>
+                </a>
+            {/if}
+        </div>
+    </div>
+    <div class="more-info">
+        <div class="tag">
+            <div class="tag-title">标签:</div>
+            <ul>
+                {volist name="$tag" id="vo"}
+                    <li>{$vo.tag_name}</li>
+                {/volist}
+            </ul>
+            <div class="clear"></div>
+        </div>
+        <div class="description">
+            <div class="description-title">简介:</div>
+            <div class="description-content">
+                {$article_info.description}<br style="clear:both">
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="share">
+            分享:
+        </div>
+    </div>
+    <div class="ad">
+        {$article_info|ad=14,###}
+    </div>
+    <div class="article_info">
+        <div class="user_info">
+            <div class="face"><img src="{$user_info.face}" alt=""></div>
+            <div class="nickname">{$user_info.nickname}Lv.{$user_info.level}</div>
+            <div class="operate">
+                <button style="background:#FFE300;border:none;">关注</button>
+                <button>私信</button>
+            </div>
+        </div>
+        <div class="concern">
+            <div class="head">
+                <ul>
+                    <li class="this">相关文档</li>
+                    <li>收录收藏夹</li>
+                </ul>
+            </div>
+            <ul class="related_list">
+                {volist name="concern_articleList" id="vo" length="4"}
+                    <a href="{$vo.url}">
+                        <li>
+                            <img src="{$vo.litpic}" alt="">
+                            <div class="related_article_title">{$vo.title}</div>
+                        </li>
+                    </a>
+                {/volist}
+            </ul>
+        </div>
+        <div class="clear"></div>
+    </div>
+</article>
+<div class="comment">
+    <div class="ad">
+        {$article_info|ad=15,###}
+    </div>
+    <div class="title">
+        发表评论
+        <div class="comment-descript">
+            愿您的每句评论，都能给大家的生活添色彩，带来共鸣，带来思索，带来快乐。
+        </div>
+    </div>
+    <div class="push-comment">
+        <textarea name="content" id="" cols="30" rows="10" class="input" style="resize:none;background:#FAFAFA;" placeholder="素材站有您的参与更精彩"></textarea>
+        <div class="nologin">
+            <div class="clue">登录账号后，即可发表评论。</div>
+            <button class="login">登录账号</button>
+        </div>
+    </div>
+    <div class="all">
+        全部评论
+        <div class="more-operate">
+            <a href="" class="refresh-comment" style="display: inline-block">刷新</a>
+            <input type="radio" name="order" value="1" checked="checked" style="display: inline-block" class="inline" ><label for="" class="inline">最新</label>
+            <input type="radio" name="order" value="2" class="inline" style="display: inline-block"><label for="" class="inline">最早</label>
+        </div>
+    </div>
+    <div class="list">
+        <ul class="comment-list" data-page="1" data-order="1" data-maxpage="9999">
+
+        </ul>
+    </div>
+    <div class="clear"></div>
+</div>
+<div class="operation">
+    <a href="" title="扫码小程序打开"><div class="wap"></div></a>
+    <a href="" title="扫码手机打开"><div class="miniapp"></div></a>
+    <a href="" title="意见反馈"><div class="feedback"></div></a>
+    <div class="top"></div>
+</div>
+<div class="footer-ad">
+    {$article_info|ad=16,###}
+</div>
+{include file="./templates/scz/article_footer.html"}
+<input type="hidden" name="id" value="{$article_info.article_id}">
+</body>
+<script type="text/javascript" src="/public/js/index/sj_bz.js"></script>
+<script type="text/javascript" src="/public/js/index/article_common.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="https://cpro.baidustatic.com/cpro/ui/c.js" async="async" defer="defer" ></script>
+</html>

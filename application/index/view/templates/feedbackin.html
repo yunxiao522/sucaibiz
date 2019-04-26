@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>意见反馈</title>
+    <link rel="stylesheet" href="/public/css/index/feedback.css">
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+</head>
+<body>
+    <h2>意见反馈</h2>
+    <div class="input">
+        <textarea name="" id="" cols="30" rows="10" placeholder="您的建议是我们前进的方向,有您的建议我们才能走的更远。"></textarea>
+    </div>
+
+    <button>提交</button>
+</body>
+<script>
+    $(function () {
+        //检查是否有登录账号
+        if($.cookie('member_info') != null){
+            var user_info = JSON.parse($.cookie('member_info'));
+            user_id = user_info.uid;
+        }else{
+            user_id = 0;
+        }
+       //提交按钮点击事件
+       $('button').on('click',function () {
+           var content = $('textarea').val();
+           if(content == ''){
+               layer.msg('请输入反馈的内容',{time:2000});
+               return false;
+           }
+           $.ajax({
+               type:'post',
+               data:{
+                   content:content,
+                   uid:user_id
+               },beforeSend:function () {
+                   loading = layer.load(3,{shade:[0.3,'#ffffff']});
+               },success:function (res) {
+                   var e = JSON.parse(res);
+                   layer.msg(e.msg,{time:2000},function () {
+                       if(e.success){
+                           parent.layer.closeAll();
+                       }
+                   });
+                   if(e.success){
+
+                   }
+               },complete:function () {
+                   layer.close(loading);
+               }
+           })
+       });
+    });
+</script>
+</html>

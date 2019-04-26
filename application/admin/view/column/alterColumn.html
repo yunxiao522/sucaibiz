@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改栏目-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        article {margin-top:20px;margin-left:20px;}
+    </style>
+</head>
+<body>
+<article>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级栏目</label>
+            <div class="layui-input-block" style="width:200px;">
+                <select name="parent_id" lay-filter="aihao" lay-verify="parent_id">
+                    <option value="0" {if $column_info.parent_id == 0}selected="selected"{/if}>顶级栏目</option>
+                    {volist name="column_list" id="vo"}
+                        <option value="{$vo.id}" {if $column_info.parent_id == $vo.id}selected="selected"{/if}>{$vo.type_name}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="type_name" lay-verify="type_name" autocomplete="off" placeholder="请输入栏目名称" class="layui-input" style="width:300px;" value="{$column_info.type_name}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">封面图像</label>
+            <button class="layui-btn layui-btn-sm layui-btn-warm" id="upload_cover_img">上传</button>
+            <img src="{$column_info.cover_img}" alt="" class="cover_img" style="width:250px;height:100px;background:red;" />
+            <input type="hidden" name="cover_url" id="cover_img" value="{$column_info.cover_img}">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容模型</label>
+            <div class="layui-input-block" style="width:200px;">
+                <select name="channel_type" lay-filter="aihao" lay-verify="channel_type">
+                    {volist name="channeltype_data" id="vo"}
+                    <option value="{$vo.id}" {if $column_info.channel_type == $vo.id}selected="selected"{/if}>{$vo.typename}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排列顺序</label>
+            <div class="layui-input-block">
+                <input type="text" name="sort_rank" lay-verify="sort_rank" autocomplete="off" placeholder="排列顺序" class="layui-input" style="width:100px;" value="{$column_info.sort_rank}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">支持投稿</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" name="issend" lay-skin="switch" lay-filter="switchTest" lay-verify="is_send" {if $column_info.issend eq 2}checked="checked"{/if} lay-text="是|否">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">浏览权限</label>
+            <div class="layui-input-block">
+                {volist name="member_level" id="vo"}
+                <input type="checkbox" name="like[{$vo.id}]" {volist name="corank" id="v"}{if $vo.id eq $v}checked="checked"{/if}{/volist} title="{$vo.level_name}">
+                {/volist}
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">栏目关键词</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入栏目关键词" lay-verify="keywords" name="keywords" class="layui-textarea">{$column_info.keywords}</textarea>
+            </div>
+        </div>
+        <div style="height:170px;">
+            <div class="layui-form" style="float:left;">
+                <label class="layui-form-label">栏目目录</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type_dir" lay-verify="type_dir" autocomplete="off" placeholder="请输入栏目目录" class="layui-input" style="width:200px;" value="{$column_info.type_dir}">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-left:50px;">
+                <label class="layui-form-label">首页名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="defaultname" lay-verify="default_index" autocomplete="off" placeholder="请输入首页名称" class="layui-input" style="width:200px;" value="{$column_info.defaultname}">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-top:20px;">
+                <label class="layui-form-label">模板封面</label>
+                <div class="layui-input-block">
+                    <input type="text" name="default_index" autocomplete="off" lay-verify="temp_index" placeholder="请输入模板封面" class="layui-input" style="width:200px;" value="{$column_info.default_index}">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-left:50px;margin-top:20px;">
+                <label class="layui-form-label">列表封面</label>
+                <div class="layui-input-block">
+                    <input type="text" name="templist" autocomplete="off" lay-verify="temp_list" placeholder="请输入列表封面" class="layui-input" style="width:200px;" value="{$column_info.templist}">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-top:20px;">
+                <label class="layui-form-label">文章封面</label>
+                <div class="layui-input-block">
+                    <input type="text" name="temparticle" autocomplete="off" lay-verify="temp_article" placeholder="请输入文章封面" class="layui-input" style="width:200px;" value="{$column_info.temparticle}">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章命名规则</label>
+            <div class="layui-input-block">
+                <input type="text" name="namerule" autocomplete="off" lay-verify="temp_list" id="name_rule" placeholder="请输入文章命名规则" style="width:250px;" class="layui-input" style="width:200px;" value="{$column_info.namerule}">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">列表命名规则</label>
+            <div class="layui-input-block">
+                <input type="text" name="listrule" autocomplete="off" lay-verify="list_rule" id="list_rule" placeholder="请输入列表命名规则" style="width:250px;" class="layui-input" style="width:200px;" value="{$column_info.listrule}">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">模板名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="modename" autocomplete="off" lay-verify="mode_name" placeholder="请输入模板名称" style="width:250px;" class="layui-input" style="width:200px;" value="{$column_info.modename}">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">栏目描述</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入模板名称" lay-verify="description" name="description" class="layui-textarea">{$column_info.description}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <input type="hidden" id="typeid" value="{$column_info.id}">
+            <button class="layui-btn" lay-submit="" lay-filter="demo2">提交</button>
+        </div>
+    </form>
+</article>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript">
+//    $(function () {
+//        //获取系统设置的文章命名规则和列表命名规则
+//        $.ajax({
+//            'url': '/admin/getnamerule',
+//            'type': 'post',
+//            success:function (e) {
+//                var rule = JSON.parse(e);
+//                $('#name_rule').val(rule.column_article_rule);
+//                $('#list_rule').val(rule.column_list_rule);
+//            }
+//        })
+//    });
+    layui.use(['form', 'layedit', 'laydate' ,'upload'], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,upload = layui.upload
+            ,layedit = layui.layedit
+            ,laydate = layui.laydate;
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            parent_id:function(value){
+                if(value == ''){
+                    return '父级栏目不能为空哦';
+                }
+            },
+            type_name: function(value){
+                if(value.length == 0){
+                    return '栏目名称不能为空哦';
+                }else if(value.length > 30){
+                    return '栏目名称不能超过30个字符哦';
+                }
+            },
+            channel_type:function(value){
+                if(value == ''){
+                    return '要选择内容模型啊';
+                }
+            },
+            sort_rank:function(value){
+                if(value == ''){
+                    return '输入的排列顺序不能为空哦';
+                }
+            },
+            is_send:function(value){
+                if(value == ''){
+                    return '请选择是否支持投稿';
+                }
+            },
+            keywords:function(value){
+                if(value.length > 100){
+                    return '输入的栏目关键词不能超过100个字符哦';
+                }
+            },
+            type_dir:function(value){
+                if(value.length == 0){
+                    return '输入的栏目目录不能为空哦';
+                }
+                if(value.length > 100){
+                    return '输入的栏目目录不能超过100个字符哦';
+                }
+            },
+            default_index:function(value){
+                if(value.length == 0){
+                    return '输入的默认首页名称不能为空哦';
+                }
+                if(value.length > 20){
+                    return '输入的默认首页名称不能超过20个字符哦';
+                }
+            },
+            temp_index:function(value){
+                if(value.length == 0){
+                    return '输入的模板封面不能为空哦';
+                }
+                if(value.length > 60){
+                    return '输入的模板封面不能超过60个字符哦';
+                }
+            },
+            temp_list:function(value){
+                if(value.length == 0){
+                    return '输入的列表封面不能为空哦';
+                }
+                if(value.length > 60){
+                    return '输入的列表封面不能超过60个字符哦';
+                }
+            },
+            temp_article:function(value){
+                if(value.length == 0){
+                    return '输入的文章封面不能为空哦';
+                }
+                if(value.length > 60){
+                    return '输入的文章封面不能超过60个字符哦';
+                }
+            },
+            name_rule:function(value){
+                if(value.length == 0){
+                    return '输入的文章命名规则不能为空哦';
+                }
+                if(value.length > 60){
+                    return '输入的文章命名规则不能超过60个字符哦';
+                }
+            },
+            list_rule:function(value){
+                if(value.length == 0){
+                    return '输入的列表命名规则不能为空哦';
+                }
+                if(value.length > 60){
+                    return '输入的列表命名规则不能超过60个字符哦';
+                }
+            },
+            mode_name:function(value){
+                if(value.length == 0){
+                    return '输入的模板名称不能为空哦';
+                }
+                if(value.length > 60){
+                    return '输入的模板名称不能超过60个字符哦';
+                }
+            },
+            description:function(value){
+                if(value.length > 200){
+                    return '输入的栏目描述不能超过200个字符哦';
+                }
+            }
+        });
+        //上传栏目封面图
+        var uploadInst = upload.render({
+            elem: '#upload_cover_img' //绑定元素
+            , url: '/admin/uploadcolumncoverimg' //上传接口
+            , done: function (data) {
+                layer.msg(data.msg, {time: 1000}, function () {
+                    $('#cover_img').val(data.url);
+                    $('.cover_img').attr('src', data.url);
+                })
+            }
+            , error: function () {
+            }
+        });
+        $('#upload_cover_img').on('click'  ,function(){
+            return false;
+        });
+        //监听提交
+        form.on('submit(demo2)', function(data){
+            //发送ajax进行数据提交
+            var id = $('#typeid').val();
+            $.ajax({
+                url:'/admin/alter_column.html?id=' + id,
+                type:'post',
+                data:data.field,
+                beforeSend:function(){
+                    loading = layer.load(0, {shade: false});
+                },
+                success:function(e){
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg,{time:1000},function(){
+                        if(data.errorcode==0){
+                            parent.tableIns.reload();
+                            parent.layer.closeAll();
+                        }
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

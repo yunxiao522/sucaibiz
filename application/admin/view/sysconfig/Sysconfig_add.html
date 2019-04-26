@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建系统参数</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<form class="layui-form" action="" id="add" style="margin-top:20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">参数说明</label>
+        <div class="layui-input-block" style="width:400px;">
+            <input type="text" name="description" lay-verify="description" autocomplete="off" placeholder="请输入参数说明"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div style="float:left;">
+            <label class="layui-form-label">参数类型</label>
+            <div class="layui-input-block" style="width:100px;">
+                <select name="type" lay-filter="type">
+                    {volist name="sysconfig_type" id="vo" }
+                    <option value="{$vo.k}">{$vo.value}</option>
+                    {/volist}
+
+                </select>
+            </div>
+        </div>
+        <div style="float:left;">
+            <label class="layui-form-label" style="float:left">排序</label>
+            <div class="layui-input-block" style="width:100px;">
+                <input type="number" name="sort" lay-verify="sort" autocomplete="off" placeholder="排序值"
+                       class="layui-input" value="0">
+            </div>
+        </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">默认值</label>
+        <div class="layui-input-block" style="width:350px;">
+            <input type="text" name="value" lay-verify="value" placeholder="请输入默认值" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">变量名</label>
+        <div class="layui-input-block" style="width:200px;">
+            <input type="text" name="name" lay-verify="name" placeholder="请输入参数名" autocomplete="off"
+                   class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">参数分组</label>
+        <div class="layui-input-block" style="width:150px;">
+            <select name="class" lay-filter="class">
+                {volist name="group" id="vo" key="key" }
+                <option value="{$vo.id}">{$vo.name}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">附加数据</label>
+        <div class="layui-input-block" style="width:500px;">
+            <textarea name="data"
+                    placeholder="格式text:value,radio:value1,value2,value3...valuen$checked:valuex,checkbox:value1,value2,value3...valuen$checked:value1,checked:value2...checked:valuen,select:name1#value1,name2#value2...namen#valuen$selected:name=num,textarea:value"
+                    class="layui-textarea"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" style="margin-left:200px;">新增</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/Sysconfig_add.js"></script>
+</body>
+</html>

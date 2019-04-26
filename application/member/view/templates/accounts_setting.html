@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>账号中心-会员中心-素材站</title>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/public/ico/favicon.ico"/>
+    <link rel="stylesheet" href="/public/css/member/account.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/accounts.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/accounts/left" /}
+    </div>
+    <div class="right inline">
+        <div class="header">
+            <ul>
+                <a href="" class="seetingli" data-type="info"><li class=" {if $class eq 'info'}this t1{/if}">账号信息</li></a>
+                <a href="" class="seetingli" data-type="face"><li class=" {if $class eq 'face'}this{/if}">头像</li></a>
+            </ul>
+        </div>
+        <div class="info">
+            <form action="" id="infoform">
+            <div class="list">
+                <div class="tt inline">昵称：</div>
+                <div class="input inline"><input type="text" name="nickname" value="{$user_info.nickname}"></div>
+            </div>
+            <div class="list">
+                <div class="tt inline">邮箱：</div>
+                <div class="input inline">{$user_info.email}</div>
+                <div class="options inline"><a href="" data-type="email">修改</a></div>
+            </div>
+            <div class="list">
+                <div class="tt inline">性别：</div>
+                <div class="input inline">
+                    <input type="radio" value="1" name="sex" {if $user_info.sex eq 1}checked="checked"{/if}>男
+                    <input type="radio" value="2" name="sex" {if $user_info.sex eq 2}checked="checked"{/if}>女
+                </div>
+            </div>
+            <div class="list">
+                <div class="tt inline">手机号：</div>
+                <div class="input inline">{$user_info.phone}</div>
+                <div class="options inline"><a href="" data-type="phone">绑定</a></div>
+            </div>
+            <div class="list">
+                <div class="tt inline">签名：</div>
+                <div class="input inline">
+                    <input type="text" name="signature" value="{$user_info.signature}" style="width:600px;" placeholder="输入自己的签名,在0-40个字符之间">
+                </div>
+            </div>
+            <div class="list">
+                <div class="tt inline">说明：</div>
+                <div class="input inline">
+                    <input type="text" name="description" value="{$user_info.description}" style="width:600px;" placeholder="输入自己的说明,在0-2000个字符之间">
+                </div>
+            </div>
+                <input type="hidden" name="class" value="info">
+                <input type="hidden" name="type" value="info">
+                <btton class="layui-btn" id="btn1">保存</btton>
+
+            </form>
+        </div>
+        <div class="infoface">
+            <div class="alterface">
+                <div class="showface">
+                    <img src="{$user_info.face}" alt="" class="faceimg">
+                </div>
+                <button id="uploadface" class="layui-btn">上传</button>
+            </div>
+
+        </div>
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;">
+
+    </div>
+</article>
+{include file="templates/accounts/footer" /}
+<input type="hidden" name="id" value="{$user_info.id}">
+</body>
+</html>

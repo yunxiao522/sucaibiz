@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文档属性管理-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        .main {
+            width: 100%;
+            height: auto;
+        }
+
+        article {
+            width: 300px;
+            height: 500px;
+            float: left;
+        }
+
+        aside {
+            width: 100%;
+            float: left;
+            height: 500px;
+            padding: 10px;
+            padding-top: 0px;
+            padding-left: 0px;
+        }
+
+        .nav-tree {
+            width: 390px;
+            margin-left: 10px;
+            margin-top: 10px;
+            height: auto;
+            border: 1px solid #e2e2e2;
+            border-bottom:0px;
+            border-right: 0px;
+        }
+
+        .manage-main {
+            width: 100%;
+            border: 1px solid #e2e2e2;
+            height:100%;
+        }
+
+        .tree-main {
+            margin-left: 40px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>内容管理</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>文档属性管理</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+        <button class="layui-btn  layui-btn-small add-attribute layui-btn-normal">添加属性</button>
+    </div>
+</header>
+<div class="main">
+    <article id="article">
+        <div class="nav-tree">
+            <div class="tree-main">
+                <ul id="tree"></ul>
+            </div>
+        </div>
+    </article>
+    <aside id="aside">
+        <div class="manage-main" id="manage-main">
+
+        </div>
+    </aside>
+</div>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script>
+    $(document).ready(function () {
+            $(aside).width(($('body').width() - $('article').width()) - 10);
+            $.ajax({
+                url: '/admin/getattributetreejson.html',
+                type: 'get',
+                async:false,
+                success: function (data) {
+                    node = $.parseJSON(data);
+                }
+            });
+        }
+    );
+    layui.use(['tree','layer'], function () {
+        var form = layui.form
+            , layer = layui.layer
+            , tree = layui.tree;
+        setTimeout(1000);
+       tree({
+            elem: '#tree' //传入元素选择器
+            , click: function (data) { //点击节点回调
+                // 加载中...
+                var loadIndex = layer.load(1, {shade: false});
+                // 关闭加载
+                layer.close(loadIndex);
+                // 刷新表格
+                $('#manage-main').load('/admin/article/alterattribute.html?id='+data.id , function () {
+                    $('#btn').on('click', function () {
+                        $.ajax({
+                            url:'/admin/article/alterattribute.html',
+                            type:'post',
+                            data:$('#alterform').serialize(),
+                            beforeSend: function () {
+                                loading = layer.load(0, {shade: false});
+                            },
+                            success: function (e) {
+                                var data = JSON.parse(e);
+                                layer.msg(data.msg, {time: 1000}, function () {
+                                    if (data.errorcode == 0) {
+                                        location.href = "/admin/article/attribute.html";
+                                    }
+                                });
+                            }
+                        });
+                        return false;
+                    });
+                });
+            }
+            , nodes: node
+        });
+
+    });
+    //绑定增加顶级栏目按钮事件
+    $('.add-attribute').on('click', function () {
+        layer.open({
+            type: 2,
+            title: '增加顶级栏目',
+            skin: 'addheader',
+            shadeClose: true,
+            shade: false,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['893px', '600px'],
+            content: '/admin/add_article_attribute.html'
+        });
+        return false;
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理-素材站-个人中心</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="icon" href="/public/static/image/code.png">
+    <script src="/public/jquery.js"></script>
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<fieldset class="layui-elem-field layui-field-title">
+    <legend>个人中心</legend>
+</fieldset>
+
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+        <li class="layui-this">我的资料</li>
+        <li>头像</li>
+        <li>密码</li>
+    </ul>
+    <div class="layui-tab-content" style="height: 100px;">
+        <!--我的资料-->
+        <div class="layui-tab-item layui-show">
+            <form class="layui-form layui-form-pane" action="" id="accountform">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="username" autocomplete="off" placeholder="请输入用户名" class="layui-input" style="width:250px;" value="{$admin_info.user_name}" id="username">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">昵称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="nickname" lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input" style="width:250px;" value="{$admin_info.nick_name}" id="nickname">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">真实姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="realname" lay-verify="required" placeholder="请输入真实姓名" autocomplete="off" class="layui-input" style="width:250px;" value="{$admin_info.real_name}" id="realname">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo2" id="btn1">保存</button>
+                </div>
+            </form>
+
+        </div>
+        <!--头像-->
+        <div class="layui-tab-item">
+            <div style="width:400px;height:400px;background:#808080;">
+                <div style="width:100%;height:20px;"></div>
+                <div style="width:300px;height:300px;margin-left:50px;">
+                    <img src="{$admin_info.face}" alt="" style="width:300px;height:300px;border-radius:150px;" id="face">
+                </div>
+                <div style="width:100%;height:80px;text-align:center;line-height:80px;">
+                    <form action="">
+                        <button class="layui-btn" lay-submit="" lay-filter="demo2" id="btn3" style="margin:0 auto;">上传头像</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!--密码-->
+        <div class="layui-tab-item">
+            <form class="layui-form layui-form-pane" action="" id="editpasswordform">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新密码</label>
+                    <div class="layui-input-block">
+                        <input type="password" name="password" autocomplete="off" placeholder="请输入密码" class="layui-input" style="width:250px;" id="password">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">确认密码</label>
+                    <div class="layui-input-inline">
+                        <input type="password" name="verify_password" lay-verify="required" placeholder="请输入确认密码" autocomplete="off" class="layui-input" style="width:250px;" id="verifypassword">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo2" id="btn2">确认修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript">
+    layui.use('element', function () {
+        var $ = layui.jquery
+            , element = layui.element;
+
+        //触发事件
+        var active = {
+            tabAdd: function () {
+                //新增一个Tab项
+                element.tabAdd('demo', {
+                    title: '新选项' + (Math.random() * 1000 | 0) //用于演示
+                    , content: '内容' + (Math.random() * 1000 | 0)
+                })
+            }
+            , tabDelete: function () {
+                //删除指定Tab项
+                element.tabDelete('demo', 2); //删除第3项（注意序号是从0开始计算）
+            }
+            , tabChange: function () {
+                //切换到指定Tab项
+                element.tabChange('demo', 1); //切换到第2项（注意序号是从0开始计算）
+            }
+        };
+
+        $('.site-demo-active').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#btn3' //绑定元素
+            ,url: '/admin/upface' //上传接口
+            ,method:'post'
+            ,done: function(res){
+                var data = res;
+                layer.msg(data.msg,{time:1000},function(){
+                    if(data.errorcode==0){
+                        $('#face').attr('src',data.face_url);
+                    }
+                });
+            }
+        });
+    });
+    //绑定头像上传按钮事件
+    $('#btn3').on('click',function(){
+        return false;
+    })
+    //绑定修改用户信息按钮事件
+    $('#btn1').on('click',function(){
+        //验证数据不能为空
+        if($('#username').val() == ''){
+            layer.tips('输入的用户名不能为空', '#username',{tips:[3,'orange']});
+        }else if($('#nickname').val() == ''){
+            layer.tips('输入的昵称不能为空', '#nickname',{tips:[3,'orange']});
+        }else{
+            $.ajax({
+                url:'/admin/account.html',
+                type:'post',
+                data:$('#accountform').serialize(),
+                beforeSend:function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success:function (e) {
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg,{time:1000},function(){
+                        if(data.errorcode==0){
+                            window.location.href='/admin/account.html';
+                        }
+                    });
+                }
+            })
+        }
+        return false;
+    })
+    //绑定修改用户密码按钮事件
+    $('#btn2').on('click',function(){
+        //验证数据不能为空
+        if($('#password').val() == ''){
+            layer.tips('输入的密码不能为空', '#password',{tips:[3,'orange']});
+        }else if($('#verifypassword').val() == ''){
+            layer.tips('输入确认密码不能为空', '#verifypassword',{tips:[3,'orange']});
+        }else if($('#password').val() != $('#verifypassword').val()){
+            layer.tips('两次输入的密码不一致', '#verifypassword',{tips:[3,'orange']});
+        }else{
+            $.ajax({
+                url:'/admin/editpassword',
+                type:'post',
+                data:$('#editpasswordform').serialize(),
+                beforeSend:function(){
+                    loading = layer.load(0, {shade: false});
+                },
+                success:function(e){
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    layer.msg(data.msg,{time:1000},function(){
+                        if(data.errorcode==0){
+                            window.location.href='/admin/account.html';
+                        }
+                    });
+                }
+            })
+        }
+        return false;
+    })
+</script>
+</body>
+</html>

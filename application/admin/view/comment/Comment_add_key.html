@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增评论关键词</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        form{
+            margin-top:20px;
+            margin-left:-20px;
+            padding:0px;
+        }
+        .filter_name{
+            width:200px;
+        }
+        .content{
+            width:250px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="" id="alter">
+    <div class="layui-form-item">
+        <label class="layui-form-label">过滤名称</label>
+        <div class="layui-input-block" class="filter_name">
+            <input type="text" name="filter_name" lay-verify="filter_name" autocomplete="off" placeholder="请输入过滤名称" class="layui-input filter_name" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">关键词</label>
+        <div class="layui-input-block">
+            <input type="text" name="content" lay-verify="content" placeholder="请输入关键词" autocomplete="off" class="layui-input content" >
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" style="margin-left:200px;" id="btn">新增</button>
+        </div>
+    </div>
+</form>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/Comment_add_key.js"></script>
+</body>
+</html>

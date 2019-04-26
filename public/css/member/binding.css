@@ -1,0 +1,110 @@
+body {
+    background: #F9F9F9;
+}
+
+article {
+    width: 800px;
+    height: 500px;
+    background: #FFFFFF;
+    margin: 0 auto;
+    margin-top: calc(50vh - 250px);
+
+}
+
+header {
+    width: 100%;
+    height: 50px;
+    text-align: center;
+}
+
+.logo {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto;
+}
+
+.info {
+    width: 100%;
+    height: 300px;
+}
+
+.title {
+    width: 100%;
+    font-size: 25pt;
+    font-weight: 200;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+}
+
+.detail {
+    width: 100%;
+    height: 200px;
+    text-align: center;
+}
+
+.face {
+    width: 90px;
+    height: 90px;
+    background: #D7E3F1;
+    border-radius: 45px;
+    margin: 0 auto;
+    margin-top:5px;
+}
+.face img{
+    width:90px;
+    height:90px;
+    border-radius: 45px;
+}
+.bor{
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+    border: 1px #E3E3E3 solid;
+    margin: 0 auto;
+}
+.nickname{
+    width:100%;
+    height:20px;
+    font-size:10pt;
+    text-align:center;
+    margin-top:40px;
+}
+.hint{
+    width:100%;
+    height:30px;
+    text-align:center;
+    font-size:12pt;
+}
+button{
+    border:0;
+    width:200px;
+    height:40px;
+    margin:0 auto;
+    margin-top:10px;
+    font-size: 12pt;
+    display: block;
+}
+input{
+    width:300px;
+    height:20px;
+    display:block;
+    padding:10px;
+    margin:0 auto;
+    margin-top:20px;
+}
+.operate1{
+    width:320px;
+    height:20px;
+    margin:0 auto;
+    font-size:10pt;
+    text-align:right;
+}
+a{
+    text-decoration:none;
+    color:#808080;
+}
+a:active{
+    text-decoration:none;
+    color:#13A38C;
+}

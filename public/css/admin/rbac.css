@@ -1,0 +1,46 @@
+body{
+    margin:0;
+    padding:0;
+}
+
+form{
+    margin-top:40px;
+}
+.name{
+    width:300px;
+}
+.parent{
+    width:200px;
+}
+.url{
+    width:400px;
+}
+.description{
+    width:500px;
+}
+.ico{
+    width:400px;
+}
+.type{
+    width:150px;
+}
+
+.left{
+    width:500px;
+    height:1000px;
+    float:left;
+
+}
+.right{
+    width:500px;
+    height:1000px;
+    background:yellow;
+    float:left;
+}
+.role{
+    width:200px;
+    margin-left:-10px;
+}
+.user{
+    width:200px;
+}

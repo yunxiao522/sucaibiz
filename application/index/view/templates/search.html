@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-搜索</title>
+    <script src="/public/jquery.js"></script>
+    <script src="/public/layer/layer.js"></script>
+    <link rel="stylesheet" href="/public/css/index/search.css">
+    <link rel="stylesheet" href="/public/css/paging.css">
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <script type="text/javascript" src="/public/js/index/common.js"></script>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="/public/js/jquery.lazyload.min.js?v=1.9.1"></script>
+    <script src="/public/js/index/search.js"></script>
+    <style>
+        nav{
+            width:100%;
+            height:35px;
+            border-top:1px solid #F0F0F0;
+            border-bottom:1px solid #F0F0F0;
+        }
+        nav ul{
+            padding:0;
+            margin:0;
+            margin-left:230px;
+            height:35px;
+            line-height:35px;
+        }
+        nav ul li{
+            padding-left:10px;
+            padding-right:10px;
+            list-style:none;
+            float:left;
+            height:34px;
+            font-size:14px;
+            cursor:pointer;
+        }
+        nav ul .this{
+            border-bottom:2px solid #13A38C;
+            font-weight:900;
+        }
+        aside{
+            width:970px;
+            margin-left:230px;
+            min-height:calc(100vh - 205px);
+        }
+        aside .left{
+            width:620px;
+            float:left;
+
+        }
+        .list{
+            margin:0;
+            padding:0;
+            min-height:calc(100vh - 320px);
+        }
+        .list li{
+            list-style:none;
+            margin-top:30px;
+        }
+        .list li .item{
+            width:100%;
+            min-height:100px;
+        }
+        .list li .item .title{
+            font-size:15px;
+            color:blue;
+        }
+        .list li .item a{
+            color:blue;
+            text-decoration:none;
+        }
+        .list li .item a:link{
+            color:blue;
+            text-decoration:none;
+        }
+        .list li .item  .title a{
+            color:blue;
+            text-decoration:underline;
+        }
+        .list li .item .desctiption{
+            font-size:12px;
+            margin-top:10px;
+        }
+        .tt{
+            font-size:10px;
+            color:#999999;
+        }
+        .tag{
+            margin:0;
+            padding:0;
+            width:100%;
+            height:20px;
+            margin-top:10px;
+        }
+        .tag li{
+            float:left;
+            font-size:12px;
+            color:blue;
+            margin-right:10px;
+            margin-top:0;
+        }
+        .url{
+            font-size:12px;
+            color:#008000;
+        }
+        .imgurl{
+            margin:0;
+            padding:0;
+            width:100%;
+            margin-top:10px;
+        }
+        .imgurl li{
+            list-style:none;
+            width:140px;
+            float:left;
+            margin-top:0;
+            margin-right:10px;
+        }
+        .imgurl li img{
+            width:140px;
+        }
+        footer{
+            width:100%;
+            height:50px;
+            margin-top:20px;
+            border-top:1px solid #e8e8e8;
+            background:#e8e8e8;
+            line-height:50px;
+        }
+        footer .copyright{
+            float:left;
+            margin-left:20px;
+            font-size:12px;
+        }
+        #pagging{
+            margin-top:20px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="site"><a href="/">素材站</a></div>
+    <ul class="more">
+        <li><a href="/bz">桌面壁纸</a></li>
+        <li><a href="/wap">手机壁纸</a></li>
+        <li><a href="/zx">素材资讯</a></li>
+        <li><a href="/tx">头像</a></li>
+        <li><a href="/sszd">数字之道</a></li>
+    </ul>
+    <div class="handle"><a href="" id="login">登录</a> | <a href="/register.html">注册</a></div>
+</header>
+<form action="">
+    <article id="so" style="width:100%;height:40px;padding-top:10px;padding-bottom:10px;background:#ffffff;">
+        <div class="logo" style="margin:0;float:left;height:35px;">
+            <a href="/" title="素材站">
+                <img src="/public/png/logo1_2.png" alt="" style="height:35px;width:auto;float:right;">
+            </a>
+        </div>
+        <div class="so" style="float:left;margin-top:0;margin-left:20px;">
+            <input type="text" name="keyword" id="keyword" value="{$keyword}">
+            <input type="hidden" name="type" id="" value="{$type}">
+            <button>搜索</button>
+        </div>
+    </article>
+</form>
+<nav>
+    <ul>
+        <li data-id="0">全部</li>
+        {volist name='type_list' id='value'}
+            <li data-id="{$value.id}">{$value.name}</li>
+        {/volist}
+    </ul>
+</nav>
+<aside>
+    <div class="left">
+        <div class="tt">获得{$list.count}条结果（用时 {$list.time} 秒）</div>
+        <ul class="list">
+            {volist name='list.data' id='item'}
+                <li>
+                    <div class="item">
+                        <div  class="title">
+                            <a href="{$item.url}" target="_blank" title="{$item.title}">{$item.title}</a>
+                        </div>
+                        {if $item.channel == 1}
+                            <div class="desctiption">
+                                {$item.description}
+                            </div>
+                        {elseif $item.channel ==  2}
+                            <ul class="imgurl">
+                                {volist name='item.imgurl' id='src'}
+                                    <li>
+                                        <a href="{$src.url}" title="{$item.title}" target="_blank"><img data-original='{$src.img}' alt=""></a>
+                                    </li>
+                                {/volist}
+                                <div style="width:100%;height:1px;clear:both"></div>
+                            </ul>
+                        {/if}
+                        <ul class="tag">
+                            {volist name='item.tag' id='t'}
+                                <li>
+                                    <a href="{$t.url}" title="{$t.name}" target="_blank">{$t.name}</a>
+                                </li>
+                            {/volist}
+                        </ul>
+                        <div class="url">
+                            <a href="{$item.url}" title="{$item.title}">{$item.url}</a> - {$item.pubdate} - 类似结果
+                        </div>
+                    </div>
+                </li>
+            {/volist}
+            <div style="width:100%;height:1px;clear: both"></div>
+        </ul>
+        <div id="pagging">
+            {$paging}
+        </div>
+    </div>
+    <div class="right"></div>
+    <div style="width:100%;height:1px;clear: both"></div>
+</aside>
+<footer>
+    <div class="copyright">©2019 素材站 版权所有</div>
+</footer>
+</body>
+
+<script>
+    $(function(){
+        $('nav').children('ul').children('li').on('click',function () {
+            var type = this.dataset.id;
+            $("input[name='type']").val(type);
+            soso();
+        });
+        function soso(){
+            var keyword = $("input[name='keyword']").val();
+            var type = $("input[name='type']").val();
+            window.location.href = '/search.html?keyword='+ keyword  +'&type='+ type;
+        };
+        function refreshNav(){
+            var nav_list = $('nav').children('ul').children('li');
+            var type  = $("input[name='type']").val();
+            nav_list.each(function(){
+                $(this).removeClass('this');
+                var id = this.dataset.id;
+                if(id == type){
+                    $(this).addClass('this');
+                }
+            })
+        };
+        refreshNav();
+        function menuFixed(id) {
+            var obj = document.getElementById(id);
+            var _getHeight = obj.offsetTop;
+
+            window.onscroll = function () {
+                changePos(id, _getHeight);
+            }
+        }
+
+        function changePos(id, height) {
+            var obj = document.getElementById(id);
+            var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if (scrollTop < height) {
+                obj.style.position = 'relative';
+                obj.style.borderBottom = '';
+                obj.style.boxShadow = '';
+            } else {
+                obj.style.position = 'fixed';
+                obj.style.top = 0;
+                obj.style.borderBottom = '1px solid #f0f0f0';
+                obj.style.boxShadow = '0 0 5px #888';
+            }
+        }
+        window.onload = function () {
+            menuFixed('so');
+        }
+        $("img").lazyload({skip_invisible:false});
+    })
+</script>
+</html>

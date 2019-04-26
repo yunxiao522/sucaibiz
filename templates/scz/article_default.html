@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$article_info.title}</title>
+    <meta name="keywords" content="{$article_info.keywords}" />
+    <meta name="description" content="{$article_info.description}" />
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie插件-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.js"></script>
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.lazyload.js"></script>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="http://t1.sucai.biz/image/sucaiz-logo.ico"  />
+</head>
+<body>
+<header>
+
+</header>
+
+<footer></footer>
+{$column_list_string}
+<br>
+{$article_aff.body}
+</body>
+</html>

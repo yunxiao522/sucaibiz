@@ -1,0 +1,16 @@
+body{
+    padding:0;
+    margin:0;
+}
+form{
+    margin-top:20px;
+}
+.username{
+    width:250px;
+}
+.password{
+    width:300px;
+}
+.level{
+    width:200px;
+}

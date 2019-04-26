@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改积分会员等级</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<form class="layui-form layui-form-pane" action="" id="addlevel" style="margin-top:20px;margin-left:20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">积分等级名称</label>
+        <div class="layui-input-block" style="width:150px;">
+            <input type="text" name="level_name" lay-verify="level_name" autocomplete="off" placeholder="请输入积分等级名称" class="layui-input" value="{$integral_info.level_name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">积分范围</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="number" name="min_integral" placeholder="G" autocomplete="off" class="layui-input" lay-verify="min_integral" value="{$integral_info.min_integral}">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="number" name="max_integral" placeholder="G" autocomplete="off" class="layui-input"  lay-verify="max_integral" value="{$integral_info.max_integral}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">星星数量</label>
+        <div class="layui-input-block" style="width:100px;">
+            <input type="number" name="star_num" lay-verify="star_num" autocomplete="off" class="layui-input" value="{$integral_info.star_num}">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="width:550px;">
+        <label class="layui-form-label">积分等级说明</label>
+        <div class="layui-input-block" >
+            <textarea placeholder="请输入等级说明" name="description" lay-verify="description" class="layui-textarea">{$integral_info.description}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <input type="hidden" name="id" value="{$id}">
+        <button class="layui-btn" lay-submit="" id="btn" lay-filter="demo2" style="margin-left:240px;">修改</button>
+    </div>
+</form>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/integral_alter_info.js"></script>
+</body>
+</html>

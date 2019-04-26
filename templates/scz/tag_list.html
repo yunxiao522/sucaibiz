@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <link href="/public/css/index/sc_list_zx.css" rel="stylesheet" media="screen" type="text/css"/>
+    <link href="/public/css/index/article.css" rel="stylesheet" media="screen" type="text/css"/>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.js"></script>
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.lazyload.js"></script>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie插件-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="http://t1.sucai.biz/image/sucaiz-logo.ico"/>
+</head>
+<body>
+<header>
+    <div class="content">
+        <div class="header">
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+        <div class="logo">
+            <img src="/public/png/logo1_2.png" alt="" style="height:60px;">
+        </div>
+        <div class="search"></div>
+    </div>
+    <nav>
+        <div class="nav">
+            <ul>
+                <ul>
+                    <a href="/list?id=36"><li>桌面壁纸</li></a>
+                    <a href="/list?id=35"><li>素材资讯</li></a>
+                </ul>
+
+            </ul>
+        </div>
+    </nav>
+    <div class="stance"></div>
+</header>
+<div class="content">
+    <article>
+        <div class="head">
+            <div class="crumb">当前位置：<a href="/tag/index.html">tag标签</a> > {$tag.tag_name}</div>
+        </div>
+        <div class="content">
+            <ul>
+                {volist name="article" id="vo"}
+                <li style="border-bottom:1px #808080 dashed;height:200px;">{$vo.id}{$vo.title}{$vo.pubdate|date='Y-m-d H:i:s' ,###}{$vo.column}</li>
+                {/volist}
+            </ul>
+        </div>
+        <div id="paging">
+
+        </div>
+    </article>
+    <aside>
+        <div class="hot">
+            <div class="title">
+                <div class="tit">热门资讯</div>
+                <div class="more"><a href="/">更多>></a></div>
+            </div>
+            <div class="content">
+                <ul>
+                    {volist name="1|hot='article',###" key="k" id="vo" offset="0" length="10"}
+
+                    <li>
+                        <div class="prefix" {if $k elt 3}style="background:#FF8773"{/if}>{$k}</div>
+                        <a href="{$vo.url}">
+                            <div class="tit"><span>{$vo.title|cut_str=16}</span></div>
+                        </a>
+                     </li>
+
+                {/volist}
+            </ul>
+        </div>
+    </aside>
+</div>
+<!--引入公共的文档js-->
+<script type="text/javascript" src="/public/js/index/list.js"></script>
+<!--引入js文件-->
+<script type="text/javascript" src="/public/js/index/sc_list_zx.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</body>
+</html>

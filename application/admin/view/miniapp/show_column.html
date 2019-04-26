@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-小程序-分类管理-显示设置</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        body{
+            background:#F2F2F2;
+            margin:0;
+            padding:0;
+        }
+        header{
+            background:#ffffff;
+        }
+        article{
+            padding:10px;
+        }
+        .inline{
+            float:left;
+        }
+        .left{
+            width:calc(50% - 10px);
+            background:#ffffff;
+            height:calc(100vh - 110px);
+            margin-right:10px;
+        }
+        .right{
+            width:calc(50% - 20px);
+            background:#ffffff;
+            height:calc(100vh - 110px);
+        }
+        .content{
+            margin-top:-10px;
+        }
+        .title{
+            width:calc(100% - 20px);
+            height:20px;
+            padding:10px;
+        }
+        .r{
+            float:right;
+        }
+    </style>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>小程序</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>分类管理</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>显示设置</li>
+        </a>
+    </ul>
+</header>
+<article>
+    <div class="left inline">
+        <div class="title">
+            手机壁纸
+            <button class="layui-btn layui-btn-mini r btn" data-column="54">同步数据</button>
+        </div>
+        <div id="content1" class="content" lay-filter="demo1"></div>
+    </div>
+    <div class="right inline">
+        <div class="title">
+            素材资讯
+            <button class="layui-btn layui-btn-mini r btn" data-column="24">同步数据</button>
+        </div>
+        <div id="content2" class="content" lay-filter="demo"></div>
+    </div>
+</article>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" >
+    $(function () {
+        layui.use(['table','vip_table'], function () {
+
+            var table = layui.table
+                , vipTable = layui.vip_table;
+            //封装表格渲染函数
+            function showTable(elem,column){
+                //组合表格名称
+                 table.render({
+                    elem: elem                  //指定原始表格元素选择器（推荐id选择器）
+                    , height: vipTable.getFullHeight(112)    //容器高度
+                    , cols: [[                  //标题栏
+                        {checkbox: true, sort: true, fixed: true, space: true}
+                        , {field: 'id', align: 'center', title: 'ID', width: 80}
+                        , {field: 'type_name', align: 'center', title: '栏目名称', width: 120}
+                        , {field: 'parent_id', align: 'center', title: '父级id', width: 120}
+                        , {field: 't_status', align: 'left', title: '推荐状态', width: 120}
+                        , {field: 'create_time', align: 'left', title: '同步时间', width: 300}
+                        , {fixed: 'right', title: '操作', width: 150, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
+                    ]]
+                    , id: 'dataCheck'
+                    , url: '/admin/miniapp/getMiniappColumnList.html'
+                    , method: 'post'
+                    , page: true
+                    , where:{column:column}
+                    , limits: [30, 60, 90, 150, 300]
+                    , limit: 30 //默认采用30
+                    , loading: true
+                });
+                //监听工具条
+                table.on('tool(demo)', function (obj) {
+                    var data = obj.data;
+                    if (obj.event === 'edit') {
+                        $.ajax({
+                            url: '/admin/miniapp/alterRecommendStatus.html',
+                            type: 'post',
+                            data: {id: data.id},
+                            beforeSend: function () {
+                                loading = layer.load(0, {shade: false});
+                            },
+                            success: function (e) {
+                                layer.close(loading);
+                                var data = JSON.parse(e);
+                                layer.msg(data.msg, {time: 1000}, function () {
+                                    if (data.errorcode == 0) {
+                                        window.location='/admin/miniapp/showcolumn.html';
+                                        return false;
+                                    }
+                                });
+                            }
+                        })
+
+                    } else if (obj.event === 'del') {
+                        //删除
+                        //询问框
+                        layer.confirm('确定要删除吗？', {
+                            btn: ['确定', '取消'] //按钮
+                        }, function () {
+                            $.ajax({
+                                url: '/admin/sysconfig/delmenu.html',
+                                type: 'post',
+                                data: {id: data.id},
+                                beforeSend: function () {
+                                    loading = layer.load(0, {shade: false});
+                                },
+                                success: function (e) {
+                                    layer.close(loading);
+                                    var data = JSON.parse(e);
+                                    layer.msg(data.msg, {time: 1000}, function () {
+                                        if (data.errorcode == 0) {
+                                            obj.del();
+                                        }
+                                    });
+                                }
+                            })
+                        }, function () {
+                            layer.closeAll('dialog');
+                        });
+                    }
+                });
+                //监听工具条
+                table.on('tool(demo1)', function (obj) {
+                    var data = obj.data;
+                    if (obj.event === 'edit') {
+                        $.ajax({
+                            url: '/admin/miniapp/alterRecommendStatus.html',
+                            type: 'post',
+                            data: {id: data.id},
+                            beforeSend: function () {
+                                loading = layer.load(0, {shade: false});
+                            },
+                            success: function (e) {
+                                layer.close(loading);
+                                var d = JSON.parse(e);
+                                layer.msg(d.msg, {time: 1000}, function () {
+                                    if (d.errorcode == 0) {
+                                        window.location='/admin/miniapp/showcolumn.html';
+                                        return false;
+                                    }
+                                });
+                            }
+                        })
+
+                    } else if (obj.event === 'del') {
+                        //删除
+                        //询问框
+                        layer.confirm('确定要删除吗？', {
+                            btn: ['确定', '取消'] //按钮
+                        }, function () {
+                            $.ajax({
+                                url: '/admin/sysconfig/delmenu.html',
+                                type: 'post',
+                                data: {id: data.id},
+                                beforeSend: function () {
+                                    loading = layer.load(0, {shade: false});
+                                },
+                                success: function (e) {
+                                    layer.close(loading);
+                                    var data = JSON.parse(e);
+                                    layer.msg(data.msg, {time: 1000}, function () {
+                                        if (data.errorcode == 0) {
+                                            obj.del();
+                                        }
+                                    });
+                                }
+                            })
+                        }, function () {
+                            layer.closeAll('dialog');
+                        });
+                    }
+                });
+            }
+
+
+            showTable('#content1' ,54);
+            showTable('#content2' ,24);
+        });
+        //绑定同步数据按钮方法
+        $('.btn').on('click' ,function(){
+            var column = this.dataset.column;
+            //调用同步数据函数
+            syncData(column);
+        });
+        //封装的同步数据方法
+        function syncData(column){
+            $.ajax({
+                url:'/admin/miniapp/syncColumn.html',
+                type:'post',
+                data:{column:column},
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.close(loading);
+                    layer.msg(data.msg, {time: 1000}, function () {
+                        if (data.errorcode == 0) {
+                            window.location='/admin/miniapp/showcolumn.html';
+                            return false;
+                        }
+                    });
+                }
+            })
+        }
+    });
+</script>
+<!-- 表格操作按钮集 -->
+<script type="text/html" id="barOption">
+    <a class="layui-btn layui-btn-mini layui-btn-cyan" lay-event="edit">改推荐</a>
+    <a class="layui-btn layui-btn-mini layui-btn-danger" lay-event="del">删除</a>
+</script>
+</html>

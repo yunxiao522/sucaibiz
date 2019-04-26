@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新建广告-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <link rel="stylesheet" href="/public/css/admin/advert.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item">
+        <label class="layui-form-label">广告名称</label>
+        <div class="layui-input-block name">
+            <input type="text" name="ad_name" lay-verify="ad_name" autocomplete="off" placeholder="请输入标题" class="layui-input" value="{$info.ad_name}">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">广告大小</label>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="number" name="width" placeholder="宽度-px" autocomplete="off" class="layui-input" lay-verify="width" value="{$info.width}">
+            </div>
+            <div class="layui-form-mid">-</div>
+            <div class="layui-input-inline" style="width: 100px;">
+                <input type="number" name="height" placeholder="高度-px" autocomplete="off" class="layui-input" lay-verify="height" value="{$info.height}">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-inline">
+            <label class="layui-form-label">分组名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="class" lay-verify="class" autocomplete="off" placeholder="请输入标题" class="layui-input" value="{$info.class}">
+            </div>
+        </div>
+        <div class="layui-inline">
+            <label class="layui-form-label">是否启用</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="status" lay-skin="switch" lay-filter="switchTest" lay-text="启用|禁用" {if $info.status eq 1}checked=""{/if}>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">广告代码</label>
+        <div class="layui-input-block content">
+            <textarea placeholder="请输入广告代码" class="layui-textarea" name="content">{$info.content}</textarea>
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label">广告说明</label>
+        <div class="layui-input-block palcename">
+            <textarea placeholder="请输入广告说明" class="layui-textarea" name="palcename" lay-verify="palcename">{$info.palcename}</textarea>
+        </div>
+    </div>
+    <input type="hidden" name="id" id="id" value="{$info.id}">
+    <div class="layui-form-inline" style="text-align:center;">
+        <div class="layui-input-inline" >
+            <button class="layui-btn" lay-submit="" lay-filter="demo2">修改</button>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/advert.js"></script>
+</html>

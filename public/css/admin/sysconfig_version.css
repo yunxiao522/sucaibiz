@@ -1,0 +1,34 @@
+header{
+    margin-bottom:0;
+}
+article{
+    width:100%;
+    height:calc(100% - 50px);
+    margin-top:0;
+}
+article .left{
+    float:left;width:800px;
+    height:calc(100vh - 80px);
+}
+article .right{
+    float:left;
+    width:calc(100% - 800px);
+}
+.layui-table-view {
+    margin:0;
+}
+.h{
+    margin-top:40px;
+}
+.number{
+    width:200px;
+}
+#demo{
+    width:600px;
+}
+.layui-table-view{
+    border:none;
+}
+.layui-layedit{
+    width:600px;
+}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改文档属性-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<form class="layui-form" action="" style="margin-top:40px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">文档属性</label>
+        <div class="layui-input-block">
+            {volist name="$attribute" id="vo"}
+            <input type="checkbox" name="att[{$vo.mark}]" title="{$vo.attrname}" {if strpos($info.arcatt,$vo.mark) !== false}checked{/if}>
+            {/volist}
+        </div>
+    </div>
+    <input type="hidden" name="id" value="{$info.id}">
+    <div class="layui-form-inline" style="text-align:center;">
+        <div class="layui-input-inline">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script>
+    // layui方法
+    layui.use(['form'], function () {
+        // 操作对象
+        var form = layui.form;
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            $.ajax({
+                url:'/admin/alter_article_att.html',
+                type:'post',
+                data:data.field,
+                beforeSend:function(){
+                    loading = layer.load(0, {shade: false});
+                },
+                success:function (e) {
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg, {time: 1000}, function () {
+                        if (data.errorcode == 0) {
+                            parent.location.href = "/admin/article/show.html";
+                        }
+                    });
+                }
+            });
+            return false;
+        });
+    })
+</script>
+</html>

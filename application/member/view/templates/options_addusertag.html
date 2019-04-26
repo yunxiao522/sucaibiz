@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加用户标签-素材站</title>
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <style>
+        body{
+            width:360px;
+            height:100px;
+            padding:30px;
+            margin:0px;
+        }
+        input{
+            width:320px;
+            height:20px;
+            line-height:20px;
+            padding:10px;
+            margin-left:20px;
+            margin-right:20px;
+            border:1px solid #DDDDDD;
+            border-radius:5px;
+        }
+        input:focus{
+            border:1px solid #DDDDDD;
+            outline: none !important;
+        }
+        .button{
+            width:280px;
+            margin:0 auto;
+            height:40px;
+            margin-top:20px;
+        }
+        .button button{
+            width:120px;
+            height:40px;
+            margin-left:10px;
+            margin-right:10px;
+            float:left;
+            border-radius:5px;
+            background:#ffffff;
+            border:1px solid #000000;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<form action="">
+    <input type="text" placeholder="标签，请输入汉字或者英文（必填）" name="tag" data-num="30" maxlength="30">
+    <div class="button">
+        <button class="close">取消</button>
+        <button class="btn">确定</button>
+    </div>
+</form>
+</body>
+<script>
+    $(function () {
+        //绑定取消按钮点击事件
+        $('.close').on('click' ,function () {
+            parent.layer.closeAll();
+            return false;
+        });
+        //绑定确定按钮点击事件
+        $('.btn').on('click' ,function () {
+            //验证数据
+            var length = $('input[name="tag"]').val().length;
+            if(length == 0){
+                layer.msg('输入的标签不能为空' ,{icon:5});
+                return false;
+            }
+            if(length >= 30){
+                layer.msg('输入的标签不能超过30个字符' ,{icon:5});
+                return false;
+            }
+            //发送ajax请求，提交数据
+            $.ajax({
+               url:'/member/options/addusertag.html',
+               type:'post',
+               data:$('form').serialize(),
+                beforeSend: function () {
+                    loading = layer.load(0, {shade: false});
+                },
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    layer.msg(data.msg ,{time:2000} ,function () {
+                        if(data.errorcode == 0){
+                            parent.layer.closeAll();
+                        }
+                    })
+                }
+            });
+            return false;
+        })
+    });
+</script>
+</html>

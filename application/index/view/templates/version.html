@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--[if IE 7]><html class="ie7" lang="zh"><![endif]-->
+<!--[if gt IE 7]><!-->
+<html lang="zh">
+<!--<![endif]-->
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>版本历史-素材站</title>
+    <link href="/public/css/index/version/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div class="content">
+    <div class="wrapper">
+        <div class="light"><i></i></div>
+        <hr class="line-left">
+        <hr class="line-right">
+        <div class="main">
+            <h1 class="title">素材站版本日志</h1>
+            {volist name='info' id='item'}
+            <div class="year">
+                <h2><a href="#">{$item.year}<i></i></a></h2>
+                <div class="list">
+                    <ul>
+                        {volist name='item.info' id='list'}
+                            <li class="cls {if $list.is_height == 2}highlight{/if}">
+                                <p class="date">{$list.pubdate}</p>
+                                <p class="intro">{$list.title}</p>
+                                <p class="version">{$list.number}</p>
+                                <div class="more">
+                                    {$list.content}
+                                </div>
+                            </li>
+                        {/volist}
+                    </ul>
+                </div>
+            </div>
+            {/volist}
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <div class="footer-content clearfix">
+        <div class="copyright"> Copyright © 2011-2014  All Rights Reserved </div>
+    </div>
+</div>
+<script type="text/javascript" src="/public/js/index/version/jquery.min.js"></script>
+<script>
+    $(".main .year .list").each(function (e, target) {
+        var $target=  $(target),
+            $ul = $target.find("ul");
+        $target.height($ul.outerHeight()), $ul.css("position", "absolute");
+    });
+    $(".main .year>h2>a").click(function (e) {
+        e.preventDefault();
+        $(this).parents(".year").toggleClass("close");
+    });
+</script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/jquery.cookie.js"></script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</body>
+</html>

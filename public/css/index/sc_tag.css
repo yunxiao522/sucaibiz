@@ -1,0 +1,164 @@
+body{
+    padding:0;
+    margin:0;
+}
+ul{
+    padding:0;
+    margin:0;
+}
+li{
+    padding:o;
+    margin:0;
+    list-style-type:none;
+}
+a{
+    color:#000;
+}
+a:hover{
+    color:red;
+}
+header{
+    width:100%;
+    height:150px;
+    min-width:1200px;
+    background:#fafafa;
+    border-bottom:1px #E5E5E5 solid;
+}
+header .header{
+    width:1200px;
+    height:40px;
+    margin:0 auto;
+}
+header nav{
+    width:100%;
+    height:80px;
+    background:#13A38C;
+}
+nav .content{
+    width:1200px;
+    height:80px;
+    margin:0 auto;
+}
+.content img{
+    height:60px;
+    width:200px;
+    margin-top:10px;
+    float:left;
+}
+.content .search{
+    height:40px;
+    width:500px;
+    background:#fff;
+    margin-top:20px;
+    float:left;
+    margin-left:200px;
+}
+header .head{
+    font-size:8pt;
+}
+.head ul{
+    margin-left:40px;
+}
+header ul li{
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    border-right:1px #E1E1E1 solid;
+    height:20px;
+    margin-top:10px;
+    line-height:20px;
+    color:#555555;
+}
+article{
+    width:1200px;
+    margin:0 auto;
+    margin-top:20px;
+    border:1px #E8E8E8 solid;
+}
+article .content{
+    width:1200px;
+    height:160px;
+    border-bottom:1px #E8E8E8 solid;
+}
+.content .left{
+    width:200px;
+    height:100%;
+    background:#FAFAFA;
+    float:left;
+}
+.left .title{
+    margin-top:60px;
+    width:100%;
+    height:35px;
+    line-height:40px;
+    font-size:14pt;
+}
+.title img{
+    width:35px;
+    height:35px;
+    margin:0;
+    margin-left:40px;
+
+}
+.content .center{
+    width:970px;
+    padding-top:10px;
+    padding-bottom:10px;
+    height:140px;
+    float:left;
+}
+.content .right{
+    text-align:center;
+
+}
+.content .right:hover{
+    background:orangered;
+}
+.center .item{
+    width:173px;
+    height:50%;
+    border-right:1px #E8E8E8 solid;
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    font-size:10pt;
+}
+.item:hover{
+    background:#ABD0BC;
+    text-decoration: #00A080;
+}
+.item .title{
+    width:100%;
+    height:20px;
+    line-height:20px;
+    margin-left:0;
+    text-align:left;
+
+    margin-top:10px;
+}
+.item .title img{
+    width:12px;
+    height:12px;
+    margin-left:0;
+    margin-top:2px;
+}
+.low{
+    border:none;
+}
+.content .right{
+    width:30px;
+    height:160px;
+    background:#F8F8F8;
+    float:left;
+}
+.handle{
+    float:right;
+    height:20px;
+    margin-top:10px;
+}
+footer{
+    width:100%;
+    height:300px;
+    margin-top:20px;
+    background:#13A38C;
+}

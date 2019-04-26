@@ -1,0 +1,210 @@
+body{
+    margin:0px;
+    padding:0px;
+}
+header{
+    height:110px;
+    width:100%;
+    background: url(/public/png/headbg.jpg) repeat-x left bottom
+}
+.header{
+    width:1200px;
+    margin:0 auto;
+    height:100px;
+}
+.logo{
+    height:80px;
+    float:left;
+}
+.con-font{
+    float:left;
+    font-size:18pt;
+    font-family: '微软雅黑';
+    line-height:100px;
+    color:#000000;
+    text-decoration:none;
+}
+.con-font a:active{
+    color:#000000;
+    text-decoration:none;
+}
+.account{
+    height:100%;
+    float:right;
+    line-height:110px;
+}
+.account a{
+    color:red;
+}
+.account a:active{
+    color:red;
+}
+article{
+    width:600px;
+    height:600px;
+    margin:0 auto;
+    margin-top:60px;
+}
+.article{
+    width:600px;
+    height:150px;
+    margin:0 auto;
+    margin-top:60px;
+}
+.reg-flow{
+    width:428px;
+    height:80px;
+    font-family:'微软雅黑';
+    font-size:8pt;
+    margin:0 auto;
+}
+.reg-1{
+    width:60px;
+    height:60px;
+    float:left;
+}
+.step-success{
+    background: url(/public/png/reg-icon.png) no-repeat;
+    line-height:60px;
+    margin:0 auto;
+    width:24px;
+    height:24px;
+}
+.step-title{
+    width:100%;
+    height:10px;
+    text-align:center;
+    margin-top:5px;
+    color:#33BB44;
+}
+.inline{
+    /*background: url(/public/png/reg-icon.png) no-repeat;*/
+    background-image: url(/public/png/reg-icon.png);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-position: 0 -130px;
+    width:124px;
+    float:left;
+    height:10px;
+    margin-top:7px;
+}
+.step-active{
+    background-image: url(/public/png/reg-icon.png);
+    background-position: 0 -200px;
+    margin:0 auto;
+    width:24px;
+    height:24px;
+    text-align:center;
+    line-height:23px;
+    color:#ffffff;
+    font-size:9pt;
+}
+.noline{
+    /*background: url(/public/png/reg-icon.png) no-repeat;*/
+    background-image: url(/public/png/reg-icon.png);
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-position: 0 -100px;
+    width:124px;
+    float:left;
+    height:10px;
+    margin-top:7px;
+}
+.step-defeated{
+    background-image: url(/public/png/reg-icon.png);
+    background-position: -45px -200px;
+    margin:0 auto;
+    width:24px;
+    height:24px;
+    text-align:center;
+    line-height:23px;
+    color:#000000;
+    font-size:9pt;
+}
+.reg-form{
+    width:450px;
+    margin:0 auto;
+    height:400px;
+}
+.form-item{
+    width:100%;
+    height:50px;
+    border:1px solid #DDDDDD;
+}
+.b{
+    border:1px solid #999999;
+}
+.form-item label{
+    float:left;
+    height:50px;
+    width:100px;
+    line-height:50px;
+    text-align:center;
+    font-size:10pt;
+    color: #666;
+}
+.form-item input{
+    float:left;
+    width:346px;
+    height:48px;
+    border:none;
+}
+.form-hint{
+    width:450px;
+    height:30px;
+    margin:0 auto;
+    font-size:8pt;
+}
+#btn:active{
+    border:1px solid #999999;
+}
+.form-item button{
+    width:100%;
+    height:100%;
+    background:#12A38C;
+    color:#ffffff;
+    font-size:12pt;
+}
+footer{
+    bottom:20px;
+    width:100%;
+    height:90px;
+    position:absolute;
+}
+footer .main{
+    width:1200px;
+    height:90px;
+    border-top:1px solid #E6E6E6;
+    margin:0 auto;
+    padding-top:20px;
+    text-decoration: none;
+    text-align:center;
+}
+footer .main a{
+    color:#999999;
+    text-decoration: none;
+}
+footer .main a:active{
+    color:#999999;
+    text-decoration:none;
+}
+.i-error{
+    background: url(/public/png/register3.png) no-repeat;
+    background-position: -17px -100px;
+    width:19px;
+    height:19px;
+}
+.error{
+    color:orangered;
+
+}
+.hint{
+    color:#999999;
+}
+.success{
+    color:green;
+}

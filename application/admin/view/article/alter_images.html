@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑文档</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <link rel="stylesheet" href="/public/css/admin/alter_article.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+
+    <script src="/public/plugins/divupload/js/webuploader.html5only.min.js"></script>
+    <script src="/public/plugins/divupload/js/diyUpload.js"></script>
+    <!--引入diyupload-->
+    <link rel="stylesheet" type="text/css" href="/public/plugins/diyupload/css/webuploader.css">
+    <link rel="stylesheet" type="text/css" href="/public/plugins/diyupload/css/diyUpload.css">
+
+    <!--必要样式-->
+    <link rel="stylesheet" type="text/css" href="/public/plugins/loading/css/component.css"/>
+    <link rel="stylesheet" type="text/css" href="/public/plugins/loading/css/custom-bars.css"/>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>文档</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>编辑文档</li>
+        </a>
+    </ul>
+</header>
+<article>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">文档标题</label>
+            <div class="layui-input-block title">
+                <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" value="{$article.title}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文档属性</label>
+            <div class="layui-input-block">
+                {volist name="attribute" id="vo"}
+                    <input type="checkbox" lay-filter="attribute" value="{$vo.mark}" name="attribute[{$vo.mark}]" {if strpos($article.arcatt,$vo.mark) !== false}checked{/if} title="{$vo.attrname}">
+                {/volist}
+            </div>
+        </div>
+        <div class="litpic">
+            <div class="layui-form-item">
+                <div class="left inline">
+                    <label class="layui-form-label">缩略图</label>
+                    <div class="layui-input-inline litpic-url" >
+                        <input type="text" name="litpic" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input" value="{$article.litpic}" disabled id="litpic_url">
+                    </div>
+                    <input type="hidden" name="litpic_id" id="litpic_id" value="">
+                    <button class="layui-btn layui-btn-sm" id="litpic">上传</button>
+                </div>
+                <div class="right inline">
+                    <div class="layui-input-inline litpic-img">
+                        <img src="{$article.litpic}" alt="" id="litpic_img">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div id="litpic2" style="width:100%;height:200px;margin-bottom:20px;{if empty($article.arcatt) || strpos('f',$article.arcatt) !== false}display: none{/if} ">
+            <div class="layui-form-item" style="margin-top:80px;float:left;line-height:35px;">
+                <div style="width:620px;float:left;line-height:35px;">
+                    <label class="layui-form-label">幻灯片</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="slide" autocomplete="off" disabled placeholder="请输入缩略图地址"
+                               class="layui-input" style="width:500px;" id="slide_url" value="{$article.roll_img}">
+                    </div>
+                    <input type="hidden" name="slide_id" id="slide_id" value="">
+                </div>
+                <button class="layui-btn-warm layui-btn layui-btn-small upload_slide">上传</button>
+            </div>
+            <div style="width:300px;height:200px;float:left;margin-left:20px;">
+                <img src="{$article.slide_img}" alt="" style="width:300px;height:200px;" id="slide_img">
+            </div>
+        </div>
+        <div id="litpic3" style="width:100%;height:200px;margin-bottom:20px; {if empty($article.arcatt) || strpos('s',$article.arcatt) !== false}display: none{/if} ">
+            <div class="layui-form-item" style="margin-top:80px;float:left;line-height:35px;">
+                <div style="width:620px;float:left;line-height:35px;">
+                    <label class="layui-form-label">滚动图</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="roll" autocomplete="off" disabled placeholder="请输入缩略图地址"
+                               class="layui-input" style="width:500px;" id="roll_url" value="{$article.roll_img}">
+                    </div>
+                    <input type="hidden" name="roll_id" id="roll_id" value="">
+                </div>
+                <button class="layui-btn-warm layui-btn layui-btn-small upload_roll">上传</button>
+            </div>
+            <div style="width:300px;height:200px;float:left;margin-left:20px;">
+                <img src="{$article.roll_img}" alt="" style="width:300px;height:200px;" id="roll_img">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">TAG标签</label>
+            <div class="layui-input-block tag">
+                <input type="text" name="tag" lay-verify="tag" placeholder="请输入tag标签" autocomplete="off" class="layui-input" value="{$tag}">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">文档来源</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="source" lay-verify="source" autocomplete="off" class="layui-input" id="source" value="{$article.source}">
+                </div>
+                <button class="layui-btn layui-btn-sm" id="choice_source">来源</button>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">文档作者</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="author" lay-verify="author" autocomplete="off" class="layui-input" id="author" value="{$article.author}">
+                </div>
+                <button class="layui-btn layui-btn-sm" id="choice_author">作者</button>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">阅读权限</label>
+            <div class="layui-input-block">
+                {volist name="level" id="vo"}
+                <input type="checkbox" name="power[{$vo.id}]" {if strpos($article.arcrank,(string)$vo.id) !== false}checked{/if} title="{$vo.level_name}">
+                {/volist}
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">文档栏目</label>
+            <div class="layui-input-inline column">
+                <select name="column" lay-filter="column">
+                    <option value="0">选择栏目</option>
+                    {volist name="column_list" id="vo"}
+                    <option value="{$vo.id}" {if $article.column_id eq $vo.id}selected{/if}>{$vo.type_name}</option>
+                    {/volist}
+                </select>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">重新压缩</label>
+                <div class="layui-input-inline">
+                    <input type="checkbox" checked="" name="is_pack" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">关键词</label>
+            <div class="layui-input-block tag">
+                <input type="text" name="keywords" lay-verify="keywords" placeholder="请输入文档关键词" autocomplete="off" class="layui-input" value="{$article.keywords}" id="keywords">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">摘要</label>
+            <div class="layui-input-block description">
+                <textarea placeholder="请输入内容" name="description" class="layui-textarea">{$article.description}</textarea>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text ">
+            <div class="layui-input-block images">
+                <label class="layui-form-label" style="width:100%;text-align:center;background:#fff;">图集列表</label>
+                <div class="list">
+                    <ul>
+                        {volist name="imgs" id="vo" key="k"}
+                        <li>
+                            <img src="{$vo|getImgUrl=###}" alt="" class="imgurls" width="190" height="110">
+                            <a href="javascript:void(0)"><img src="/public/png/del.png" data-num="{$k}" alt="" class="del"></a>
+                        </li>
+                        {/volist}
+                    </ul>
+                </div>
+                <div class="addimages">
+                    <label class="layui-form-label" style="width:100%;text-align:center;background:#fff;">新增图片</label>
+                    <div id="test"></div>
+                    <script type="text/javascript">
+                        images_new = [];
+                        /*
+                         * 服务器地址,成功返回,失败返回参数格式依照jquery.ajax习惯;
+                         * 其他参数同WebUploader
+                         */
+                        $('#test').diyUpload({
+                            url: '/admin/article/uploadimages.html?token=1',
+                            success: function (data) {
+                                if(data.errorcode == 0){
+                                    images_new.push(data.info);
+                                }
+                            },
+                            error: function (err) {
+                            }
+                        });
+                    </script>
+                </div>
+
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">真实路径</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="redirecturl" lay-verify="source" autocomplete="off" class="layui-input" value="{$article.redirecturl}">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">模板</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="template" lay-verify="author" autocomplete="off" class="layui-input" value="{$article.templet}">
+                </div>
+            </div>
+        </div>
+        <input type="hidden" value="{$article.channel}" name="channel">
+        <input type="hidden" value="{$article.article_id}" name="id">
+        <input type="hidden" value="{$article.token}" name="token">
+        <input type="hidden" value="{$article.pubdate|date='Y-m-d H:i:s',###}" name="pudate">
+        <input type="hidden" value="{$article.channel}" name="column_type">
+        <div class="layui-form-item">
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit="" lay-filter="demo1" align="center" style="margin-left:400px;">保存</button>
+            </div>
+        </div>
+    </form>
+</article>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/alter_article.js"></script>
+<script type="text/javascript">
+    $("#change-color .bar").hover(function () {
+        // $(this).toggleClass('active');
+        $(this).find('.front').toggleClass('shine');
+    });
+    var images_old = [];
+
+    {volist name="imgs" id="vo" key="k"}
+        images_old.push( "{$vo}" );
+    {/volist}
+
+    //绑定删除图集图片事件
+    $('.del').on('click' ,function(){
+        var img_id = $(this).attr('data-num');
+        console.log(img_id);
+        $(this).parent().parent().hide();
+        images_old[img_id - 1] = null;
+    });
+</script>
+</html>

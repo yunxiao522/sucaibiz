@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <style>
+        ul{
+            padding:0px;
+            margin:0px;
+        }
+        li{
+            float:left;
+            list-style:none;
+            margin-left:10px;
+            margin-right:10px;
+        }
+    </style>
+</head>
+<body style="width:400px;padding:0px;margin:0px;">
+<div style="width:100%;height:50px;">
+    <button class="layui-btn layui-btn-warm layui-btn-small" id="set" style="float:right">设置来源</button>
+</div>
+<ul>
+    {volist name="source_list" id="vo"}
+    <a href="javascript:void(1)" data-value="{$vo.soname}" class="author"><li>{$vo.soname}</li></a>
+    {/volist}
+</ul>
+<script type="text/javascript">
+    //给a链接绑定事件
+    $(document).on('click','.author',function(){
+        //获取选择的作者名
+        var author = $(this).attr('data-value');
+        //将获取的值赋值给父级里面的input
+        var inpu = window.parent.document.getElementById('source');
+        inpu.value=author;
+        //关闭弹出层
+        parent.layer.closeAll();
+    });
+    //给设置按钮绑定时间
+    $(document).on('click','#set',function(){
+        location.href = "/admin/set_article_source.html";
+    });
+</script>
+</body>
+</html>

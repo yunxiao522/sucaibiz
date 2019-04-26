@@ -1,0 +1,37 @@
+body{
+    padding:0;
+    margin:0;
+    font-size:12px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+#shortcut {
+	background-color: #fafafa;
+	color: #535353;
+}
+
+#shortcut h3 {
+	display: none;
+}
+
+#shortcut nav {
+	display: inline-block;
+	position: relative;
+    left: 50%;
+    margin-left: -578px;
+	padding: 5px 0;
+	overflow: hidden;
+}
+
+#shortcut nav a {
+	display: inline-block;
+	text-align: center;
+	border-left: 1px solid #e1e1e1;
+	width: 74px;
+	margin: 5px 0 5px -1px;
+	color: #555;
+}
+
+#shortcut nav a:hover {
+	color: #ee521c;
+	text-decoration: underline;
+}

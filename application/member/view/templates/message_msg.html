@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>消息中心-会员中心-素材站</title>
+    <link rel="stylesheet" href="/public/css/member/message.css">
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquer-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script type="text/javascript" src="/public/layer/layer.js"></script>
+    <script type="text/javascript" src="/public/js/member/message.js"></script>
+    <!--引入layui-->
+    <script type="text/javascript" src="/public/layui/layui.all.js"></script>
+    <!--引入公共的js文件-->
+    <script type="text/javascript" src="/public/js/member/common.js"></script>
+    <!--引入公共的css文件-->
+    <link rel="stylesheet" href="/public/css/member/common.css">
+</head>
+<body>
+{include file="templates/accounts/header" /}
+<article>
+    <div class="left inline">
+        {include file="templates/msg/left" /}
+    </div>
+    <div class="right inline">
+        <div class="header">
+            <ul>
+                <a href="" class="seetingli" data-type="all"><li class=" {if $class eq 'all'}this t1{/if}">全部消息</li></a>
+                <a href="" class="seetingli" data-type="recommend"><li class=" {if $class eq 'recommend'}this{/if}">推荐</li></a>
+                <a href="" class="seetingli" data-type="attention"><li class=" {if $class eq 'attention'}this{/if}">关注</li></a>
+                <a href="" class="seetingli" data-type="notice"><li class=" {if $class eq 'notice'}this{/if}">公告</li></a>
+                <a href="" class="seetingli" data-type="system"><li class=" {if $class eq 'system'}this{/if}">系统</li></a>
+                <a href="" class="seetingli" data-type="team"><li class=" {if $class eq 'team'}this{/if}">团队</li></a>
+            </ul>
+        </div>
+        <div class="matter" style="width:100%;height:500px;">
+            {if $list eq []}
+                <div class="empty">
+                    <div style="width:100%;height:1px;"></div>
+                    <div style="width:100%;height:30px;margin-top:350px;text-align:center;">没有消息哦</div>
+                </div>
+            {else /}
+                <ul class="mlist">
+                    {volist name="list" id="vo"}
+                        <li>
+                            <div class="list">
+                                <div class="left inline">
+                                    <div class="left_list">
+                                        <img src="{$vo.source_info.face}" alt="{$vo.source_info.nickname}">
+                                    </div>
+                                </div>
+                                <div class="right inline">
+                                    <div class="head"><div class="nickna inline">{$vo.source_info.nickname}</div> <div class="time inline">{$vo.create_time}</div></div>
+                                    <div class="cont">
+                                        {$vo.content}
+                                    </div>
+                                </div>
+                                <div style="clear: both"></div>
+                            </div>
+                        </li>
+                    {/volist}
+                </ul>
+                <div class="padding">
+                    {$paging}
+                </div>
+            {/if}
+        </div>
+    </div>
+    <div style="clear: both;display: block;width:100%;height:1px;">
+
+    </div>
+</article>
+{include file="templates/common/footer" /}
+<input type="hidden" name="id" value="{$user_info.id}">
+</body>
+</html>

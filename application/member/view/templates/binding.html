@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定账号</title>
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <link rel="stylesheet" href="/public/css/member/binding.css">
+</head>
+<body>
+<article>
+    <header>
+        <img src="/public/logo.png" alt="" class="logo">
+    </header>
+    <div class="info">
+        <div class="title">关联账号</div>
+        <div class="detail">
+            <div class="bor">
+                <div class="face">
+                    <img src="{$face}" alt="">
+                </div>
+            </div>
+            <div class="nickname"><b>{$user_info.nickname}</b></div>
+            <div class="hint">你的账户尚未绑定本站账号</div>
+        </div>
+    </div>
+    <div class="operate">
+        <input type="hidden" name="type" value="{$type}">
+        <input type="hidden" name="code" value="{$code}">
+        <input type="hidden" name="token" value="{$token}">
+        <button id="relevance" style="background:#13A38C;color:#ffffff;">关联已有账号</button>
+        <button id="register">注册账号</button>
+    </div>
+</article>
+</body>
+<script type="text/javascript">
+    var type = $('input[name="type"]').val();
+    var code = $('input[name="code"]').val();
+    var token = $('input[name="token"]').val();
+    $(function(){
+        $('#relevance').on('click' ,function(){
+            window.location.href = "/binding.html?type="+type+"&code="+ code +"&token="+ token +"&flow=2";
+        });
+        $('#register').on('click' ,function(){
+            window.location.href = "//www.jb51.net";
+        })
+    })
+</script>
+</html>

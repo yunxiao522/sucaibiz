@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>邮件详情</title>
+    <style>
+        body{
+            margin:0px;
+            padding:2px;
+            font-family:'微软雅黑-light';
+        }
+        header{
+            width:100%;
+            background:#F5F5F5;
+        }
+        .header{
+            height:100px;
+            width:500px;
+            margin-left:10px;
+        }
+        .nickname{
+            color:#88A207;
+            font-family:'隶书';
+        }
+        label{
+            font-size:10pt;
+        }
+        .time{
+            color:#7F7F7F;
+            font-size:10pt;
+        }
+        article{
+            margin-top:10px;
+            width:100%;
+            padding:10px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div style="width:100%;height:10px;"></div>
+    <div class="header">
+        <span class="title">{$email_info.title}</span><br>
+        <label>收件人: </label><span class="nickname">{$email_info.nickname}</span><span class="time"><{$email_info.address}></span><br>
+        <label>时  间: </label><span class="time">{$email_info.create_time}</span><br>
+        <label>发送状态: </label><span class="time">{$email_info.status}</span><br>
+    </div>
+</header>
+<article>
+    {$email_info.content}
+</article>
+</body>
+</html>

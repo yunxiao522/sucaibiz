@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-小程序-分类管理-显示设置-详细信息</title>
+    <style>
+        .top{
+            width:100%;
+            margin-top:50px;
+            height:200px;
+        }
+        .inline{
+            float:left;
+        }
+        .bottom{
+            width:100%;
+            font-size:10pt;
+            height:30px;
+            line-height:30px;
+        }
+        .left{
+            width:50%;
+        }
+        .right{
+            width:50%;
+        }
+        .right img{
+            text-align:center;
+            margin:0 auto;
+            width:150px;
+            height:150px;
+            margin-left:100px;
+        }
+        .list{
+            width:100%;
+            height:30px;
+            font-size:10pt;
+            line-height:30px;
+        }
+        .tit{
+            width:100px;
+            text-align:right;
+            float:left;
+        }
+    </style>
+</head>
+<body>
+<div class="top">
+    <div class="left inline">
+        <div class="list" style="margin-top:50px;"><div class="tit">名称：</div>{$info.name}</div>
+        <div class="list"><div class="tit">所属栏目：</div>{$info.column}</div>
+        <div class="list"><div class="tit">tag表id：</div>{$info.tag_id}</div>
+        <div class="list"><div class="tit">文档数量：</div>{$info.info.total}</div>
+    </div>
+    <div class="right inline"><img src="{$info.litpic}" alt=""></div>
+</div>
+<div class="bottom">
+    <div class="black inline"><div class="tit">创建时间：</div>{$info.create_time}</div>
+    <div class="black inline"><div class="tit">状态：</div>{$info.status}</div>
+    <div class="black inline"><div class="tit">点击数：</div>{$info.info.count}</div>
+</div>
+
+
+
+
+
+
+
+
+</body>
+</html>

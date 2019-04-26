@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-后台管理-系统设置-基本参数</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>系统设置</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>基本参数</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+        <button class="layui-btn  layui-btn-small add-column layui-btn-normal" id="show">参数管理</button>
+    </div>
+</header>
+<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <ul class="layui-tab-title">
+        {volist name="sysconfig_group" id="vo" }
+            <li lay-id = "{$vo.id}" {if $vo.id eq 1}class="layui-this" {/if}>{$vo.name}</li>
+        {/volist}
+    </ul>
+    <div class="layui-tab-content" style="width:1410px;">
+        {volist name="sysconfig_group" id="vo" }
+            <div class="layui-tab-item {if $vo.id eq 1}layui-show{/if}" >
+                <form action="" class="layui-form" data-id = "{$vo.id}">
+                    {volist name="sysconfig_list" id="v" key="k"}
+                        {if $v.class eq $vo.id}
+                            <div class="layui-form-item">
+                                <label class="layui-form-label" style="width:300px;">{$v.description}</label>
+                                {if $v.type eq 1}
+                                    <div class="layui-input-inline" style="width:800px;">
+                                        <input type="text" name="{$v.name}" lay-verify="title" autocomplete="off" class="layui-input" value="{$v.value}">
+                                    </div>
+                                {elseif $v.type eq 2}
+                                    <div class="layui-input-inline" style="width:800px;">
+                                        {volist name="$v.data" id="vod" key="kod"}
+                                        <input type="radio" name="{$v.name}" value="{$kod}" title="{$vod}" {if $v.value eq $kod}checked{/if}>
+                                        {/volist}
+                                    </div>
+                                {elseif $v.type eq 3}
+                                <div class="layui-input-inline" style="width:800px;">
+                                    {volist name="$v.data" id="vod" key="kod"}
+                                    <input type="checkbox" name="{$v.name}${$kod}" title="{$vod}" {volist name="$v.value" id="o"}{if $o eq $kod}checked{/if} {/volist}    >
+                                    {/volist}
+                                </div>
+                                {elseif $v.type eq 5}
+                                <div class="layui-input-inline" style="width:800px;">
+                                    <div class="layui-input-inline">
+                                        <textarea placeholder="请输入内容" name="{$v.name}" style="width:600px;" class="layui-textarea">{$v.value}</textarea>
+                                    </div>
+                                </div>
+                                {/if}
+                                <label class="layui-form-label" style="float:left;width:200px;text-align:center;" >{$v.name}</label>
+                            </div>
+                        {/if}
+                    {/volist}
+                    <input type="hidden" value="{$vo.id}" name="class">
+                    <button class="layui-btn" lay-submit="" lay-filter="demo1" style="margin-left:700px;">修改</button>
+                </form>
+            </div>
+        {/volist}
+    </div>
+</div>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/Sysconfig_show.js"></script>
+</body>
+</html>

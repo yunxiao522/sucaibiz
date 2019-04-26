@@ -1,0 +1,20 @@
+<div class="header">
+    <div style="width:100%;height:40px;"></div>
+    <div class="face">
+        <img src="{$user_info.face}" alt="" class="faceimg">
+    </div>
+    <div class="nickname">
+        <a href="/member/index.html?id={$user_info.id}" target="_blank">{$user_info.nickname}</a>
+    </div>
+    <div class="level">
+        {$user_info.level_info}
+    </div>
+    <a href="/member/contribute/add.html" target="_blank">
+        <div class="contribute">投稿</div>
+    </a>
+</div>
+<div class="content">
+    <a href="/member/message/msg.html"><div class="list {if $type eq 'msg'}this{/if}">通知</div></a>
+    <a href="/member/message/comment.html"><div class="list {if $type eq 'comment'}this{/if}">评论/留言</div></a>
+    <a href="/member/message/personal.html"><div class="list {if $type eq 'personal'}this{/if}">私信</div></a>
+</div>

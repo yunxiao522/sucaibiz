@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>素材站</title>
+        <link>http://www.sucai.biz</link>
+        <description>素材站提供风景壁纸,美女壁纸,花卉壁纸,汽车壁纸,游戏壁纸,体育壁纸,动漫壁纸,卡通壁纸,日历壁纸,节日壁纸,影视壁纸,卡通壁纸,设计壁纸,头像,PSD素材,图片素材,JS素材等高清壁纸下载服务
+        </description>
+        <language>ch-en</language>
+        {volist name="article" id="vo"}
+
+        <item>
+            <title>{$vo.title}</title>
+            <link>{$vo.url}</link>
+            <description>{$vo.title}</description>
+            <pubDate><![CDATA[{$vo.pubdate|date='Y-m-d H:i:s',###}]]></pubDate>
+        </item>
+        {/volist}
+    </channel>
+</rss>

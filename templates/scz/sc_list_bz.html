@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$column.type_name}</title>
+    <meta name="keywords" content="{$column.keywords}">
+    <meta name="description" content="{$column.description}">
+    <link href="/public/css/index/sc_list_bz.css" rel="stylesheet" media="screen" type="text/css"/>
+    <link href="/public/css/index/article.css" rel="stylesheet" media="screen" type="text/css"/>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.js"></script>
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.lazyload.js"></script>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie插件-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="/favicon.ico"/>
+</head>
+<body>
+<header>
+    <div class="content">
+        <div class="header">
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+        <div class="logo">
+            <img src="/public/png/logo1_2.png" alt="" style="height:60px;">
+        </div>
+        <div class="search"></div>
+    </div>
+</header>
+<nav>
+    <div class="column">
+        <div class="title inline">
+            <div style="margin-top:20px;margin-left:60px;">
+                <div class="inline img"><img src="/public/png/column2.png" alt="" style="width:20px;height:20px;" /></div>
+                <div class="inline tt"><span class="inline" style="">壁纸分类</span></div>
+            </div>
+        </div>
+        <div class="content inline">
+            <ul class="inline">
+                <a href="/bz/bz_1.html"><li {if $column.id eq 1} class="this" {/if}>全部</li></a>
+                {volist name="1|getColumn=### ,' id,type_name '" id="vo"}
+                <a href="{$vo.url}"><li {if $column.id eq $vo.id} class="this" {/if}>{$vo.type_name}</li></a>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="size">
+        <div class="title inline">
+            <div style="margin-top:20%;margin-left:60px;">
+                <div class="inline img"><img src="/public/png/size.png" alt="" style="width:20px;height:20px;" /></div>
+                <div class="inline tt"><span class="inline" style="">壁纸大小</span></div>
+            </div>
+        </div>
+        <div class="content inline">
+            <ul class="inline">
+                <a href=""><li >全部</li></a>
+                {volist name="$article_list|getImagesScrnList" id="vo"}
+                <a href=""><li>{$vo.scrn_size}</li></a>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="color">
+        <div class="title inline">
+            <div style="margin-top:10px;margin-left:60px;">
+                <div class="inline img"><img src="/public/png/color.png" alt="" style="width:20px;height:20px;" /></div>
+                <div class="inline tt"><span class="inline" style="">壁纸颜色</span></div>
+            </div>
+        </div>
+        <div class="content inline">
+            <ul class="inline">
+                <a href=""><li ><div style="padding-left:10px;padding-right:10px;border-radius:10px;">全部</li></a>
+                {volist name="$article_list|getImagesColorList" id="vo"}
+                <a href=""><li ><div style="background:{$vo.color_code };border:0;width:20px;height:20px;"></div></li></a>
+                {/volist}
+            </ul>
+        </div>
+    </div>
+    <div class="info">
+        <div class="scrn">
+            <div class="inline"><img src="/public/png/scrn.png" alt="" style="width:20px;height:20px;"></div>
+            <div class="inline srcnf"></div>
+        </div>
+    </div>
+</nav>
+<article>
+    <div class="header">
+        <div class="title">最新壁纸</div>
+        <div class="more">更多>></div>
+    </div>
+    <div class="content">
+        <ul>
+            {volist name="article_list" id="vo"}
+            <a href="{$vo.url}">
+                <li>
+                    <div class="item">
+                        <div class="i"><img src="{$vo.litpic}" alt="" style="width:200px;height:120px;"></div>
+                        <div class="t"><span>{$vo.title|cut_str="14"}</span></div>
+                    </div>
+                </li>
+            </a>
+            {/volist}
+        </ul>
+    </div>
+    <div id="pagging">
+        {$paging}
+    </div>
+</article>
+<footer>
+
+</footer>
+<input type="hidden" name="id" value="{$column.id}">
+</body>
+<!--引入公共的文档js-->
+<script type="text/javascript" src="/public/js/index/list.js"></script>
+<!--引入壁纸列表js-->
+<script type="text/javascript" src="/public/js/index/sc_list_bz.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

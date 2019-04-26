@@ -1,0 +1,383 @@
+*{
+    margin:0;
+    padding:0;
+    border:0;
+}
+body{
+    width:100%;
+    min-width:1200px;
+    height:max-content;
+    background:#F4F4F4;
+    font-family: '微软雅黑';
+}
+.main{
+    color:#000000;
+}
+.main a{
+    color:#000000;
+    text-decoration:none;
+}
+article{
+    width:1200px;
+    margin:0 auto;
+    margin-top:20px;
+    min-height:500px;
+}
+.inline{
+    float:left;
+}
+.left{
+    width:260px;
+}
+.header{
+    width:100%;
+    height:270px;
+    background:#ffffff;
+    border-radius:5px;
+}
+.header a{
+    text-decoration:none;
+}
+
+.face{
+    width:100%;
+    height:80px;
+    text-align:center;
+}
+.face img{
+    width:80px;
+    height:80px;
+    border-radius:40px;
+    margin:0 auto;
+}
+.nickname{
+    width:100%;
+    height:30px;
+    line-height:30px;
+    text-align:center;
+    margin-top:20px;
+    font-size:12pt;
+    font-weight:600;
+}
+.nickname a{
+    color:#000000;
+}
+.nickname a:hover{
+    color:#000000;
+}
+.level{
+    width:100%;
+    height:20px;
+    color:#BBBBBB;
+    text-align:center;
+    font-size:10pt;
+}
+.contribute{
+    width:80%;
+    height:40px;
+    line-height:40px;
+    background:#13A38C;
+    margin:0 auto;
+    text-align:center;
+    border-radius:5px;
+    margin-top:10px;
+}
+.contribute:hover{
+    background:#00C9A9;
+}
+.content{
+    width:100%;
+    height:max-content;
+    background:#ffffff;
+    margin-top:10px;
+    border-radius:5px;
+}
+.content .list{
+    width:calc(100% - 4px);
+    height:50px;
+    line-height:50px;
+    text-align:center;
+    border:2px #ffffff solid;
+}
+.content .list:hover{
+    background:#13A38C;
+    color:#ffffff;
+}
+.content a{
+    text-decoration:none;
+    color:#000000;
+}
+.content a:hover{
+    color:#000000;
+}
+.content .this{
+
+    border-left:2px #13A38C solid;
+}
+.right{
+    width:calc(100% - 280px);
+    margin-left:20px;
+    background:#ffffff;
+    border-radius:5px;
+    padding-bottom: 20px;
+}
+.right .header{
+    width:100%;
+    height:62px;
+    border-bottom:1px #EEEEEE solid;
+    line-height:60px;
+}
+.logh{
+    padding-left:20px;
+    width:calc(100% - 20px);
+}
+.right .header ul{
+    margin:0;
+    padding:0;
+}
+.right .header ul li{
+    margin:0;
+    padding:0;
+    float:left;
+    margin-left:50px;
+    list-style:none;
+    border-bottom:2px #ffffff solid;
+}
+.right .header ul a{
+    color:#000000;
+    text-decoration:none;
+}
+.right .header ul a:hover{
+    color:#000000;
+}
+.right .header ul .this{
+    border-bottom:2px #000000 solid;
+}
+.right .info{
+    width:100%;
+    margin-top:20px;
+}
+.right .info .list{
+    width:100%;
+    height:50px;
+    line-height:50px;
+}
+.right .info .list .tt{
+    width:100px;
+    height:50px;
+    text-align:right;
+}
+.right .info .list .options{
+    width:200px;
+    height:50px;
+    color:red;
+    margin-left:20px;
+}
+.right .info .list .options a{
+    text-decoration:none;
+    color:red;
+}
+.right .info .list .options a:hover{
+    color:red;
+}
+.right .info .list input{
+    height:18px;
+    background:#F4F4F4;
+    padding:10px;
+    padding-left:20px;
+    line-height:18px;
+    border:1px #DDDDDD solid;
+    border-radius:5px;
+}
+.right .info .list input:focus {
+    background-color: #ffffff;
+}
+.right .infoface .alterface{
+    width:calc(100% - 40px);
+    margin-left:20px;
+    height:300px;
+    background:#F2F2F5;
+}
+.right .infoface .alterface .showface{
+    width:100%;
+    height:200px;
+    border-radius:100px;
+    margin-top:20px;
+    text-align:center;
+}
+.right .infoface .alterface .showface img{
+    width:200px;
+    height:200px;
+    border-radius:100px;
+    margin:0 auto;
+    margin-top:20px;
+}
+.right .log{
+    width:100%;
+    margin-top:10px;
+    background:#ffffff;
+    padding-bottom:20px;
+}
+.right .log table{
+    width:calc(100% - 40px);
+    margin:20px;
+    padding-bottom:20px;
+}
+.right .log table .theader{
+    width:100%;
+    height:40px;
+    line-height:40px;
+    background:#F3F3F3;
+}
+.right .log table .time{
+    width:250px;
+    text-align:center;
+}
+.right .log table .ip{
+    width:250px;
+    text-align:center;
+}
+.right .log table .browser{
+    width:150px;
+    text-align:center;
+}
+.right .log table .method{
+    text-align:center;
+}
+.right .log table tr{
+    width:100%;
+    height:30px;
+    line-height:30px;
+}
+.right .log .paging{
+    display: inline-block;
+    margin:0 auto;
+    padding:0;
+    width:max-content;
+    height:max-content;
+}
+.right .log .paging li{
+    float:left;
+    padding-left:10px;
+    padding-right:10px;
+    text-align:center;
+    background:#F5F5F5;
+    border-radius:2px;
+    font-size:10pt;
+    border:1px #E2E2E2 solid;
+    height:38px;
+    line-height:38px;
+}
+.right .log .paging a:hover{
+    color:#11A28B;
+}
+.right .log .paging .this{
+    background:#11A28B;
+    color:#fff;
+    border:1px #11A28B solid;
+}
+.right .log .disable{
+    color:#E2E2E2;
+    background:#F5F5F5;
+
+}
+.right .log .disable:hover{
+    color:#E2E2E2;
+    background:#F5F5F5;
+}
+.right .alterpassword{
+    width:100%;
+    margin-top:10px;
+    background:#ffffff;
+}
+.right .alterpassword .psswordcontent{
+    width:100%;
+}
+.right .alterpassword .psswordcontent .list{
+    width:100%;
+    height:40px;
+    line-height:40px;
+    margin-top:10px;
+}
+.right .alterpassword .psswordcontent .list .tt{
+    margin-left:20px;
+    width:100px;
+    text-align:right;
+
+}
+.right .alterpassword .psswordcontent .list .input{
+    width:calc(100% - 140px);
+    padding-left:20px;
+}
+.right .alterpassword .psswordcontent .list .input input{
+    width:500px;
+    border:1px #DDDDDD solid;
+    border-radius:5px;
+    height:20px;
+    padding:10px;
+    line-height:20px;
+    background:#F4F4F4;
+}
+.right .alterpassword .psswordcontent .list .input input:focus{
+    background:#ffffff;
+}
+.right .alterpassword .psswordcontent .alterpasswordbtn{
+    display:block;
+    width:150px;
+    margin:0 auto;
+    margin-top:80px;
+}
+.right .relevance{
+    width:100%;
+    height:40px;
+    line-height:40px;
+    margin-top:20px;
+}
+.right .relevance .tt{
+    width:250px;
+    padding-left:80px;
+}
+.right .relevance .content{
+    width:calc(100% - 600px);
+    text-align:center;
+    line-height:40px;
+    height:40px;
+    margin-top:0;
+}
+.binging{
+    width:100px;
+    text-align:center;
+    height:35px;
+    line-height:35px;
+    border-radius:5px;
+    background:#13A38C;
+    border:none;
+}
+.binging:hover{
+    background:#00C9A9;
+}
+.n{
+    background:#ffffff;
+    border:1px #BBBBBB solid;
+}
+.n:hover{
+    background:#13A38C;
+}
+#btn1{
+    margin:0 auto;
+    display:block;
+    width:150px;
+    margin-top:20px;
+}
+#uploadface{
+    margin:0 auto;
+    margin-top:50px;
+    display:block;
+    width:150px;
+}
+footer{
+    width:100%;
+    height:500px;
+    background:#282828;
+    margin-top:20px;
+}

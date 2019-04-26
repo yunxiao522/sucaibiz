@@ -1,0 +1,38 @@
+a{
+    color:#000;
+    text-decoration:none;
+}
+a:link {
+    color: #000000;
+}
+
+a:active {
+    color: #FD2A54;
+}
+
+a:hover {
+    color: #FD2A54;
+}
+
+a:visited {
+    color: #000000;
+}
+ul{
+    padding:0;
+    margin:0;
+}
+ul li{
+    padding:0;
+    margin:0;
+    list-style-type:none;
+}
+.inline{
+    float:left;
+}
+footer {
+    width: 100%;
+    min-width: 1200px;
+    height: 500px;
+    background: #444546;
+    margin-top: 20px;
+}

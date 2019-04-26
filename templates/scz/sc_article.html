@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$article_info.title}</title>
+    <meta name="keywords" content="{$article_info.keywords}"/>
+    <meta name="description" content="{$article_info.description}"/>
+    <link href="/public/css/index/sc_article.css" rel="stylesheet" media="screen" type="text/css"/>
+    <link href="/public/css/index/article.css" rel="stylesheet" media="screen" type="text/css"/>
+    <!--延时加载图片-->
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.js"></script>
+    <script type="text/javascript" src="http://t1.sucai.biz/js/cssjquery.lazyload.js"></script>
+    <!--引入jquery-->
+    <script type="text/javascript" src="/public/jquery.js"></script>
+    <!--引入jquery.cookie插件-->
+    <script type="text/javascript" src="/public/jquery.cookie.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <!--引入sha1加密文件-->
+    <script src="/public/plugins/sha1/sha1.js"></script>
+    <!--加载导航栏图标-->
+    <link rel="shortcut icon" href="http://t1.sucai.biz/image/sucaiz-logo.ico"/>
+    <script>
+        //判断是否是移动端访问,如果是移动动访问则跳转至wap站
+        $(document).ready(function () {
+            var sUserAgent = navigator.userAgent.toLowerCase();
+            var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
+            var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
+            var bIsMidp = sUserAgent.match(/midp/i) == "midp";
+            var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
+            var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
+            var bIsAndroid = sUserAgent.match(/android/i) == "android";
+            var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
+            var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
+            if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
+                window.location.href="http://m.sucai.biz/html/zx_detail.html?id={$article_info.article_id}";
+            }
+        });
+    </script>
+</head>
+<body>
+<header>
+    <div class="content">
+        <div class="header">
+            <div class="handle"><a href="/login.html">登录</a> | <a href="/register.html">注册</a></div>
+        </div>
+        <div class="logo">
+            <img src="/public/png/logo1_2.png" alt="" style="height:60px;">
+        </div>
+        <div class="search"></div>
+    </div>
+    <nav>
+        <div class="nav">
+            <ul>
+                {volist name="24|getColumn=###" id="vo"}
+                <a href="/list?id={$vo.id}"><li>{$vo.type_name}</li></a>
+                {/volist}
+            </ul>
+        </div>
+    </nav>
+    <div class="stance"></div>
+</header>
+<div class="content">
+    <article>
+        <div class="head">
+            <div class="crumb">当前位置：{$article_info.title|getArticleSite=$article_info.column_id ,###}</div>
+        </div>
+        <div class="title">{$article_info.title}</div>
+        <div class="related" align="center">
+            <div class="time inline">{$article_info.pubdate|date="Y-m-d H:i:s",###}</div>
+            <div class="source inline">来源：{$article_info.source}</div>
+            <div class="author inline">作者：{$article_info.author}</div>
+            <div class="author inline">浏览：{$article_info.click}</div>
+            <div class="cnum inline">评论：0</div>
+        </div>
+        <div class="ad" style="width:100%;height:300px;">
+            <div style="float:left;width:360px;height:300px;margin-left:50px;">{$article_info.title|ad=5,###}</div>
+            <div style="float:left;width:360px;height:300px;">{$article_info.title|ad=6,###}</div>
+        </div>
+        <div class="content">
+            {$article_info.body}
+        </div>
+        <div class="tag">
+            <div class="icon"><img src="/public/png/tag.png" alt="" style="width:20px;height:20px;"></div>
+            <div class="tt inline">标签：</div>
+            <div class="inline con">
+                <ul>
+                    {volist name="$article_info.article_id|getArticleTag=###" id="vo"}
+                    <li><a href="/tags?id={$vo.id}"><div class="tag_l">{$vo.name}</div></a></li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="guess">
+            <div class="title">
+                <div class="tlt">猜你喜欢</div>
+            </div>
+            <div class="content">
+                <ul>
+                    {volist name="$article_info.column_id|getGuessArticle=###" id="vo" offset="0" length='4'}
+                    <li><a href="/article"></a></li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="comment">
+            <div class="title">
+                <div style="margin-left:10px;float:left;color:#19A97B"><b>发表评论</b></div>
+                <div style="float:right;font-size:8pt;color:#808080;line-height:35px;">愿您的每句评论，都能给大家的生活添色彩，带来共鸣，带来思索，带来快乐。</div>
+            </div>
+            <div class="push">
+                <form action="">
+                    <textarea name="" id="comment" placeholder="素材站有您的参与更精彩!"></textarea>
+                    <div class="info" style="width:96%;height:50px;background:#ffffff;">
+                        <form action="">
+                            <input type="text" name="username">
+                            <input type="password" name="password">
+                            <input type="submit" value="登录" id="login">
+                        </form>
+                    </div>
+                </form>
+            </div>
+            <!--<div class="hot">-->
+                <!--<div class="title">-->
+                    <!--<span>热门评论</span>-->
+                <!--</div>-->
+                <!--<div class="list">-->
+                    <!--<div class="left">-->
+                        <!--<div><img src="http://www.sucai.biz/upload/face/76d2c1a93b7794a3732e6546473366f8.jpeg" alt="" ></div>-->
+                        <!--<div class="lv">Lv.22</div>-->
+                    <!--</div>-->
+                    <!--<div class="right">-->
+                        <!--<div class="comment_info">-->
+                            <!--<div class="nickname">叶天行</div>-->
+                            <!--<div class="time">2018-6-11 10:00:58</div>-->
+                            <!--<div class="tier">1楼</div>-->
+                        <!--</div>-->
+                        <!--<div class="comment_content">-->
+                            <!--几千年前的人们也进行过这种“通天塔”的尝试😂-->
+                        <!--</div>-->
+                        <!--<div class="operate">-->
+                            <!--<div class="unnfold">展开(0)</div>-->
+                            <!--<div class="idea">-->
+                                <!--<div class="support">支持(12)</div>-->
+                                <!--<div class="oppose">反对(0)</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <div class="all">
+                <div class="title">
+                    <span>全部评论</span>
+                    <div style="float:right;font-size:10pt;"><a href="" class="refresh">刷新</a> <input type="radio" name="order" checked value="1">最新</input><input type="radio" name="order" value="2">最早</input></div>
+                </div>
+                <div id="comment_all">
+
+                </div>
+            </div>
+        </div>
+    </article>
+    <aside>
+        <div class="hot">
+            <div class="title">
+                <div class="tit">热门资讯</div>
+                <div class="more"><a href="/list?id={$article_info.column_id}">更多>></a></div>
+            </div>
+            <div class="content">
+                <ul>
+                    {volist name="$article_info.column_id|hot='article',###" key="k" id="vo" offset="0" length="10"}
+
+                        <li>
+                            <div class="prefix" {if $k elt 3}style="background:#FF8773"{/if}>{$k}</div>
+                            <a href="{$vo.url}">
+                                <div class="tit"><span>{$vo.title|cut_str=16}</span></div>
+                            </a>
+                        </li>
+
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="hot" style="margin-top:20px;">
+            <div class="title">
+                <div class="tit">相关资讯</div>
+                <div class="more"><a href="/list?id={$article_info.column_id}">更多>></a></div>
+            </div>
+            <div class="content">
+                <ul>
+                    {volist name="$article_info.id|getConcernArticleList=### ,$article_info.column_id" key="k" id="vo" offset="0" length="10"}
+                        <li>
+                            <div class="prefix">{$k}</div>
+                            <a href="{$vo.url}">
+                                <div class="tit"><span>{$vo.title|cut_str=16}</span></div>
+                            </a>
+                        </li>
+                     {/volist}
+                 </ul>
+            </div>
+        </div>
+        <div class="hot" style="margin-top:20px;">
+            <div class="title" >
+                <div class="tit">热门标签</div>
+                <div class="more"><a href="/list?id={$article_info.column_id}">更多>></a></div>
+            </div>
+            <div class="tcontent">
+                <ul>
+                    {volist name="$article_info.column_id|hot='tag',###" id="vo" offset="0" length="20"}
+                    <li>
+                        <a href="/tag_list?id={$vo.id}"><div class="htag"><span>{$vo.tag_name|cut_str=4}</span></div></a>
+                    </li>
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="ad" style="width:300px;height:250px;margin-top:10px;">
+            {$article_info.title|ad=7,###}
+        </div>
+    </aside>
+</div>
+
+<footer></footer>
+<input type="hidden" id="token" value="{$article_info.token}">
+<input type="hidden" id="id" value="{$article_info.article_id}">
+</body>
+<!--引入公共的文档js-->
+<script type="text/javascript" src="/public/js/index/article.js"></script>
+<!--引入图集js-->
+<script type="text/javascript" src="/public/js/index/sc_article.js"></script>
+<!--百度统计代码-->
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "https://hm.baidu.com/hm.js?9dad3cabac16db2c39712551c0ae6477";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+<script type="text/javascript" src="/public/js/index/common.js"></script>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>后台管理-素材站</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="icon" href="/public/static/image/code.png">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <style>
+        .news {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 2.5px;
+            background: red;
+            top: 20px;
+            right: 22px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- layout admin -->
+<div class="layui-layout layui-layout-admin"> <!-- 添加skin-1类可手动修改主题为纯白，添加skin-2类可手动修改主题为蓝白 -->
+    <!-- header -->
+    <div class="layui-header my-header">
+        <a href="index.html">
+            <!--<img class="my-header-logo" src="" alt="logo">-->
+            <div class="my-header-logo">素材站-后台</div>
+        </a>
+        <div class="my-header-btn">
+            <button class="layui-btn layui-btn-small btn-nav"><i class="layui-icon">&#xe602;</i></button>
+        </div>
+
+        <!-- 顶部左侧添加选项卡监听 -->
+        <ul class="layui-nav" lay-filter="side-top-left">
+            <li class="layui-nav-item" data-class="2"><a href="javascript:;" href-url="demo/btn.html"><i
+                    class="layui-icon"><img
+                    src="/public/png/wechat.png" style="width:20px;height:20px;"></i>微信公众号</a></li>
+            <li class="layui-nav-item" data-class="3"><a href="javascript:;" href-url="/admin/sina/showlist.html"><i
+                    class="layui-icon"><img
+                    src="/public/png/weibo.png" style="width:20px;height:20px;"></i>新浪微博</a></li>
+            <li class="layui-nav-item" data-class="8"><a href="javascript:;" href-url=""><i class="layui-icon"><img
+                    src="http://image.sucai.biz/2019-04-04/9c58f743877d57cb733696b7af2b5e1d.png"
+                    style="width:20px;height:20px;"></i>移动端</a></li>
+        </ul>
+        <span style="background:#19A094;padding:5px;border-radius:2px;color:#ffffff;display: none;" id="showindex">显示后台主页</span>
+        <!-- 顶部右侧添加选项卡监听 -->
+        <ul class="layui-nav my-header-user-nav" lay-filter="side-top-right">
+            <li class="layui-nav-item">
+                <a class="name" href="javascript:;" href-url="/admin/account.html"><i class="layui-icon"
+                                                                                      style="position: relative">&#xe63f;</i>
+                    <div class="news"></div>
+                </a>
+
+            </li>
+            <li class="layui-nav-item">
+                <a class="name" href="javascript:;"><i class="layui-icon"><img
+                        src="/public/png/theme.png" style="width:14px;height:14px;"></i>主题</a>
+                <dl class="layui-nav-child">
+                    <dd data-skin="0"><a href="javascript:;" data-skin="0">默认</a></dd>
+                    <dd data-skin="1"><a href="javascript:;" data-skin="1">纯白</a></dd>
+                    <dd data-skin="2"><a href="javascript:;" data-skin="2">蓝白</a></dd>
+                </dl>
+            </li>
+            <li class="layui-nav-item">
+                <a class="name" href="javascript:;"><img src="{$Think.session.admin.face}" alt="logo">{$Think.session.admin.nick_name}</a>
+                <dl class="layui-nav-child">
+                    <dd><a href="javascript:;" href-url="/admin/account.html"><i class="layui-icon">&#xe68e;</i>个人中心</a>
+                    </dd>
+                    <dd><a href="javascript:;" href-url="demo/map.html"><i class="layui-icon">&#xe631;</i>修改密码</a></dd>
+                    <dd><a href="/admin/loginout"><i class="layui-icon">&#x1006;</i>退出</a></dd>
+                    <dd><a href="javascript:;" href-url="/admin/preserve.html"><i class="layui-icon"><img
+                            src="/public/png/preserve.png" style="width:20px;height:20px;"></i>网站维护</a></dd>
+                </dl>
+            </li>
+        </ul>
+
+    </div>
+    <!-- side -->
+    <div class="layui-side my-side">
+        <div class="layui-side-scroll">
+            <!-- 左侧主菜单添加选项卡监听 -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="side-main">
+            </ul>
+
+        </div>
+    </div>
+    <!-- body -->
+    <div class="layui-body my-body">
+        <div class="layui-tab layui-tab-card my-tab" lay-filter="card" lay-allowClose="true">
+            <ul class="layui-tab-title">
+                <li class="layui-this" lay-id="1"><span><i class="layui-icon">&#xe638;</i>首页</span></li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                    <iframe id="iframe" src="/admin/index/welcome.html" frameborder="0"></iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- footer -->
+    <div class="layui-footer my-footer">
+        <p><a href="http://www.sucai.biz/admin/index" target="_blank">素材站-后台管理</a>&nbsp;&nbsp;&&nbsp;&nbsp;<a
+                href="http://www.sucai.biz" target="_blank">素材站</a></p>
+        <p>2017 © copyright 蒙ICP备号14003053号-1</p>
+    </div>
+</div>
+
+<!-- 右键菜单 -->
+<div class="my-dblclick-box none">
+    <table class="layui-tab dblclick-tab">
+        <tr class="card-refresh">
+            <td><i class="layui-icon">&#xe666;</i>刷新当前标签</td>
+        </tr>
+        <tr class="card-close">
+            <td><i class="layui-icon">&#x1006;</i>关闭当前标签</td>
+        </tr>
+        <tr class="card-close-all">
+            <td><i class="layui-icon">&#x1006;</i>关闭所有标签</td>
+        </tr>
+    </table>
+</div>
+<input type="hidden" name="uid" value="{$Think.session.admin.id}">
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/static/js/vip_comm.js"></script>
+<script type="text/javascript">
+    layui.use(['layer', 'vip_nav', 'element'], function () {
+        $('.news').hide();
+        // 操作对象
+        var vipNav = layui.vip_nav
+            , element = layui.element;
+        // 顶部左侧菜单生成 [请求地址,过滤ID,是否展开,携带参数]
+        // vipNav.top_left('./json/nav_top_left.json', 'side-top-left', false);
+        // 主体菜单生成 [请求地址,过滤ID,是否展开,携带参数]
+        vipNav.main('/admin/index/getMenuInfo.html?class=1', 'side-main', false);
+
+        // 监听顶部左侧导航
+        element.on('nav(side-top-left)', function (elem) {
+            if ($(elem).attr('href-url') != '') {
+                window.addTab(elem);
+            } else {
+                $('#showindex').show();
+                var clas = $(elem).parent()[0].dataset.class;
+                // 主体菜单生成 [请求地址,过滤ID,是否展开,携带参数]
+                vipNav.main('/admin/index/getMenuInfo.html?class=' + clas, 'side-main', false);
+            }
+            // 添加tab方法
+            // window.addTab(elem);
+        });
+        //显示后台按钮点击
+        $(document).on('click', '#showindex', function () {
+            $(this).hide();
+            vipNav.main('/admin/index/getMenuInfo.html?class=1', 'side-main', false);
+        });
+
+        //定时任务,获取消息
+        setInterval(getNews(), 60000);
+
+        function getNews() {
+            $.ajax({
+                url: '/admin/news/getNewsInfo.html',
+                type: 'post',
+                data: {uid: $('input[name="uid"]').val()},
+                success: function (e) {
+                    var data = JSON.parse(e);
+                    if (data.errorcode == 0) {
+                        if (data.count != 0) {
+                            $('.news').show();
+                        }
+                    }
+                }
+            })
+        }
+
+        getNews();
+    });
+</script>
+</body>
+</html>

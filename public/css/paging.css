@@ -1,0 +1,35 @@
+#paging{
+    width:800px;
+
+}
+.paging{
+    margin:0 auto;
+    padding:0;
+    width:max-content;
+    height:max-content;
+}
+.paging li{
+    float:left;
+    padding:10px;
+    text-align:center;
+    background:#F5F5F5;
+    border-radius:2px;
+    font-size:10pt;
+    border:1px #E2E2E2 solid;
+    list-style:none;
+}
+.paging a:hover{
+    color:#11A28B;
+}
+.paging .this{
+    background:#11A28B;
+    color:#fff;
+}
+.disable{
+    color:#E2E2E2;
+    background:#F5F5F5;
+}
+.disable:hover{
+    color:#E2E2E2;
+    background:#F5F5F5;
+}

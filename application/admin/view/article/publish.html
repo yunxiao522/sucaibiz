@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>发布文档=素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <script src="/public/plugins/divupload/js/webuploader.html5only.min.js"></script>
+    <script src="/public/plugins/divupload/js/diyUpload.js"></script>
+    <!--引入diyupload-->
+    <link rel="stylesheet" type="text/css" href="/public/plugins/diyupload/css/webuploader.css">
+    <link rel="stylesheet" type="text/css" href="/public/plugins/diyupload/css/diyUpload.css">
+
+    <!--必要样式-->
+    <link rel="stylesheet" type="text/css" href="/public/plugins/loading/css/component.css"/>
+    <link rel="stylesheet" type="text/css" href="/public/plugins/loading/css/custom-bars.css"/>
+
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>内容管理</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>发布文档</li>
+        </a>
+    </ul>
+</header>
+<form class="layui-form layui-form-pane" action="" style="margin-left:20px;">
+    <div class="layui-form-item" style="margin-top:20px;">
+        <label class="layui-form-label">文章标题</label>
+        <div class="layui-input-block">
+            <input type="text" name="title" autocomplete="off" placeholder="请输入文章标题" class="layui-input"
+                   style="width:700px;" id="title " lay-verify="title">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">自定义属性</label>
+        <div class="layui-input-block" >
+            {volist name="$attribute" id="vo" }
+            <input type="checkbox" name="attribute[{$vo.mark}]" lay-filter="attribute" title="{$vo.attrname}" value="{$vo.mark}">
+            {/volist}
+        </div>
+    </div>
+    <div style="width:100%;height:200px;margin-bottom:20px;">
+        <div class="layui-form-item" style="margin-top:80px;float:left;line-height:35px;">
+            <div style="width:620px;float:left;line-height:35px;">
+                <label class="layui-form-label">缩略图</label>
+                <div class="layui-input-block">
+                    <input type="text" name="litpic" autocomplete="off" disabled placeholder="请输入缩略图地址"
+                           class="layui-input" lay-verify="litpic" style="width:500px;" id="litpic_url">
+                </div>
+                <input type="hidden" name="litpic_id" id="litpic_id">
+            </div>
+            <button class="layui-btn-warm layui-btn layui-btn-small update_litpic">上传</button>
+        </div>
+        <div style="width:300px;height:200px;float:left;margin-left:20px;">
+            <img src="" alt="" style="width:300px;height:200px;" id="litpic_img">
+        </div>
+    </div>
+    <div id="litpic2" style="width:100%;height:200px;margin-bottom:20px;">
+        <div class="layui-form-item" style="margin-top:80px;float:left;line-height:35px;">
+            <div style="width:620px;float:left;line-height:35px;">
+                <label class="layui-form-label">幻灯片</label>
+                <div class="layui-input-block">
+                    <input type="text" name="slide" autocomplete="off" disabled placeholder="请输入缩略图地址"
+                           class="layui-input" style="width:500px;" id="slide_url">
+                </div>
+                <input type="hidden" name="slide_id" id="slide_id">
+            </div>
+            <button class="layui-btn-warm layui-btn layui-btn-small upload_slide">上传</button>
+        </div>
+        <div style="width:300px;height:200px;float:left;margin-left:20px;">
+            <img src="" alt="" style="width:300px;height:200px;" id="slide_img">
+        </div>
+    </div>
+    <div id="litpic3" style="width:100%;height:200px;margin-bottom:20px;">
+        <div class="layui-form-item" style="margin-top:80px;float:left;line-height:35px;">
+            <div style="width:620px;float:left;line-height:35px;">
+                <label class="layui-form-label">滚动图</label>
+                <div class="layui-input-block">
+                    <input type="text" name="roll" autocomplete="off" disabled placeholder="请输入缩略图地址"
+                           class="layui-input" style="width:500px;" id="roll_url">
+                </div>
+                <input type="hidden" name="roll_id" id="roll_id">
+            </div>
+            <button class="layui-btn-warm layui-btn layui-btn-small upload_roll">上传</button>
+        </div>
+        <div style="width:300px;height:200px;float:left;margin-left:20px;">
+            <img src="" alt="" style="width:300px;height:200px;" id="roll_img">
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top:20px;">
+        <label class="layui-form-label">TAG标签</label>
+        <div class="layui-input-block">
+            <input type="text" name="tag" autocomplete="off" placeholder="请输入TAG便签" class="layui-input"
+                   style="width:500px;" lay-verify="keywords" list="taglist">
+            <datalist id="taglist">
+            </datalist>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div style="width:250px;float:left;line-height:35px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">生成HTML</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" checked="" name="makehtml" lay-skin="switch" lay-filter="switchTest"
+                           lay-text="是|否">
+                </div>
+            </div>
+        </div>
+        <div style="width:250px;float:left;line-height:35px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">允许评论</label>
+                <div class="layui-input-block">
+                    <input type="checkbox" checked="" name="comment" lay-skin="switch" lay-filter="switchTest"
+                           lay-text="允许|否">
+                </div>
+            </div>
+        </div>
+        <div style="width:250px;float:left;line-height:35px;">
+            <div class="layui-form-item">
+                <label class="layui-form-label">浏览次数</label>
+                <div class="layui-input-block">
+                    <input type="number" name="click" autocomplete="off" placeholder="请输入文章浏览次数" class="layui-input"
+                           lay-filter="click" style="width:150px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div style="width:400px;float:left;line-height:35px;">
+            <label class="layui-form-label">文章来源</label>
+            <div class="layui-input-inline">
+                <input type="text" name="source" placeholder="请输文章来源" autocomplete="off" class="layui-input" id="source"
+                       lay-verify="source">
+            </div>
+            <button class="layui-btn-warm layui-btn layui-btn-small" id="choice_source">选择</button>
+        </div>
+        <div style="width:450px;float:left;line-height:35px;">
+            <label class="layui-form-label" style="margin-left:50px;">作者</label>
+            <div class="layui-input-inline">
+                <input type="text" name="author" placeholder="请输入作者" autocomplete="off" class="layui-input" id="author"
+                       lay-verify="author">
+            </div>
+            <button class="layui-btn-warm layui-btn layui-btn-small" id="choice_author">选择</button>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-form-item">
+            <label class="layui-form-label">发布微博</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" checked="" name="weibo" lay-skin="switch" lay-filter="switchTest"
+                       lay-text="是|否">
+            </div>
+            <label class="layui-form-label">公众号推送</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" checked="" name="wechat" lay-skin="switch" lay-filter="switchTest"
+                       lay-text="是|否">
+            </div>
+            <label class="layui-form-label">百度链接推送</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="baidupush" lay-skin="switch" lay-filter="switchTest"
+                       lay-text="是|否">
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">阅读权限</label>
+        <div class="layui-input-block">
+            {volist name="$member_level" id="vo" }
+            <input type="checkbox" name="power[{$vo.id}]" title="{$vo.level_name}">
+            {/volist}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">文章栏目</label>
+        <div class="layui-input-block" style="width:350px;">
+            <select name="column" lay-verify="column" lay-filter="column" style="width:350px;" lay-search>
+                <option value="0">请选择栏目</option>
+                {volist name="$column_list" id="vo"}
+                <option value="{$vo.id}" {if $column eq $vo.id}selected{/if}>{$vo.type_name}</option>
+                {/volist}
+            </select>
+        </div>
+    </div>
+    <div id="resource" style="border:1px #000000 solid;width:900px;min-height:500px;margin-bottom:20px;">
+        <div class="layui-form-item source">
+            <label class="layui-form-label" style="width:100%;">资源</label>
+        </div>
+        <div class="layui-form-item source">
+            <div style="width:400px;float:left;line-height:35px;">
+                <label class="layui-form-label">资源地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="fileurl" style="width:300px;" placeholder="请输文离线下载地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item source">
+            <div style="width:250px;float:left;line-height:35px;">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否展示</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox" checked="" name="show" lay-skin="switch" lay-filter="switchTest"
+                               lay-text="是|否">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item"
+             style="text-align:center;width:100%;background-color: #FBFBFB;border-bottom:1px solid #e6e6e6;line-height:39px;height:39px;">
+            <label class="layui-form-label" style="float:none;margin:0 auto;border:0px;display:inline-block">展示图像</label>
+        </div>
+        <div style="float:right;height:39px;margin-top:-10px;">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="checkbox" checked="" name="show_type" lay-skin="switch" lay-filter="sourceimg"
+                           lay-text="多图|单图">
+                </div>
+            </div>
+        </div>
+        <div style="width:100%;height:200px;">
+            <div style="width:200px;height:50px;"></div>
+            <button class="layui-btn-warm layui-btn layui-btn-small update_source" id="sourceimgone">上传</button>
+            <div id="sourceimgmore"></div>
+            <script type="text/javascript">
+                source_img = [];
+                //绑定上传多张资源图片方法
+                $('#sourceimgmore').diyUpload({
+                    url: '/admin/upload_source_more.html?token={$token}',
+                    success: function (data) {
+                        if(data.errorcode == 0){
+                            source_img.push(data.info);
+                        }
+                    }, error: function (err) {
+                        console.info(err);
+                    }
+                });
+            </script>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">花费金币</label>
+        <div class="layui-input-inline">
+            <input type="number" name="gold" autocomplete="off" placeholder="请输入文章花费金币" class="layui-input" style="width:150px;" value="0">
+        </div>
+        <label class="layui-form-label">发布日期</label>
+        <div class="layui-input-inline">
+            <input type="text" name="pudate" autocomplete="off" id="test04" placeholder="请输入发布文档日期" class="layui-input" style="width:150px;" >
+        </div>
+    </div>
+    <div class="layui-form-item" style="margin-top:20px;">
+        <label class="layui-form-label">关键词</label>
+        <div class="layui-input-block">
+            <input type="text" name="keywords" autocomplete="off" placeholder="请输入关键词" class="layui-input" style="width:500px;" lay-verify="keywords">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text" style="width:700px;">
+        <label class="layui-form-label">内容摘要</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入内容摘要" class="layui-textarea" name="description"></textarea>
+        </div>
+    </div>
+    <div id="atlas" style="border:1px #000000 solid;width:1000px;min-height:500px;margin-bottom:20px;height:max-content;overflow:hidden">
+        <div class="layui-form-item source">
+            <label class="layui-form-label" style="width:100%;">图集</label>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">打包图集</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" checked="" name="is_pack" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+            </div>
+            <label class="layui-form-label">生成缩略图</label>
+            <div class="layui-input-inline">
+                <input type="checkbox" checked="" name="is_thumb" lay-skin="switch" lay-filter="switchTest" lay-text="是|否">
+            </div>
+        </div>
+        <div class="layui-form-item source">
+            <label class="layui-form-label" style="width:100%;">上传图片</label>
+        </div>
+        <div id="test"></div>
+        <script type="text/javascript">
+            images = [];
+            /*
+             * 服务器地址,成功返回,失败返回参数格式依照jquery.ajax习惯;
+             * 其他参数同WebUploader
+             */
+            $('#test').diyUpload({
+                url: '/admin/article/uploadimages.html?token={$token}',
+                success: function (data) {
+                    if(data.errorcode == 0){
+                        images.push(data.info);
+                    }
+                },
+                error: function (err) {
+                }
+            });
+        </script>
+
+    </div>
+
+    </div>
+    <div id="docu">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label" style="width:800px;">文档内容</label>
+            <div class="layui-input-block" style="width:800px;">
+                <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label" style="width:150px;">自定义文件名</label>
+        <div class="layui-input-inline" style="margin-right:150px;">
+            <input type="text" name="redirecturl" autocomplete="off" placeholder="文件名不用包含.html" class="layui-input" style="width:250px;">
+        </div>
+        <label class="layui-form-label">文档模板</label>
+        <div class="layui-input-inline">
+            <input type="text" name="template" autocomplete="off" placeholder="文档模板" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="text-align:center;">
+        <input type="hidden" name="column_type">
+        <input type="hidden" name="token" value="{$token}">
+        <button class="layui-btn" lay-submit="" lay-filter="demo2">发布</button>
+        <button class="layui-btn" lay-submit="" type="reset">重置</button>
+    </div>
+    <div style="height:100px;width:100%"></div>
+</form>
+<script src="/public/layui/layui.js" charset="utf-8"></script>
+<script src="/public/js/admin/article_publish.js" charset="utf-8"></script>
+<script type="text/javascript">
+    $("#change-color .bar").hover(function () {
+        // $(this).toggleClass('active');
+        $(this).find('.front').toggleClass('shine');
+    });
+</script>
+</body>
+</html>

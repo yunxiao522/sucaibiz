@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-小程序-分类管理-tag管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <link rel="stylesheet" href="/public/css/childcommon.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        body{
+            background:#F2F2F2;
+            margin:0;
+            padding:0;
+        }
+        div{
+            border:0;
+        }
+        header{
+            background:#ffffff;
+        }
+        .inline{
+            float:left;
+            display: inline;
+        }
+        article{
+            padding:10px;
+            height:calc(100% - 100px);
+        }
+        .left{
+            width:400px;
+            height:calc(100vh - 100px);
+            border-radius:4px;
+            background:#FFFFFF;
+        }
+        .right{
+            width:calc(100% - 410px);
+            height:calc(100vh - 85px);
+            margin-left:10px;
+            border-radius:4px;
+            background:#FFFFFF;
+        }
+        .title{
+            width:calc(100% - 15px );
+            height:35px;
+            border-bottom:1px #F6F6F6 solid;
+            padding-left:15px;
+            line-height:35px;
+        }
+        .manage-main{
+            margin-top:-10px;
+        }
+        .nav-tree{
+            margin-left:10px;
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+<!--面包屑导航-->
+<header style="width:100%;height:60px;line-height:60px;" id="header">
+    <ul style="margin-left:20px;" class="bread-nav">
+        <a href="">
+            <li>首页</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>小程序</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>分类管理</li>
+        </a>
+        <li>|</li>
+        <a>
+            <li>显示设置</li>
+        </a>
+    </ul>
+    <div class="top-btn">
+        <button class="layui-btn layui-btn-sm add-column layui-btn-normal async">同步tag数据</button>
+    </div>
+</header>
+<article>
+    <div class="left inline">
+        <div class="title">手机壁纸</div>
+        <div class="nav-tree">
+            <div class="tree-main">
+                <ul id="tree"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="right inline">
+        <div class="title">tag列表</div>
+        <div class="manage-main" lay-filter="demo">
+
+        </div>
+    </div>
+</article>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            url: '/admin/miniapp/getColumnTreeJson.html',
+            type: 'get',
+            async:false,
+            success: function (data) {
+                node = $.parseJSON(data);
+            }
+        });
+    });
+    $(function () {
+        layui.use(['table', 'form', 'vip_table', 'tree'], function () {
+
+            var form = layui.form
+                , table = layui.table
+                , vipTable = layui.vip_table;
+            // 表格渲染
+            var tableIns = table.render({
+                elem: '.manage-main'                  //指定原始表格元素选择器（推荐id选择器）
+                , height: vipTable.getFullHeight(77)    //容器高度
+                , cols: [[                  //标题栏
+                    {type:'checkbox',fixed:'left'}
+                    , {field: 'id', align: 'center', title: 'ID', width: 80}
+                    , {field: 'name', align: 'center', title: '名称', width: 120}
+                    , {field: 'tag_id', align: 'center', title: 'tag表id', width: 120}
+                    , {field: 'litpic', align: 'center', title: '封面', width: 120}
+                    , {field: 'column', align: 'center', title: '所属栏目', width: 120}
+                    , {field: 'status', align: 'center', title: '状态', width: 120}
+                    , {field: 'create_time', align: 'center', title: '创建时间', width: 200}
+                    , {field: 'alter_time', align: 'center', title: '修改时间', width: 200}
+                    , {fixed: 'right', title: '操作', width: 400, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
+                ]]
+                , id: 'dataCheck'
+                , url: '/admin/miniapp/getTagList.html'
+                , method: 'post'
+                , page: true
+                , where: {column: 54}
+                , limits: [30, 60, 90, 150, 300]
+                , limit: 30 //默认采用30
+                , loading: true
+                , done:function(){
+                    table.render({ //其它参数在此省略
+                        initSort:{field:'litpic' , type:'asc' }
+                    });
+                }
+            });
+
+            //监听工具条
+            table.on('tool(demo)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'info') {
+                    //iframe层
+                    layer.open({
+                        type: 2,
+                        title: '详细信息',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['600px', '400px'],
+                        content: '/admin/miniapp/showTagInfo.html?id='+data.id //iframe的url
+                    });
+                } else if (obj.event === 'article') {
+                    //iframe层
+                    layer.open({
+                        type: 2,
+                        title: '相关文档',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['600px', '400px'],
+                        content: '/admin/miniapp/getTagArticle.html?id='+data.id //iframe的url
+                    });
+                } else if(obj.event === 'status'){
+                    $.ajax({
+                        url: '/admin/miniapp/alterTagStatus.html',
+                        type: 'post',
+                        data: {id: data.id},
+                        beforeSend: function () {
+                            loading = layer.load(0, {shade: false});
+                        },
+                        success: function (e) {
+                            layer.close(loading);
+                            var data = JSON.parse(e);
+                            layer.msg(data.msg, {time: 1000}, function () {
+                                if (data.errorcode == 0) {
+                                    tableIns.reload();
+                                }
+                            });
+                        }
+                    })
+                } else if(obj.event === 'litpic'){
+                    layer.open({
+                        type: 2,
+                        title: '修改Tag封面',
+                        shadeClose: true,
+                        shade: 0.8,
+                        area: ['600px', '200px'],
+                        content: '/admin/miniapp/alterTagLitpic.html?id='+data.id , //iframe的url,
+                        end: function () {
+                            tableIns.reload();
+                        }
+                    });
+                }
+            });
+            setTimeout(1000);
+            layui.tree({
+                elem: '#tree' //传入元素选择器
+                , click: function (data) { //点击节点回调
+                    // 加载中...
+                    var loadIndex = layer.load(1, {shade: false});
+                    // 关闭加载
+                    layer.close(loadIndex);
+                    // 刷新表格
+                    tableIns.reload({
+                        where: {
+                            column: data.id
+                        }
+                    });
+                }
+                , nodes: node
+            });
+            $('.async').on('click',function(){
+                $.ajax({
+                    type:'get',
+                    url:'/admin/miniapp/syncDate.html',
+                    data:{type:'tag'},
+                    beforeSend:function () {
+                        loading = layer.load(1, {shade: false});
+                    },success:function(e){
+                        var data = JSON.parse(e);
+                        layer.msg(data.msg,{time:2000});
+                    },complete:function () {
+                        layer.close(loading);
+                    }
+                })
+            });
+        });
+    });
+</script>
+<!-- 表格操作按钮集 -->
+<script type="text/html" id="barOption">
+    <a class="layui-btn layui-btn-sm layui-btn-warm" lay-event="info">详细信息</a>
+    <a class="layui-btn layui-btn-sm layui-btn-cyan" lay-event="status">改状态</a>
+    <a class="layui-btn layui-btn-sm layui-btn-danger" lay-event="litpic">修改封面</a>
+    <a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="article">相关文档</a>
+</script>
+</html>

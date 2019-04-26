@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>素材站-小程序-分类管理-显示设置-修改tag封面</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <style>
+        .litpic {
+            width: 300px;
+        }
+        form{
+            margin-top:10px;
+        }
+    </style>
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-inline">
+        <label class="layui-form-label">封面图像</label>
+        <div class="layui-input-inline litpic">
+            <input type="text" name="litpic" lay-verify="title" autocomplete="off" placeholder="封面壁纸" disabled="disabled"
+                   class="layui-input" value="{$litpic}">
+        </div>
+        <div class="layui-input-inline">
+            <button class="layui-btn browse">浏览</button>
+        </div>
+    </div>
+    <div class="layui-form-inline" style="text-align:center;margin-top:20px;">
+        <div class="layui-input-inline">
+            <input type="hidden" name="id" value="{$id}">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1" id="upload">上传文件</button>
+        </div>
+    </div>
+</form>
+</body>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script>
+    $(function () {
+        $('.browse').on('click', function () {
+            var litpic = $('input[name="litpic"]').val();
+            var json = {
+                "title": "", //相册标题
+                "id": 123, //相册id
+                "start": 0, //初始显示的图片序号，默认0
+                "data": [   //相册包含的图片，数组格式
+                    {
+                        "alt": "",
+                        "pid": 666, //图片id
+                        "src": litpic, //原图地址
+                        "thumb": litpic //缩略图地址
+                    }
+                ]
+            };
+            layer.photos({
+                photos: json
+                ,anim: 5 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            });
+            return false;
+        });
+        layui.use(['form', 'upload'], function () {
+            var form = layui.form,
+                upload = layui.upload;
+            //执行实例
+            var uploadInst = upload.render({
+                elem: '#upload' //绑定元素
+                , url: '/admin/miniapp/alterTagLitpic.html' //上传接口,
+                , auto:false
+                , data:{id:$('input[name="id"]').val()}
+                ,choose: function (obj) {  //上传前选择回调方法
+                    var flag = true;
+                    obj.preview(function (index, file, result) {
+                        var img = new Image();
+                        img.src = result;
+                        img.onload = function () { //初始化夹在完成后获取上传图片宽高，判断限制上传图片的大小。
+                            if (img.width == 200 && img.height == 200) {
+                                obj.upload(index, file); //满足条件调用上传方法
+                            } else {
+                                flag = false;
+                                layer.msg("上传的封面图像大小必须是200*200");
+                                return false;
+                            }
+                        };
+                        return flag;
+                    });
+                }
+                , done:function (res) {
+                    layer.msg(res.msg, {time: 1000}, function () {
+                        if(res.errorcode == 0){
+                            $('input[name="litpic"]').val(res.url);
+                        }
+                    })
+                },
+                error: function () {
+                    //请求异常回调
+                }
+            });
+            $('#upload').on('click', function () {
+
+                return false;
+            })
+        });
+    });
+</script>
+</html>
