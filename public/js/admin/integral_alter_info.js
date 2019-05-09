@@ -11,7 +11,8 @@ $(function () {
         }
     }
     layui.use(['form'], function() {
-        var form = layui.form;
+        var form = layui.form,
+            tableIns = layui.table;
         //自定义验证规则
         form.verify({
             level_name: function (value) {
@@ -66,7 +67,8 @@ $(function () {
                     layer.msg(data.msg, {time: 1000}, function () {
                         layer.close(loading);
                         if (data.errorcode == 0) {
-                            parent.location.href = "/admin/show_integral_list.html";
+                            window.parent.tableIns.reload();
+                            window.parent.layer.closeAll();
                         }
                     });
                 }

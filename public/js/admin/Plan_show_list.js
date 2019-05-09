@@ -1,11 +1,9 @@
 $(function () {
     layui.use(['tree', 'table', 'vip_table', 'layer' , 'vip_tab'], function () {
-
         // 操作对象
         var table = layui.table
             , vipTable = layui.vip_table
             , layer = layui.layer
-            , $ = layui.jquery
             , viptab = layui.vip_tab;
 
         // 表格渲染
@@ -29,6 +27,14 @@ $(function () {
             ]]
             , id: 'dataCheck'
             , url: '/admin/get_plan_list.html'
+            , parseData:function (res) {
+                return {
+                    'code':res.data.code,
+                    'msg':res.msg,
+                    'count':res.data.count,
+                    "data":res.data.data
+                }
+            }
             , method: 'get'
             , page: true
             , limits: [20, 40, 60, 80, 100]

@@ -28,6 +28,14 @@ layui.use(['table', 'form', 'layer', 'vip_table'], function () {
         ]]
         , id: 'dataCheck'
         , url: '/admin/user_list_json.html'
+        , parseData:function (res) {
+            return {
+                'code':res.data.code,
+                'msg':res.msg,
+                'count':res.data.count,
+                "data":res.data.data
+            }
+        }
         , method: 'get'
         , page: true
         , limits: [50, 100, 150, 200, 250]

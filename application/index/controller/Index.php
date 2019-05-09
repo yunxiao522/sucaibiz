@@ -11,6 +11,7 @@ use think\Request;
 use think\View;
 use app\common\controller\Article;
 use app\common\controller\Html;
+use app\model\Versions;
 
 class Index extends BaseController
 {
@@ -291,7 +292,7 @@ class Index extends BaseController
                     'and'
                 ]
             ];
-            $info = Model('versions')->getAll($where);
+            $info = Versions::getAll($where);
             if (!empty($info)) {
                 $list[] = [
                     'year' => $i,

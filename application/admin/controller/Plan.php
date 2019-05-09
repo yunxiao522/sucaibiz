@@ -9,14 +9,12 @@
 
 namespace app\admin\controller;
 
-
+use app\model\Task;
 use think\Db;
 use think\Request;
 
 class Plan extends Common
 {
-    private $execute_type = ['1' => '每小时', '2' => '每天', '3' => '每周', '4' => '每月', '5' => '每年', '6' => '固定时间'];
-    protected $plan_model;
     //验证规则
     protected $rule = [
         'name' => 'require|max:30',
@@ -41,7 +39,6 @@ class Plan extends Common
     public function __construct()
     {
         parent::__construct();
-        $this->plan_model = new \app\admin\model\Plan();
     }
 
     /**
@@ -50,37 +47,13 @@ class Plan extends Common
      */
     public function getPlanList()
     {
-        $limit = (input('page') - 1) * input('limit') . ',' . input('limit');
         $where = [];
-        $Plan = model('Plan');
-        $Plan_list = $Plan->getPlanList($where, ' * ', $limit);
-        $Plan_count = $Plan->getPlanCount($where);
-        foreach ($Plan_list as $key => $value) {
-            $Plan_list[$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
-            if (!empty($value['alter_time'])) {
-                $Plan_list[$key]['alter_time'] = date('Y-m-d H:i:s', $value['alter_time']);
-            }
-            if (!empty($value['end_time'])) {
-                $Plan_list[$key]['end_time'] = date('Y-m-d H:i:s', $value['end_time']);
-            }
-            if ($value['status'] == 1) {
-                $Plan_list[$key]['status'] = '未执行';
-            } else {
-                $Plan_list[$key]['status'] = '已执行';
-            }
-            if ($value['condition'] == 1) {
-                $Plan_list[$key]['condition'] = '启用';
-            } else {
-                $Plan_list[$key]['condition'] = '禁用';
-            }
-            $Plan_list[$key]['execute_type'] = $this->execute_type[$value['execute_type']];
+        $Plan_List = Task::getList($where, 'id,name,fun_name,status,execute_time,execute_type,num,end_time,condition,create_time,alter_time', 'id desc');
+        foreach ($Plan_List['data'] as $key => $value) {
+            $Plan_List['data'][$key]['condition'] = Task::$condition[$value['condition']];
+            $Plan_list['data'][$key]['execute_type'] = Task::$execute_type[$value['execute_type']];
         }
-        $arr = [
-            'data' => $Plan_list,
-            'count' => $Plan_count,
-            'code' => 0
-        ];
-        return json_encode($arr, JSON_UNESCAPED_UNICODE);
+        return self::ajaxOkdata($Plan_List, 'get data success');
     }
 
     /**
@@ -120,7 +93,7 @@ class Plan extends Common
             ];
             $data += $exectue_info;
 
-            $res = $this->plan_model->add($data);
+            $res = Task::add($data);
             if ($res) {
                 return self::ajaxOk('添加成功');
             } else {
@@ -139,11 +112,10 @@ class Plan extends Common
     {
         $id = input('id');
         if (empty($id) || !is_numeric($id)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
         $where = ['id' => $id];
-        $res = Model('plan')->del($where);
+        $res = Task::del($where);
         if ($res) {
             return self::ajaxOk('删除成功');
         } else {
@@ -163,7 +135,6 @@ class Plan extends Common
             die;
         }
         $where = ['id' => $id];
-        $Plan = model('Plan');
         if (Request::instance()->isPost()) {
             //验证数据
             $result = $this->validate(input(), $this->rule, $this->msg);
@@ -194,8 +165,8 @@ class Plan extends Common
             //开启数据库事务
             Db::startTrans();
             //初始化参数说明
-            $Plan->edit($where, ['year' => '', 'month' => '', 'day' => '', 'week' => '', 'hour' => '', 'minute' => '']);
-            $res = $Plan->alterPlan($where, $data);
+            Task::edit($where, ['year' => '', 'month' => '', 'day' => '', 'week' => '', 'hour' => '', 'minute' => '']);
+            $res = Task::edit($where, $data);
             if ($res) {
                 Db::commit();
                 return self::ajaxOk('修改成功');
@@ -204,7 +175,7 @@ class Plan extends Common
                 return self::ajaxError('修改失败');
             }
         } else {
-            $Plan_info = $Plan->getPlanInfo($where);
+            $Plan_info = Task::getOne($where, 'name,execute_type,execute_time,condition,description,fun_name');
             $this->assign('plan_info', $Plan_info);
             $this->assign('id', $id);
             return View('Plan_alter');

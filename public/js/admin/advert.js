@@ -103,9 +103,9 @@ $(function(){
         // 表格渲染
         tableIns = table.render({
             elem: '#dateTable'                  //指定原始表格元素选择器（推荐id选择器）
-            , height: vipTable.getFullHeight(150)    //容器高度
+            , height: vipTable.getFullHeight(32)    //容器高度
             , cols: [[                  //标题栏
-                {checkbox: true, sort: true, fixed: true, space: true}
+                {type:'checkbox',fixed:'left'}
                 , {field: 'id', title: 'ID', width: 80}
                 , {field: 'ad_name', title: '广告名称', width: 200, align: 'center'}
                 , {field: 'width', title: '宽度', width: 150, align: 'center'}
@@ -119,6 +119,14 @@ $(function(){
             ]]
             , id: 'dataCheck'
             , url: '/admin/advert_get_list.html'
+            , parseData:function (res) {
+                return {
+                    'code':res.data.code,
+                    'msg':res.msg,
+                    'count':res.data.count,
+                    "data":res.data.data
+                }
+            }
             , method: 'get'
             , page: true
             , limits: [50, 100, 150, 200, 250]

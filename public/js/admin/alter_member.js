@@ -12,10 +12,9 @@ layui.use(['form', 'layedit', 'laydate' ,'upload'], function(){
         ,data:{id:$('input[name="id"]').val()}
         ,done: function(res){
             //上传完毕回调
-            if(res.errorcode == 0){
+            if(res.success){
                 layer.msg('上传成功',{time:1000} ,function () {
-                    $('#face_img').attr('src',res.url);
-                    $('#face').val(res.url);
+                    $('#face_img').attr('src',res.data.url);
                 });
             }else{
                 layer.msg('上传失败',{time:2000});

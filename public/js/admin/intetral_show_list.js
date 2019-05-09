@@ -9,7 +9,7 @@ layui.use(['tree', 'table', 'vip_table', 'layer' , 'vip_tab'], function () {
         , viptab = layui.vip_tab;
 
     // 表格渲染
-    var tableIns = table.render({
+    tableIns = table.render({
         elem: '#integral'                  //指定原始表格元素选择器（推荐id选择器）
         , height: vipTable.getFullHeight(32)    //容器高度
         , cols: [[                  //标题栏
@@ -22,6 +22,14 @@ layui.use(['tree', 'table', 'vip_table', 'layer' , 'vip_tab'], function () {
         ]]
         , id: 'dataCheck'
         , url: '/admin/get_integral_list.html'
+        , parseData:function (res) {
+            return {
+                'code':res.data.code,
+                'msg':res.msg,
+                'count':res.data.count,
+                "data":res.data.data
+            }
+        }
         , method: 'get'
         , page: true
         , limits: [20, 40, 60, 80, 100]

@@ -53,11 +53,12 @@
             , cols: [[                  //标题栏
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'id', title: 'ID', width: 80}
-                , {field: 'article_title', title: '文档名称', width: 350}
+                , {field: 'article_id', title: '文档名称', width: 350}
                 , {field: 'page', title:'page' ,width:100}
                 , {field: 'source_file', title: '附件地址', width:600 , align:'center'}
                 , {field: 'num' ,title:'下载次数' ,width:100 ,align:'center'}
                 , {field: 'end_time', title:'最后下载时间', width:200 ,align:'center'}
+                , {field: 'create_time', title:'首次下载时间', width:200 ,align:'center'}
             ]]
             , id: 'dataCheck'
             , url: '/admin/getHotDown.html'

@@ -57,7 +57,7 @@ class Api extends Controller
         if ($signature == $tmpStr) {
             echo $echostr;
         }
-//        echo 'sucaiz';
+        echo 'sucaiz';
     }
 
     private function textString(){

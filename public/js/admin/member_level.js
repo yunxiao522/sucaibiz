@@ -30,13 +30,21 @@ layui.use(['table', 'vip_table', 'layer' , 'vip_tab'], function () {
             , {field: 'id', title: 'ID', align:'center', width: 100}
             , {field: 'level_name', title: '等级名称', align:'center', width: 150}
             , {field: 'level_img', title: '图标', align:'center', width: 200,templet:'<div><img src="{{d.level_img}}" class="layui-table-link" style="width:122px;height:30px;"></img></div>'}
-            , {field: 'rank', title: '等级值', align:'center', width: 200}
+            , {field: 'ranks', title: '等级值', align:'center', width: 200}
             , {field: 'create_time', title: '创建时间', align:'center', width: 180}
             , {field: 'alter_time', title: '修改时间', align:'center', width: 180}
             , {fixed: 'right', title: '操作', width:300, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
         ]]
         , id: 'dataCheck'
         , url: '/admin/get_member_level_list.html'
+        , parseData:function (res) {
+            return {
+                'code':res.data.code,
+                'msg':res.msg,
+                'count':res.data.count,
+                "data":res.data.data
+            }
+        }
         , method: 'get'
         , page: true
         , limits: [20, 40, 60, 80, 100]

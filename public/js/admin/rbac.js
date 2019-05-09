@@ -11,10 +11,10 @@ $(function () {
             elem: '#dateTable'                  //指定原始表格元素选择器（推荐id选择器）
             , height: vipTable.getFullHeight(32)    //容器高度
             , cols: [[                  //标题栏
-                {type:'checkbox',fexd:'left'}
+                {type: 'checkbox', fexd: 'left'}
                 , {field: 'id', title: 'ID', width: 80}
                 , {field: 'name', title: '模块名称', width: 200, align: 'center'}
-                , {field: 'parent_id', title: '父级栏目', width: 150, align: 'center'}
+                , {field: 'parent_id', title: '父级模块', width: 150, align: 'center'}
                 , {field: 'app', title: '所属应用', width: 120, align: 'center'}
                 , {field: 'controller', title: '控制其名称', width: 150, align: 'center'}
                 , {field: 'method', title: '方法名控制其名称', width: 150, align: 'center'}
@@ -26,6 +26,14 @@ $(function () {
             ]]
             , id: 'dataCheck'
             , url: '/admin/user_model_list_json.html'
+            , parseData: function (res) {
+                return {
+                    'code': res.data.code,
+                    'msg': res.msg,
+                    'count': res.data.count,
+                    "data": res.data.data
+                }
+            }
             , method: 'get'
             , page: true
             , limits: [50, 100, 150, 200, 250]
@@ -70,7 +78,7 @@ $(function () {
                     shade: false,
                     maxmin: false, //开启最大化最小化按钮
                     area: ['700px', '700px'],
-                    content: '/admin/user_model_alter.html?id='+data.id
+                    content: '/admin/user_model_alter.html?id=' + data.id
                 });
                 return false;
             }
@@ -85,42 +93,42 @@ $(function () {
                 }
             },
             ico: function (value) {
-                if( value.length >50){
+                if (value.length > 50) {
                     return '输入的模块图标地址不能超过50个字符';
                 }
             },
-            app: function(value){
-                if(value == ''){
+            app: function (value) {
+                if (value == '') {
                     return '输入的应用不能为空';
                 }
             },
-            controller:function(value){
-                if(value.length >25){
+            controller: function (value) {
+                if (value.length > 25) {
                     return '输入的控制器名称不能超过25个字符';
                 }
             },
-            method:function(value) {
+            method: function (value) {
                 if (value.length > 25) {
                     return '输入的方法名称不能超过25个字符';
                 }
             },
-            url:function(value){
-                if(value.length > 100){
+            url: function (value) {
+                if (value.length > 100) {
                     return '输入的链接地址不能超过100个字符';
                 }
             },
-            description:function(value){
-                if(value.length > 100){
+            description: function (value) {
+                if (value.length > 100) {
                     return '输入的描述信息不能超过100个字符';
                 }
             }
         });
         //监听提交
-        form.on('submit(demo1)', function(data){
+        form.on('submit(demo1)', function (data) {
             $.ajax({
-                url:'/admin/user_model_add.html',
-                type:'post',
-                data:data.field,
+                url: '/admin/user_model_add.html',
+                type: 'post',
+                data: data.field,
                 beforeSend: function () {
                     loading = layer.load(0, {shade: false});
                 },
@@ -138,11 +146,11 @@ $(function () {
             });
             return false;
         });
-        form.on('submit(demo2)', function(data){
+        form.on('submit(demo2)', function (data) {
             $.ajax({
-                url:'/admin/user_model_alter.html',
-                type:'post',
-                data:data.field,
+                url: '/admin/user_model_alter.html',
+                type: 'post',
+                data: data.field,
                 beforeSend: function () {
                     loading = layer.load(0, {shade: false});
                 },
@@ -160,7 +168,7 @@ $(function () {
             });
             return false;
         });
-        form.on('submit(demo3)', function(data){
+        form.on('submit(demo3)', function (data) {
 
             return false;
         });
@@ -177,18 +185,18 @@ $(function () {
             return false;
         });
 
-        form.on('checkbox(power)', function(data){
+        form.on('checkbox(power)', function (data) {
             var son = data.elem.parentNode.parentNode.lastElementChild.children[0].getElementsByTagName('div');
-            for(i = 0;i <son.length ;i++){
-                if(data.elem.checked){
+            for (i = 0; i < son.length; i++) {
+                if (data.elem.checked) {
                     son[i].classList.add('layui-form-checked');
-                }else{
+                } else {
                     son[i].classList.remove('layui-form-checked');
                 }
             }
 
         });
-        form.on('submit(demo4)', function(data){
+        form.on('submit(demo4)', function (data) {
             layer.alert(JSON.stringify(data.field), {
                 title: '最终的提交信息'
             });

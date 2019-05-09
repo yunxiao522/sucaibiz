@@ -120,7 +120,8 @@ class Down extends Common
                 'token'=>$article_info['token'],
                 'source_file'=>$url,
                 'page'=>$page,
-                'end_time'=>time()
+                'end_time'=>time(),
+                'create_time'=>time()
             ]);
         }
         if(!$res){

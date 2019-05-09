@@ -131,6 +131,14 @@
                 ]]
                 , id: 'dataCheck'
                 , url: '/admin/sysconfig_show_menu_json.html'
+                , parseData:function (res) {
+                    return {
+                        'code':res.data.code,
+                        'msg':res.msg,
+                        'count':res.data.count,
+                        "data":res.data.data
+                    }
+                }
                 , method: 'post'
                 , page: true
                 , where:{class:1}

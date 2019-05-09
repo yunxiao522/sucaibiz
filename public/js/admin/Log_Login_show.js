@@ -24,6 +24,14 @@ $(function () {
             ]]
             , id: 'dataCheck'
             , url: '/admin/get_login_log.html'
+            , parseData:function (res) {
+                return {
+                    'code':res.data.code,
+                    'msg':res.msg,
+                    'count':res.data.count,
+                    "data":res.data.data
+                }
+            }
             , method: 'get'
             , page: true
             , limits: [30, 60, 90, 150, 300]

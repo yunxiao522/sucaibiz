@@ -10,10 +10,7 @@
 namespace app\admin\controller;
 
 use SucaiZ\config;
-use think\Debug;
-use think\Model;
 use think\Request;
-use SucaiZ\Page;
 
 class Html extends Common
 {

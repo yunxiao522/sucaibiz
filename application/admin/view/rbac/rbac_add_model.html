@@ -75,7 +75,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">是否启用</label>
         <div class="layui-input-block">
-            <input type="checkbox"  name="state" lay-skin="switch" lay-filter="switchTest" lay-text="启用|禁用">
+            <input type="checkbox"  name="state" {if $info.state eq 1}checkbox="checkbox"{/if} lay-skin="switch" lay-filter="switchTest" lay-text="启用|禁用">
         </div>
     </div>
     <div class="layui-form-item layui-form-text">

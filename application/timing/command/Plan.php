@@ -3,7 +3,6 @@
 
 namespace app\timing\command;
 
-
 use think\console\Command;
 use think\console\Input;
 use think\console\Output;
@@ -50,20 +49,20 @@ class Plan extends Command
      * @return array
      * Description 获取记录列表
      */
-    private function getPlanList()
+    public function getPlanList()
     {
         //获取当前年份
-        $year = date('Y');
+        $year = (int)date('Y');
         //获取当前月份
-        $mouth = date('m');
+        $mouth = (int)date('m');
         //获取当前日期
-        $day = date('d');
+        $day = (int)date('d');
         //获取当前小时
-        $hour = date('H');
+        $hour = (int)date('H');
         //获取当前分钟
-        $minute = date('i');
+        $minute = (int)date('i');
         //获取当前星期
-        $week = date('w') == 0 ? 7 : date('w');
+        $week = (int)date('w') == 0 ? 7 : date('w');
         $plan_list = [];
         //获取计划列表
         for ($i = 1; $i < 7; $i++) {

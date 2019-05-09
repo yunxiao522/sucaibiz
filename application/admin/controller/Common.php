@@ -10,6 +10,7 @@
 namespace app\admin\controller;
 
 use app\common\controller\BaseController;
+use app\model\Base;
 use think\Session;
 use SucaiZ\File;
 use SucaiZ\Rbac;
@@ -22,6 +23,7 @@ class Common extends BaseController
 
     public function __construct()
     {
+
         parent::__construct();
 
     }
@@ -44,7 +46,9 @@ class Common extends BaseController
             File::setUserInfo($admin_info['type'] ,$admin_info['id']);
             $this->admin_info = $admin_info;
         }
-
+        Base::$log_user_id = $admin_info['id'];
+        Base::$log_user_type = 2;
+        Base::$log_level = 2;
         //判断用户权限
 //        $Rbac = new Rbac();
 //        if(!$Rbac->isAuth($admin_info['id'] ,$admin_info['type'] ,['type'=>2])){

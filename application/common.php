@@ -1073,8 +1073,7 @@ function ad($ad_id = ''){
         'id'=>$ad_id,
         'status'=>1
     ];
-    $advert = new \app\admin\model\Advert();
-    $info = $advert->getAdvert($where ,' content ');
+    $info = app\model\Advert::getOne($where ,' content ');
     if(empty($info)){
         return '';
     }else{

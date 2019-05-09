@@ -3,17 +3,17 @@
 
 namespace app\timing\command;
 
-use app\timing\model\SinaComment;
+use app\model\LogOperate;
+use app\model\SinaComment;
+use app\model\Article;
+use app\model\BackUp;
+use app\model\Column;
+use app\common\controller\BaseController;
 use app\common\controller\Url;
-use app\timing\model\Article;
-use app\timing\model\BackUp;
 use SucaiZ\File;
 use SucaiZ\config;
-use app\common\model\Column;
-use app\common\controller\BaseController;
-use think\Db;
-use think\Exception;
 use SucaiZ\Sina;
+use think\Db;
 
 
 class Execute
@@ -110,9 +110,8 @@ class Execute
      */
     public static function makeRss($data)
     {
-        $column = new Column();
         //查询桌面壁纸和素材资讯
-        $column_list = $column->getAll([], 'id,parent_id', 10000);
+        $column_list = Column::getAll([], 'id,parent_id', 10000);
         $bz_column_list = BaseController::getSonList(1, $column_list);
         $zx_column_list = BaseController::getSonList(24, $column_list);
         $sj_column_list = BaseController::getSonList(54, $column_list);
@@ -126,7 +125,7 @@ class Execute
             'is_delete' => 1,
             'is_audit' => 1
         ];
-        $article_list = (new Article())->getAll($where, 'id,title,column_id,pubdate', 100000, true);
+        $article_list = Article::getAll($where, 'id,title,column_id,pubdate', 100000, true);
         foreach ($article_list as $key => $value) {
             $article_list[$key]['time'] = date('r', $value['pubdate']);
             $article_list[$key]['url'] = (new Url())->getArticleUrl($value['id'], true, true);
@@ -187,7 +186,7 @@ class Execute
             'file_path' => $file_name,
             'status' => 1
         ];
-        $id = (new BackUp())->add($a);
+        $id = BackUp::add($a);
         if (!$id) {
             return false;
         }
@@ -243,7 +242,7 @@ class Execute
         //获取文件存储大小
         $size = getsize($file_name, 'mb');
         //更新备份表信息内容
-        $res = (new BackUp())->edit(['id' => $id], ['status' => 2, 'size' => $size]);
+        $res = BackUp::edit(['id' => $id], ['status' => 2, 'size' => $size]);
 
         if ($res) {
             //判断是否要上传备份文件到阿里云Oss
@@ -263,7 +262,7 @@ class Execute
                 task('uploadOss', $b);
                 $file_info = $b['bucket'] . ':' . $b['object'];
                 //更新备份表数据
-                (new BackUp())->edit(['id' => $id], ['file_path' => $file_info, 'is_oss' => 2]);
+                BackUp::edit(['id' => $id], ['file_path' => $file_info, 'is_oss' => 2]);
             }
             return true;
         }
@@ -276,8 +275,7 @@ class Execute
     public static function syncSinaComment(){
         //设置访问者ip为服务器ip
         $_SERVER['REMOTE_ADDR'] = '115.28.150.229';
-        $new_comment_id = (new SinaComment())->getField([], 'comment_id', 'comment_id desc');
-        $user_info = Sina::get_uid();
+        $new_comment_id = SinaComment::getField([], 'comment_id', 'comment_id desc');
         $list = Sina::comments_to_me(1, 50,$new_comment_id);
         foreach ($list['comments'] as $value) {
             $arr = [
@@ -288,9 +286,23 @@ class Execute
                 'create_time' => strtotime($value['created_at']),
                 'status'=>1
             ];
-            (new SinaComment())->add($arr);
+            SinaComment::add($arr);
         }
         return true;
+    }
+
+    /**
+     * @param $data
+     * @return bool
+     * Description 写入操作日志
+     */
+    public static function writeLog($data){
+        $res = LogOperate::add($data);
+        if($res !== false){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

@@ -7,7 +7,6 @@
  * Description: 消息管理
  */
 
-
 namespace app\admin\controller;
 use app\admin\model\Msg;
 use think\Request;
@@ -23,7 +22,7 @@ class News extends Common
         //验证数据
         $uid = input('uid');
         if(!isset($uid) || empty($uid) || !is_numeric($uid)){
-            echo '非法访问';die;
+            return self::ajaxError('非法访问');
         }
         //组合查询条件
         $where = [

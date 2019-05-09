@@ -8,6 +8,8 @@
 
 namespace app\admin\controller;
 
+use app\model\Down as Down_Model;
+
 class Down extends Common
 {
     public function __construct()
@@ -20,11 +22,7 @@ class Down extends Common
      * Description 获取热门下载数据
      */
     public function getHotDown(){
-        $list = Model('Down')->getList([],'','end_time desc');
-        foreach($list['data'] as $key => $value){
-            $list['data'][$key]['end_time'] = date('Y-m-d H:i:s',$value['end_time']);
-            $list['data'][$key]['article_title'] = Model('article')->getField(['id'=>$value['article_id']],'title');
-        }
-        return self::ajaxOkdata($list,'获取数据成功','');
+        $list = Down_Model::getList([],'*','end_time desc');
+        return self::ajaxOkdata($list,'get data success','');
     }
 }

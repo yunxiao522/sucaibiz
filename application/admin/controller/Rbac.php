@@ -10,352 +10,162 @@
 
 namespace app\admin\controller;
 
-
+use app\model\AdminUser;
+use app\model\RbacModel;
+use app\model\AdminLevel;
 use think\Request;
+use think\view;
 
 class Rbac extends Common
 {
-
-    //模块类型
-    private $model_type = [1=>'外部访问',2=>'内部调用'];
     //构造函数
     public function __construct()
     {
         parent::__construct();
     }
 
-    //模块管理
-    public function modelMenage(){
-        return View('rbac_show_model');
-    }
-
-    //获取模块列表数据
+    /**
+     * @return false|string
+     * Description 获取模块列表数据
+     */
     public function getModelListJson(){
-        $limit = (input('page') - 1) * input('limit') . ',' . input('limit');
-        $rbac = new \app\admin\model\Rbac();
-        $model_list = $rbac->getModelList([] ,' * ' ,$limit);
+        $Model_List = RbacModel::getList([] ,' * ' , 'id asc');
         //处理列表数据
-        foreach($model_list as $key => $value){
-            $model_list[$key]['type'] = $this->model_type[$value['type']];
-            $model_list[$key]['create_time'] = date('Y-m-d H:i:s' ,$value['create_time']);
-            if(!empty($value['alter_time'])){
-                $model_list[$key]['alter_time'] = date('Y-m-d H:i:s' ,$value['alter_time']);
-            }
+        foreach($Model_List['data'] as $key => $value){
+            $Model_List['data'][$key]['type'] = RbacModel::$model_type[$value['type']];
         }
-        $model_count = $rbac->getModelCount([]);
-        $arr = [
-            'data' => $model_list,
-            'count' => $model_count,
-            'code' => 0
-        ];
-        return json_encode($arr, JSON_UNESCAPED_UNICODE);
-
-
+        return self::ajaxOkdata($Model_List, 'get data success');
     }
 
-    //新建模块
+    /**
+     * @return false|string|\think\response\View
+     * Description 新建模块
+     */
     public function addModel(){
         if(Request::instance()->isPost()){
             //验证数据
-            $name = input('name');
-            if(!isset($name)){
-                echo '非法访问';die;
-            }
-            $parent_id = input('parent_id');
-            if(!isset($parent_id)){
-                echo '非法访问';die;
-            }
-            if(!is_numeric($parent_id)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的格式不正确'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $ico = input('ico');
-            if(!isset($ico)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($ico ,'UTF-8') >50){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的图标地址不能超过50个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $app = input('app');
-            if(!isset($app)){
-                echo '非法访问';die;
-            }
-            if($app == ''){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的应用名不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $controller = input('controller');
-            if(!isset($controller)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($controller ,'UTF-8') >25){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的控制器名称不能超过25个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $method = input('method');
-            if(!isset($method)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($method ,'UTF-8') >25){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的方法名称不能超过25个'
-                ];
-                return json_encode($a,JSON_UNESCAPED_UNICODE);
-            }
-            $url = input('url');
-            if(!isset($url)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($url ,'UTF-8') >100){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的链接地址不能超过100个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $description = input('description');
-            if(!isset($description)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($description ,'UTF-8') >100){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的描述不能超过100个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $type = input('type');
-            if(!isset($type)){
-                echo '非法访问';die;
-            }
-            if(!is_numeric($type)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入参数类型错误'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
+            $data = $this->checkModelInfoForm();
             $state = input('state');
             if(isset($state)){
-                $state = 1;
+                $data['state'] = 1;
             }else{
-                $state = 2;
+                $data['state'] = 2;
             }
-
-            //组合数据添加到数据库
-            $arr = [
-                'parent_id'=>$parent_id,
-                'name'=>$name,
-                'app'=>$app,
-                'controller'=>$controller,
-                'method'=>$method,
-                'url'=>$url,
-                'description'=>$description,
-                'create_time'=>time(),
-                'ico'=>$ico,
-                'type'=>$type,
-                'state'=>$state
-            ];
-            $rbac = new \app\admin\model\Rbac();
-            if($rbac->addModel($arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'添加成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $data['create_time'] = time();
+            $res = RbacModel::add($data);
+            if($res){
+                return self::ajaxOk('添加成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'添加失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('添加失败');
             }
         }else{
-            $model_list = $this->getModelList();
-            $this->assign('list' ,$model_list);
+            $Model_List = RbacModel::getAll([], 'id,name', 1000);
+            view::share('list' ,$Model_List);
             return View('rbac_add_model');
         }
     }
 
-    //编辑模块
+    /**
+     * @return false|string|\think\response\View
+     * Description 修改模块信息
+     */
     public function alterMode(){
         $id = input('id');
         if(!isset($id)){
-            echo '非法访问';die;
+            return self::ajaxError('非法访问');
         }
         $where = ['id'=>$id];
-        $rbac = new \app\admin\model\Rbac();
         if(Request::instance()->isPost()){
             //验证数据
-            $name = input('name');
-            if(!isset($name)){
-                echo '非法访问';die;
-            }
-            $parent_id = input('parent_id');
-            if(!isset($parent_id)){
-                echo '非法访问';die;
-            }
-            if(!is_numeric($parent_id)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的格式不正确'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $ico = input('ico');
-            if(!isset($ico)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($ico ,'UTF-8') >50){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的图标地址不能超过50个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $app = input('app');
-            if(!isset($app)){
-                echo '非法访问';die;
-            }
-            if($app == ''){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的应用名不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $controller = input('controller');
-            if(!isset($controller)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($controller ,'UTF-8') >25){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的控制器名称不能超过25个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $method = input('method');
-            if(!isset($method)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($method ,'UTF-8') >25){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的方法名称不能超过25个'
-                ];
-                return json_encode($a,JSON_UNESCAPED_UNICODE);
-            }
-            $url = input('url');
-            if(!isset($url)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($url ,'UTF-8') >100){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的链接地址不能超过100个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $description = input('description');
-            if(!isset($description)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($description ,'UTF-8') >100){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的描述不能超过100个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $type = input('type');
-            if(!isset($type)){
-                echo '非法访问';die;
-            }
-            if(!is_numeric($type)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入参数类型错误'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $data = $this->checkModelInfoForm();
+            if(is_string($data)){
+                return self::ajaxError($data);
             }
             $state = input('state');
-            if(isset($state)){
-                $state = 1;
+            if(!empty($state)){
+                $data['state'] = 1;
             }else{
-                $state = 2;
+                $data['state'] = 2;
             }
-
-            //组合数据添加到数据库
-            $arr = [
-                'parent_id'=>$parent_id,
-                'name'=>$name,
-                'app'=>$app,
-                'controller'=>$controller,
-                'method'=>$method,
-                'url'=>$url,
-                'description'=>$description,
-                'alter_time'=>time(),
-                'ico'=>$ico,
-                'type'=>$type,
-                'state'=>$state
-            ];
-            if($rbac->alterModel($where ,$arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'修改成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $data['alter_time'] = time();
+            $res = RbacModel::edit($where, $data);
+            if($res){
+                return self::ajaxOk('修改成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'修改失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         }else{
-            $model_info = $rbac->getModelInfo($where ,' * ');
-            $this->assign('info' ,$model_info);
-            $model_list = $this->getModelList();
-            $this->assign('list' ,$model_list);
+            $Model_Info = RbacModel::getOne($where ,' * ');
+            view::share('info', $Model_Info);
+            $Model_List = RbacModel::getAll([], 'id,name', 1000);
+            view::share('list', $Model_List);
             return View('rbac_alter_model');
         }
     }
 
-    //删除模块
+    /**
+     * @return array|string|true
+     * Description 验证获取模块信息表单数据
+     */
+    protected function checkModelInfoForm(){
+        $rule = [
+            'name'=>'require|max:15',
+            'parent_id'=>'require|number',
+            'ico'=>'max:50',
+            'app'=>'require|max:25',
+            'controller'=>'max:25',
+            'method'=>'max:25',
+            'url'=>'max:100',
+            'description'=>'require|max:100',
+            'type'=>'require|number'
+        ];
+        $msg = [
+            'name.require'=>'请输入模块名称',
+            'name.max'=>'模块名称不能超过15个字符',
+            'parent_id.require'=>'请选择父级模块',
+            'parent_id.number'=>'父级模块id只能是数字',
+            'ico.max'=>'模块图标地址不能超过50个字符',
+            'app.require'=>'请输入应用',
+            'app.max'=>'应用名称不能超过25个字符',
+            'controller.max'=>'控制器名称不能超过25个字符',
+            'method.max'=>'方法名称不能超过25个字符',
+            'url.max'=>'跳转链接不能超过100个字符',
+            'description.require'=>'请输入模块说明',
+            'description.max'=>'模块说明不能超过100个字符',
+            'type.require'=>'请选择模块类型',
+            'type.number'=>'模块类型值只能是数字'
+        ];
+        return $this->checkForm($rule, $msg, function($input){
+            $data = [
+                'name'=>$input['name'],
+                'parent_id'=>$input['parent_id'],
+                'ico'=>$input['ico'],
+                'app'=>$input['app'],
+                'controller'=>$input['controller'],
+                'method'=>$input['method'],
+                'url'=>$input['url'],
+                'description'=>$input['description'],
+                'type'=>$input['type']
+            ];
+            return $data;
+        });
+    }
+
+    /**
+     * @return false|string
+     * Description 删除模块
+     */
     public function delModel(){
         $id = input('id');
         if(!isset($id)){
-            echo '非法访问';die;
+            return self::ajaxError('非法访问');
         }
         $where = ['id'=>$id];
-        $rbac = new \app\admin\model\Rbac();
-        if($rbac->delModel($where)){
-            $a = [
-                'errorcode'=>0,
-                'msg'=>'删除成功'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+        $res = RbacModel::del($where);
+        if($res){
+            return self::ajaxOk('删除成功');
         }else{
-            $a = [
-                'errorcode'=>1,
-                'msg'=>'删除失败'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('删除失败');
         }
     }
 
@@ -365,12 +175,10 @@ class Rbac extends Common
 
         }else{
             //获取角色列表
-            $user = new \app\admin\model\User();
-            $level_list = $user->getUserLevelList();
-
-            $this->assign('level' ,$level_list);
-            $user_list = $user->getUserList();
-            $this->assign('user' ,$user_list);
+            $Level_List = AdminLevel::getAll([], 'id,name');
+            view::share('level' ,$Level_List);
+            $User_List = AdminUser::getAll([], 'id,nick_name');
+            view::share('user' ,$User_List);
             return View('rbac_show');
         }
     }
@@ -387,17 +195,14 @@ class Rbac extends Common
             $where['id'] = $id;
         }
         //获取模块列表数据
-        $model_list = $this->getModelList();
-//        dump($model_list);
-        $this->assign('list',$model_list);
-
+        $Model_List = $this->getModelList();
+        view::share('list', $Model_List);
         return View('rbac_show_access');
     }
 
     //获取模块列表
     private function getModelList($where = [] ,$field = ' * ' ,$limit = 1000){
-        $rbac = new \app\admin\model\Rbac();
-        $model_list = $rbac->getModelList($where ,$field ,$limit);
-        return getarticletype($model_list ,0 ,0);
+        $Model_List = RbacModel::getAll($where, $field, $limit);
+        return getarticletype($Model_List ,0 ,0);
     }
 }

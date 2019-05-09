@@ -8,6 +8,7 @@
  */
 namespace app\admin\controller;
 
+use app\model\Upload as Upload_Model;
 use SucaiZ\file;
 use think\Session;
 
@@ -20,27 +21,16 @@ class Upload extends Common{
 
     }
 
-    //显示附件列表
-    public function show(){
-        return View();
-    }
-
-    //获取附件表json数据
+    /**
+     * @return false|string
+     * Description 获取附件表数据
+     */
     public function getuploadlistjson(){
-        $limit=(input('page') - 1)*input('limit') .',' .input('limit');
-        $upload = model('Upload');
-        $upload_list = $upload->getUploadList([] , ' * ' ,$limit);
-        foreach($upload_list as $key=>$value){
-            $upload_list[$key]['filesize'] = tosize($value['filesize']);
-            $upload_list[$key]['create_time'] = date('Y-m-d H:i:s' , $value['create_time']);
+        $Upload_List = Upload_Model::getList([], '*','id desc');
+        foreach($Upload_List['data'] as $key=>$value){
+            $Upload_List['data'][$key]['filesize'] = tosize($value['filesize']);
         }
-        $upload_count = $upload->getUploadCount([]);
-        $arr = [
-            'data'=>$upload_list,
-            'count'=>$upload_count,
-            'code'=>0
-        ];
-        return json_encode($arr , JSON_UNESCAPED_UNICODE);
+        return self::ajaxOkdata($Upload_List, 'get data success');
     }
 
     /**

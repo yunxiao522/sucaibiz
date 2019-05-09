@@ -7,15 +7,14 @@
  * Description: 处理生成html页面相关操作类，第二层
  */
 
-
 namespace app\admin\controller;
+
 use SucaiZ\config;
 use app\admin\model\Article;
 use app\admin\model\Column;
 use app\index\controller\Html;
 use SucaiZ\Page;
 use think\Db;
-use think\View;
 
 class Make extends Common
 {

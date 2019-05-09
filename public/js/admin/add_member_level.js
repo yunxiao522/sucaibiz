@@ -19,10 +19,10 @@ layui.use(['form','upload'], function(){
         ,method:'post'
         ,done: function(res){
             //上传完毕回调
-            if(res.errorcode == 0){
+            if(res.success){
                 layer.msg('上传成功',{time:1000} ,function () {
-                    $('#level_img').attr('src',res.url);
-                    $('input[name="level_img"]').attr('value',res.url);
+                    $('#level_img').attr('src',res.data.url);
+                    $('input[name="level_img"]').attr('value',res.data.url);
                 });
             }else{
                 layer.msg('上传失败',{time:2000});

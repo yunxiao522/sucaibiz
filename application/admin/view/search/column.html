@@ -28,7 +28,7 @@
         </a>
     </ul>
     <div class="top-btn">
-        <button class="layui-btn  layui-btn-small add-column layui-btn-normal" id="add">新增分类</button>
+        <button class="layui-btn  layui-btn-sm add-column layui-btn-normal" id="add">新增分类</button>
     </div>
 </header>
 <article id="article" lay-filter="demo" style="margin-top:0;"></article>
@@ -49,9 +49,9 @@ layui.use(['table', 'vip_tab', 'vip_table'], function () {
         , height: vipTable.getFullHeight(25)    //容器高度
         , cols: [[                  //标题栏
             {field: 'id', title: 'ID', align:'center', width: 100}
-            ,{field:'name',title:'名称',align:'center',width:150}
-            ,{field:'column',title:'所属栏目',align:'center',width:150}
-            ,{field:'type',title:'类型',align:'center',width:100}
+            ,{field:'name',title:'名称',align:'center',width:250}
+            ,{field:'cid',title:'所属栏目',align:'center',width:150}
+            ,{field:'tid',title:'类型',align:'center',width:100}
             ,{field:'create_time',title:'创建时间',align:'center',width:200}
             ,{field:'alter_time',title:'修改时间',align:'center',width:200}
             ,{fixed: 'right', title: '操作', width:300, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器

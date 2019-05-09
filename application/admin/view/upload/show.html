@@ -36,7 +36,7 @@
 <script type="text/javascript">
 
     // layui方法
-    layui.use(['table', 'form', 'layer', 'vip_table','upload'], function () {
+    layui.use(['table', 'form', 'layer', 'vip_table', 'upload'], function () {
 
         // 操作对象
         var form = layui.form
@@ -54,17 +54,25 @@
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'id', title: 'ID', width: 80}
                 , {field: 'article_title', title: '文档名称', width: 350}
-                , {field: 'article_id', title: '文档id', width: 100 , align:'center'}
-                , {field: 'file_type', title: '附件类型', width: 100 , align:'center'}
-                , {field: 'filesize', title: '附件大小', width: 100 , align:'center'}
-                , {field: 'admin_id', title: '管理员id', width: 100 , align:'center'}
-                , {field: 'create_time', title: '上传时间', width: 200 , align:'center'}
-                , {field: 'oss_bucket', title: 'oss-bucket', width: 200 , align:'center'}
-                , {field: 'oss_object', title: 'oss-object', width: 400 , align:'center'}
+                , {field: 'article_id', title: '文档id', width: 100, align: 'center'}
+                , {field: 'file_type', title: '附件类型', width: 100, align: 'center'}
+                , {field: 'filesize', title: '附件大小', width: 100, align: 'center'}
+                , {field: 'admin_id', title: '管理员id', width: 100, align: 'center'}
+                , {field: 'create_time', title: '上传时间', width: 200, align: 'center'}
+                , {field: 'oss_bucket', title: 'oss-bucket', width: 200, align: 'center'}
+                , {field: 'oss_object', title: 'oss-object', width: 400, align: 'center'}
                 , {fixed: 'right', title: '操作', width: 250, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
             ]]
             , id: 'dataCheck'
             , url: '/admin/get_upload_list_json.html'
+            , parseData: function (res) {
+                return {
+                    'code': res.data.code,
+                    'msg': res.msg,
+                    'count': res.data.count,
+                    "data": res.data.data
+                }
+            }
             , method: 'get'
             , page: true
             , limits: [50, 100, 150, 200, 250]
@@ -76,18 +84,18 @@
             tableIns.reload();
         });
         //监听工具条事件
-        table.on('tool(test)', function(obj){
-            switch(obj.event){
+        table.on('tool(test)', function (obj) {
+            switch (obj.event) {
                 case 'copy':
                     var copy_state = this.dataset.copy;
                     $(this).zclip({
-                        path:'/public/plugins/jquery-zclip/ZeroClipboard.swf',
-                        copy: function(){
+                        path: '/public/plugins/jquery-zclip/ZeroClipboard.swf',
+                        copy: function () {
                             //复制内容
                             return obj.data.url;
                         },
-                        afterCopy: function(){ //复制成功
-                            layer.msg('复制成功',{time:2000});
+                        afterCopy: function () { //复制成功
+                            layer.msg('复制成功', {time: 2000});
                         }
                     });
                     break;
@@ -97,21 +105,23 @@
                 case 'del':
                     layer.msg('删除');
                     break;
-            };
+            }
+            ;
         });
         //创建一个上传组件
         upload.render({
             elem: '#upload'
-            ,url: '/admin/upload/uploadfile.html'
-            ,done: function(res, index, upload){ //上传后的回调
-                layer.msg(res.msg,{time:2000},function () {
-                    if(res.success){
+            , url: '/admin/upload/uploadfile.html'
+            , done: function (res, index, upload) { //上传后的回调
+                layer.msg(res.msg, {time: 2000}, function () {
+                    if (res.success) {
                         tableIns.reload();
                     }
                 })
             }
         });
-        function copy(element,obj) {
+
+        function copy(element, obj) {
 
         }
     });

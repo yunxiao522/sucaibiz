@@ -8,8 +8,12 @@
 
 namespace app\admin\controller;
 
-
+use app\model\AdminLevel;
+use app\model\AdminUser;
+use app\validate\AdminUser as AdminUser_Validate;
+use app\validate\AdminLevel as AdminLevel_Validate;
 use think\Request;
+use think\view;
 
 class User extends Common
 {
@@ -18,216 +22,70 @@ class User extends Common
         parent::__construct();
     }
 
-    //显示管理员列表
+    /**
+     * @return \think\response\View
+     * Description 显示管理员列表
+     */
     public function show(){
-        $this->assign('level' ,$this->getLevel());
+        view::share('level' ,$this->getLevel());
         return View('user_show_list');
     }
 
-    //获取管理员列表数据
+    /**
+     * @return false|string
+     * Description 获取管理员列表数据
+     */
     public function getUserList(){
-        $limit = (input('page') - 1) * input('limit') . ',' . input('limit');
         $username = input('user_name');
         $where = [];
-        if(isset($username) && !empty($username)){
+        if(!empty($username)){
             $where['user_name'] = $username;
         }
         $uid = input('uid');
-        if(isset($uid) && !empty($uid)){
+        if(!empty($uid)){
             $where['id']=$uid;
         }
         $level = input('level');
-        if(isset($level) && !empty($level)){
+        if(!empty($level)){
             $where['type']=$level;
         }
-        $admin = new \app\admin\model\User();
-        $user_list = $admin->getUserList($where ,' * ' ,$limit);
-        $level_list = $this->getLevel();
-        $level_arr = array_column($level_list ,'name' ,'id');
-        $state_arr = [1=>'启用' ,2=>'禁用'];
+        $Admin_List = AdminUser::getList($where ,' * ', 'id desc');
         //处理列表信息
-        foreach($user_list as $key => $value){
-            if(!empty($value['create_time'])){
-                $user_list[$key]['create_time'] = date('Y-m-d H:i:s' ,$value['create_time']);
-            }
-            if(!empty($value['alter_time'])){
-                $user_list[$key]['alter_time'] = date('Y-m-d H:i:s' ,$value['alter_time']);
-            }
-            $user_list[$key]['type'] = $level_arr[$value['type']];
-            $user_list[$key]['state'] = $state_arr[$value['state']];
+        foreach($Admin_List['data'] as $key => $value){
+            $Admin_List['data'][$key]['type'] = AdminLevel::getField(['id'=>$value['type']], 'name');
+            $Admin_List['data'][$key]['state'] = AdminUser::$status[$value['state']];
         }
-        $user_count = $admin->getUserCount($where);
-        $arr = [
-            'data' => $user_list,
-            'count' => $user_count,
-            'code' => 0
-        ];
-        return json_encode($arr, JSON_UNESCAPED_UNICODE);
+        return self::ajaxOkdata($Admin_List, 'get data success');
     }
 
     //添加管理员账号方法
     public function add(){
         if(Request::instance()->isPost()){
-            $user = new \app\admin\model\User();
-            //验证数据
-            $username = input('user_name');
-            if(!isset($username)){
-                echo '非法访问';die;
+            $validate = new AdminUser_Validate();
+            if(!$validate->scene('add')->check(input())){
+                return self::ajaxError($validate->getError());
             }
-            if(empty($username)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的用户名不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            if(mb_strlen($username ,'UTF-8') >20){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的用户名不能超过20个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $namerule = '/^[A-Za-z0-9]+$/';
-            if(!preg_match($namerule,$username)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的用户名只能是字母和数字的组合'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-
-            //验证账号是否重复
-            $where = ['user_name'=>$username];
-            if($user->getUserCount($where) !=0){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'账号重复,请更换'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $password = input('password');
-            if(!isset($password)){
-                echo '非法访问';die;
-            }
-            if(empty($password)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的密码不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $verfypassword = input('verfypassword');
-            if(!isset($verfypassword)){
-                echo '非法访问';die;
-            }
-            if($password != $verfypassword){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'两次输入的密码不一致'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $nickname = input('nick_name');
-            if(!isset($nickname)){
-                echo '非法访问';die;
-            }
-            if(empty($nickname)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的昵称不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            if(mb_strlen($nickname ,'UTF-8') >20){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的昵称不能超过20个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $email = input('email');
-            if(!isset($email)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($email ,'UTF-8') >50){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的邮箱字符不能超过50个'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            //验证邮箱格式
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的邮箱格式不正确'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $state = input('state');
-            if(!isset($state)){
-                $state = 2;
-            }else{
-                $state = 1;
-            }
-            $level = input('level');
-            if(!isset($level)){
-                echo '非法访问';die;
-            }
-            if($level == 0){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'请选择账号等级'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $phone = input('phone');
-            if(!isset($phone)){
-                echo '非法访问';die;
-            }else if(!empty($phone)){
-                $phone_rule = '/^0?(13|14|15|17|18|16)[0-9]{9}$/';
-                //验证手机号格式
-                if(!preg_match($phone_rule,$phone)){
-                    return '输入的手机号格式不正确';
+            $data = $validate->getData('add', function($data, $input){
+                if(!isset($input['state'])){
+                    $data['state'] = 2;
+                }else{
+                    $data['state'] = 1;
                 }
-            }
-            $realname = input('realname');
-            if(!isset($realname)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($realname ,'UTF-8') >15){
-                $a =[
-                    'errorcode'=>1,
-                    'msg'=>'输入的真实姓名不能超过15个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            //组合数据添加到数据库
-            $arr = [
-                'user_name'=>$username,
-                'nick_name'=>$nickname,
-                'real_name'=>$realname,
-                'phone'=>$phone,
-                'user_password'=>getAdminPassword($password),
-                'email'=>$email,
-                'type'=>$level,
-                'state'=>$state,
-                'create_time'=>time()
-            ];
-
-            if($user->addUserInfo($arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'添加成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                $data['type'] = $data['level'];
+                $data['real_name'] = $data['realname'];
+                $data['user_password'] = getAdminPassword($data['password']);
+                unset($data['level']);
+                unset($data['verfypassword']);
+                unset($data['realname']);
+                unset($data['password']);
+                return $data;
+            });
+            $data['create_time'] = time();
+            $res = AdminUser::add($data);
+            if($res){
+                return self::ajaxOk('添加成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'添加失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('添加失败');
             }
         }else{
             $this->assign('level' ,$this->getLevel());
@@ -235,488 +93,246 @@ class User extends Common
         }
     }
 
-    //删除管理员方法
+    /**
+     * @return false|string
+     * Description 删除管理员方法
+     */
     public function del(){
         $id = input('id');
         if(!isset($id)){
-            echo '非法访问';die;
+            return self::ajaxError('非法访问');
         }
-        $admin = new \app\admin\model\User();
         $where = ['id'=>$id];
-        if($admin->delUserInfo($where)){
-            $a = [
-                'errorcode'=>0,
-                'msg'=>'删除成功'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+        $res = AdminUser::del($where);
+        if($res){
+            return self::ajaxOk('删除成功');
         }else{
-            $a = [
-                'errorcode'=>1,
-                'msg'=>'删除失败'
-            ];
-
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('删除失败');
         }
     }
 
-    //编辑管理员信息方法
+    /**
+     * @return false|string|\think\response\View
+     * Description 编辑管理员信息方法
+     */
     public function alter(){
         $id = input('id');
         if(!isset($id)){
-            echo '非法访问';die;
+            return self::ajaxError('非法访问');
         }
         $where = ['id'=>$id];
-        $user = new \app\admin\model\User();
         if(Request::instance()->isPost()){
-            //验证数据
-            $username = input('user_name');
-            if(!isset($username)){
-                echo '非法访问';die;
+            $validate = new AdminUser_Validate();
+            if(!$validate->scene('edit')->check(input())){
+                return self::ajaxError($validate->getError());
             }
-            if(empty($username)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的用户名不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            if(mb_strlen($username ,'UTF-8') >20){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的用户名不能超过20个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $namerule = '/^[A-Za-z0-9]+$/';
-            if(!preg_match($namerule,$username)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的用户名只能是字母和数字的组合'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $nickname = input('nick_name');
-            if(!isset($nickname)){
-                echo '非法访问';die;
-            }
-            if(empty($nickname)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的昵称不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            if(mb_strlen($nickname ,'UTF-8') >20){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的昵称不能超过20个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $email = input('email');
-            if(!isset($email)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($email ,'UTF-8') >50){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的邮箱字符不能超过50个'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            //验证邮箱格式
-            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的邮箱格式不正确'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $state = input('state');
-            if(!isset($state)){
-                $state = 2;
-            }else{
-                $state = 1;
-            }
-            $level = input('level');
-            if(!isset($level)){
-                echo '非法访问';die;
-            }
-            if($level == 0){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'请选择账号等级'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $phone = input('phone');
-            if(!isset($phone)){
-                echo '非法访问';die;
-            }else if(!empty($phone)){
-                $phone_rule = '/^0?(13|14|15|17|18|16)[0-9]{9}$/';
-                //验证手机号格式
-                if(!preg_match($phone_rule,$phone)){
-                    return '输入的手机号格式不正确';
+            $data = $validate->getData('edit', function($data, $input){
+                if(!isset($input['state'])){
+                    $data['state'] = 2;
+                }else{
+                    $data['state'] = 1;
                 }
-            }
-            $realname = input('realname');
-            if(!isset($realname)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($realname ,'UTF-8') >15){
-                $a =[
-                    'errorcode'=>1,
-                    'msg'=>'输入的真实姓名不能超过15个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            //组合数据,更新数据库内容
-            $arr = [
-                'nick_name'=>$nickname,
-                'real_name'=>$realname,
-                'phone'=>$phone,
-                'email'=>$email,
-                'type'=>$level,
-                'state'=>$state,
-                'alter_time'=>time()
-            ];
-            $res = $user->editUserInfo($where ,$arr);
+                $data['type'] = $data['level'];
+                $data['real_name'] = $data['realname'];
+                $data['alter_time'] = time();
+                unset($data['level']);
+                unset($data['realname']);
+                return $data;
+            });
+            $res = AdminUser::edit($where, $data);
             if($res){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'修改成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxOk('修改成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'修改失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         }else{
-            $admin_info = $user->getUserInfoOne($where);
-            $this->assign('info' ,$admin_info);
-            $this->assign('level' ,$this->getLevel());
+            $Admin_Info = AdminUser::getOne($where);
+            view::share('info', $Admin_Info);
+            view::share('level' ,$this->getLevel());
             return View('user_alter');
         }
     }
 
-    //修改权限
+    /**
+     * @return false|string|\think\response\View
+     * Description 修改权限
+     */
     public function alterPower(){
         $id = input('id');
-        if(!isset($id)){
-            echo '非法访问';die;
+        if(empty($id)){
+            return self::ajaxError('非法访问');
         }
-        $user = new \app\admin\model\User();
         $where = ['id'=>$id];
         if(Request::instance()->isPost()){
             //验证数据
             $level = input('level');
             if(!isset($level)){
-                echo '非法访问';die;
+                return self::ajaxError('非法访问');
             }
             if($level == 0){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'请选择账号类型'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('请选择账号类型');
             }
             //组合数据更新数据库信息
             $arr = [
                 'type'=>$level,
                 'alter_time'=>time()
             ];
-            if($user->editUserInfo($where ,$arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'修改成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $res = AdminUser::edit($where, $arr);
+            if($res){
+                return self::ajaxOk('修改成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'修改失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         }else{
-            $admin_info = $user->getUserInfoOne($where);
-            $this->assign('info' ,$admin_info);
-            $this->assign('level' ,$this->getLevel());
+            $Admin_Info = AdminUser::getOne($where);
+            view::share('info' ,$Admin_Info);
+            view::share('level' ,$this->getLevel());
             return View('user_alter_power');
         }
     }
 
-    //修改账号状态
+    /**
+     * @return false|string
+     * Description 修改账号状态
+     */
     public function alterState(){
         $id = input('id');
-        if(!isset($id)){
-            echo '非法访问';die;
+        if(empty($id) || !is_numeric($id)){
+            return self::ajaxError('非法访问');
         }
         $state = input('state');
-        if(!is_numeric($state)){
-            echo '非法访问';die;
+        if(empty($state) || !is_numeric($state)){
+            return self::ajaxError('非法访问');
         }
-        $user = new \app\admin\model\User();
         $where = ['id'=>$id];
         $arr = [
             'state'=>$state,
             'alter_time'=>time()
         ];
-        if($user->editUserInfo($where ,$arr)){
-            $a = [
-                'errorcode'=>0,
-                'msg'=>'修改成功'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+        $res = AdminUser::edit($where, $arr);
+        if($res){
+            return self::ajaxOk('修改成功');
         }else{
-            $a = [
-                'errorcode'=>1,
-                'msg'=>'修改失败'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('修改失败');
         }
     }
 
-    //修改账号密码
+    /**
+     * @return false|string|\think\response\View
+     * Description 修改账号密码
+     */
     public function alterPassword(){
         $id = input('id');
-        if(!isset($id)){
-            echo '非法访问';die;
+        if(empty($id)){
+            return self::ajaxError('非法访问');
         }
         if(Request::instance()->isPost()){
-            $password = input('password');
-            $verfy = input('verfy');
-            if(!isset($password) || !isset($verfy)){
-                echo '非法访问';die;
+            $validate = new AdminUser_Validate();
+            if($validate->scene('alter_password')->check(input())){
+                return self::ajaxError($validate->getError());
             }
-            if($password != $verfy){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'两次输入的密码不一致'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $user = new \app\admin\model\User();
+            $data = $validate->getData('alter_password', function ($data, $input){
+                $data['user_password'] = getAdminPassword($data['password']);
+                unset($data['password']);
+                unset($data['verfypassword']);
+                $data['alter_time'] = time();
+                return $data;
+            });
             $where = ['id'=>$id];
-            $arr = [
-                'user_password'=>getAdminPassword($password),
-                'alter_time'=>time()
-            ];
-            if($user->editUserInfo($where ,$arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'修改成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $res = AdminUser::edit($where, $data);
+            if($res){
+                return self::ajaxOk('修改成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'修改失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         }else{
-            $this->assign('id' ,$id);
+            view::share('id' ,$id);
             return View('user_alter_password');
         }
     }
 
-    //角色管理
-    public function role()
-    {
-        return View('user_role');
-    }
-
-    //获取角色列表
+    /**
+     * @return false|string
+     * Description 获取角色列表
+     */
     public function getRoleList(){
-        $user = new \app\admin\model\User();
-        $level_list = $user->getUserLevelList();
-        $level_count = $user->getUserLevelCount();
-        $arr = [
-            'data' => $level_list,
-            'count' => $level_count,
-            'code' => 0
-        ];
-        return json_encode($arr, JSON_UNESCAPED_UNICODE);
+        $Level_List = AdminLevel::getList([], '*', 'id desc');
+        return self::ajaxOkdata($Level_List, 'get data success');
     }
 
-    //新建角色
+    /**
+     * @return false|string|\think\response\View
+     * Description 新建角色
+     */
     public function addRole(){
         if(Request::instance()->isPost()){
-            //验证数据
-            $name = input('name');
-            if(!isset($name)){
-                echo '非法访问';die;
+            $validate = new AdminLevel_Validate();
+            if(!$validate->check(input())){
+                return self::ajaxError($validate->getError());
             }
-            if($name == ''){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色名不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            if(mb_strlen($name ,'UTF-8')>20){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色名不能超过20个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $level = input('level');
-            if(!isset($level)){
-                echo '非法访问';die;
-            }
-            if(!is_numeric($level)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色值只能是数字'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $description = input('description');
-            if(!isset($description)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($description ,'UTF-8')>40){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色描述不能超过40个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            //组合数据添加到数据库
-            $arr = [
-                'name'=>$name,
-                'level'=>$level,
-                'description'=>$description,
-                'create_time'=>time()
-            ];
-            $user = new \app\admin\model\User();
-            if($user->addLevel($arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'添加成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $data = $validate->getData();
+            $data['create_time'] = time();
+            $res = AdminLevel::add($data);
+            if($res){
+                return self::ajaxOk('添加成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'添加失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('添加失败');
             }
         }else{
             return View('user_role_add');
         }
     }
 
-    //删除角色信息
+    /**
+     * @return false|string
+     * Description 删除角色信息
+     */
     public function delRole(){
         $id = input('id');
-
-        if(!isset($id)){
-            echo '非法访问';die;
+        if(empty($id) || !is_numeric($id)){
+            return self::ajaxError('非法访问');
         }
         $where = ['id'=>$id];
-        $user = new \app\admin\model\User();
-        if($user->delLevel($where)){
-            $a = [
-                'errorcode'=>0,
-                'msg'=>'删除成功'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+        $res = AdminLevel::del($where);
+        if($res){
+            return self::ajaxOk('删除成功');
         }else{
-            $a = [
-                'errorcode'=>1,
-                'msg'=>'删除失败'
-            ];
-            return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('删除失败');
         }
     }
 
-    //修改角色信息
+    /**
+     * @return false|string|\think\response\View
+     * Description 修改角色信息
+     */
     public function alterRole(){
         $id = input('id');
-        if(!isset($id)){
-            echo '非法访问';die;
+        if(empty($id) || !is_numeric($id)){
+            return self::ajaxError('非法访问');
         }
         $where = ['id'=>$id];
-        $user = new \app\admin\model\User();
         if(Request::instance()->isPost()){
-            //验证数据
-            $name = input('name');
-            if(!isset($name)){
-                echo '非法访问';die;
+            $validate = new AdminLevel_Validate();
+            if(!$validate->check(input())){
+                return self::ajaxError($validate->getError());
             }
-            if($name == ''){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色名不能为空'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            if(mb_strlen($name ,'UTF-8')>20){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色名不能超过20个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $level = input('level');
-            if(!isset($level)){
-                echo '非法访问';die;
-            }
-            if(!is_numeric($level)){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色值只能是数字'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $description = input('description');
-            if(!isset($description)){
-                echo '非法访问';die;
-            }
-            if(mb_strlen($description ,'UTF-8')>40){
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'输入的角色描述不能超过40个字符'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
-            }
-            $arr = [
-                'name'=>$name,
-                'level'=>$level,
-                'description'=>$description,
-                'alter_time'=>time()
-            ];
-            if($user->alterLevelInfo($where ,$arr)){
-                $a = [
-                    'errorcode'=>0,
-                    'msg'=>'修改成功'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+            $data = $validate->getData();
+            $data['alter_time'] = time();
+            $res = AdminLevel::edit($where, $data);
+            if($res){
+                return self::ajaxOk('修改成功');
             }else{
-                $a = [
-                    'errorcode'=>1,
-                    'msg'=>'修改失败'
-                ];
-                return json_encode($a ,JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         }else{
-            $info = $user->getLevelInfo($where);
-            $this->assign('info' ,$info);
+            $Info = AdminLevel::getOne($where);
+            view::share('info' ,$Info);
             return View('user_role_alter');
         }
-
     }
+
     //获取账号级别列表
     private function getLevel(){
-        //分配管理员级别数据到页面
-        $admin = new \app\admin\model\User();
-        return $admin->getUserLevelList();
+        return AdminLevel::getAll([], '*');
     }
 }

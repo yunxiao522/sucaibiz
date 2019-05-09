@@ -21,13 +21,21 @@ layui.use(['tree', 'table', 'vip_table', 'layer', 'vip_tab'], function () {
             , {field: 'praiser', title: '点赞', align: 'center', width: 70}
             , {field: 'oppose', title: '反对', align: 'center', width: 70}
             , {field: 'inform', title: '举报', align: 'center', width: 70}
-            , {field: 'status_t', title: '状态', align: 'center', width: 70}
+            , {field: 'status', title: '状态', align: 'center', width: 70}
             , {field: 'create_time', title: '评论时间', align: 'center', width: 250}
             , {field: 'alter_time', title: '修改时间', align: 'center', width: 250}
             , {fixed: 'right', title: '操作', width: 400, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
         ]]
         , id: 'dataCheck'
         , url: '/admin/Comment/getCommentList.html'
+        , parseData:function (res) {
+            return {
+                'code':res.data.code,
+                'msg':res.msg,
+                'count':res.data.count,
+                "data":res.data.data
+            }
+        }
         , method: 'post'
         , page: true
         , limits: [20, 40, 60, 80, 100]

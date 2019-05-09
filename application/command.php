@@ -11,5 +11,6 @@
 
 return [
     'app\timing\command\Task',
-    'app\timing\command\Plan'
+    'app\timing\command\Plan',
+    'app\timing\command\Test'
 ];

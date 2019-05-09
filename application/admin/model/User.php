@@ -9,6 +9,7 @@
 namespace app\admin\model;
 use think\Model;
 use think\Db;
+
 class User extends Common {
     public $table_name = 'admin_user';
     private $table_name1 = 'admin_level';

@@ -1,5 +1,9 @@
 <?php
+
 namespace app\admin\controller;
+
+use app\model\LogLogin;
+use app\model\AdminUser;
 use think\Request;
 use think\Session;
 use think\Url;
@@ -36,8 +40,7 @@ class Login {
             //判断用户登录次数，超过次数给予用户提示
             if($this->Redis->get($admin_login_sum_key)<5){
                 //根据用户名取出用户信息
-                $user = model('user');
-                $user_info = $user->getUserInfoOne(['user_name'=>input('username')]);
+                $user_info = AdminUser::getOne(['user_name'=>input('username')]);
                 if($user_info){
                     //验证密码是否正确
                     if($user_info['user_password'] == getAdminPassword(input('password'))){
@@ -58,9 +61,7 @@ class Login {
                             'browser'=>getBrowserInfo(),
                             'type'=>2
                         ];
-                        $log = model('Log');
-                        $log->table_name = 'login_log_table_name';
-                        $log->createTableInfo($arr);
+                        LogLogin::add($arr);
                         $a['errorcode'] = 0;
                         $a['msg'] = "登录成功...";
                         $a['skip_url'] = '/admin/index.html';

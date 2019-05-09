@@ -7,13 +7,13 @@
  * Description: 小程序管理
  */
 
-
 namespace app\admin\controller;
 
-
+use app\model\Column;
+use app\model\MiniAppColumn;
+use app\model\Tag;
+use app\model\MiniAppTag;
 use SucaiZ\File;
-use think\Db;
-use think\Model;
 use think\Request;
 use think\Session;
 use think\View;
@@ -31,18 +31,22 @@ class Miniapp extends Common
         return View('show_manage');
     }
 
-    //同步数据
+    /**
+     * @param $type
+     * @param int $column_id
+     * @param bool $delta
+     * @return int|string
+     * Description 同步数据
+     */
     private function syncDate($type, $column_id = 0, $delta = false)
     {
         if ($type == 'column') {
-            $column = new \app\admin\model\Column();
-            $miniapp = new \app\admin\model\Miniapp();
-            $column_list = $column->getColumnList(['parent_id' => $column_id], ' id,type_name ', 1000);
+            $Column_List = Column::getAll(['parent_id' => $column_id], ' id,type_name ', 1000);
             //清空原有数据
-            $miniapp->delColumnInfo(['parent_id' => $column_id]);
+            MiniAppColumn::del(['parent_id' => $column_id]);
             $arr = [];
             //循环处理数据
-            foreach ($column_list as $key => $value) {
+            foreach ($Column_List as $key => $value) {
                 $arr[] = [
                     'parent_id' => $column_id,
                     'column_id' => $value['id'],
@@ -51,60 +55,50 @@ class Miniapp extends Common
                     'create_time' => time()
                 ];
             }
-            return $miniapp->addMoreColumnInfo($arr);
+            return MiniAppColumn::addAll($arr);
         } else if ($type == 'tag') {
             //获取子栏目列表
-            $column_list = Model('column')->getAll([], 'id,parent_id', 1000);
-            $column_son_list = self::getSonList($column_id, $column_list);
+            $Column_List = Column::getAll([], 'id,parent_id', 1000);
+            $Column_Son_List = self::getSonList($column_id, $Column_List);
             array_push($column_son_list, $column_id);
             //循环栏目tag列表数据,判断是否已经同步过数据,只同步未同步过的数据
-            $tag_list = Model('tag')->getAll(['column_id' => ['in', $column_son_list]], 'id,tag_name,column_id');
-            Db::startTrans();
-            foreach ($tag_list as $value) {
-                $count = Model('MobileTag')->getCount(['tag_id' => $value['id']]);
-                if (empty($count)) {
-                    $res = Model('MobileTag')->add([
+            $Tag_List = Tag::getAll(['column_id' => ['in', $Column_Son_List]], 'id,tag_name,column_id');
+            $arr = [];
+            foreach ($Tag_List as $value) {
+                $Tag_Id = MiniAppTag::getField(['tag_id' => $value['id']], 'id');
+                if (empty($Tag_Id)) {
+                    $arr[] = [
                         'tag_id' => $value['id'],
                         'name' => $value['tag_name'],
                         'litpic' => '',
                         'create_time' => time(),
                         'column_id' => $value['column_id'],
                         'status' => 2
-                    ]);
-                    if (!$res) {
-                        Db::rollback();
-                        return false;
-                    }
+                    ];
+
                 }
             }
-            Db::commit();
-            return true;
+            return MiniAppTag::addAll($arr);
         }
     }
 
-    //同步分类数据
+    /**
+     * @return false|string
+     * Description 同步分类数据
+     */
     public function syncColumn()
     {
         //验证数据
         $column = input('column');
         if (!isset($column) || empty($column) || !is_numeric($column)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
         //调用同步数据方法
         $res = $this->syncDate('column', $column);
         if ($res) {
-            $a = [
-                'errorcode' => 0,
-                'msg' => '同步数据成功'
-            ];
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+            return self::ajaxOk('同步成功');
         } else {
-            $a = [
-                'errorcode' => 1,
-                'msg' => '同步数据失败'
-            ];
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('同步失败');
         }
     }
 
@@ -126,36 +120,20 @@ class Miniapp extends Common
         }
     }
 
-    //获取小程序栏目列表数据
+    /**
+     * @return false|string
+     * Description 获取小程序栏目列表数据
+     */
     public function getMiniappColumnList()
     {
         //验证数据
         $column = input('column');
         if (!isset($column) || empty($column) || !is_numeric($column)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
         //获取列表数据
-        $miniapp = new \app\admin\model\Miniapp();
-        $column_list = $miniapp->getColumnList(['parent_id' => $column]);
-        $column_count = $miniapp->getColumnSum(['parent_id' => $column]);
-        //循环处理列表数据
-        foreach ($column_list as $key => $value) {
-            $column_list[$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
-            if ($value['t_status'] == 1) {
-                $a = '推荐';
-            } else {
-                $a = '不推荐';
-            }
-            $column_list[$key]['t_status'] = $a;
-        }
-        //组合返回数据
-        $arr = [
-            'data' => $column_list,
-            'count' => $column_count,
-            'code' => 0
-        ];
-        return json_encode($arr, JSON_UNESCAPED_UNICODE);
+        $Column_List = MiniAppColumn::getList(['parent_id' => $column]);
+        return self::ajaxOkdata($Column_List, 'get data success');
     }
 
     //修改小程序栏目推荐状态
@@ -398,8 +376,8 @@ class Miniapp extends Common
             $arr = [];
             //循环文档列表
             foreach ($article_list as $key => $value) {
-                $article_info = Model('Article')->getOne(['id' => $value, 'is_delete' => 1,'is_audit'=>1], 'id,title,create_time,click,column_id');
-                if(empty($article_info)){
+                $article_info = Model('Article')->getOne(['id' => $value, 'is_delete' => 1, 'is_audit' => 1], 'id,title,create_time,click,column_id');
+                if (empty($article_info)) {
                     break;
                 }
                 $article_info['create_time'] = date('Y-m-d H:i:s', $article_info['create_time']);

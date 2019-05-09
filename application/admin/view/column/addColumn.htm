@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加顶级栏目-素材站-后台管理</title>
+    <link rel="stylesheet" href="/public/layui/css/layui.css">
+    <link rel="stylesheet" href="/public/static/css/style.css">
+    <!--引入jquery-->
+    <script src="/public/jquery.js"></script>
+    <!--引入layer-->
+    <script src="/public/layer/layer.js"></script>
+    <!--引入公共的js-->
+    <script type="text/javascript" src="/public/common/js/common.js"></script>
+    <style>
+        article {margin-top:20px;margin-left:20px;}
+    </style>
+</head>
+<body>
+<article>
+    <form class="layui-form layui-form-pane" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">栏目名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="type_name" lay-verify="type_name" autocomplete="off" placeholder="请输入栏目名称" class="layui-input" style="width:300px;">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">内容模型</label>
+            <div class="layui-input-block" style="width:200px;">
+                <select name="channel_type" lay-filter="aihao" lay-verify="channel_type">
+                    {volist name="channeltype_data" id="vo"}
+                        <option value="{$vo.id}">{$vo.typename}</option>
+                    {/volist}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排列顺序</label>
+            <div class="layui-input-block">
+                <input type="text" name="sort_rank" lay-verify="sort_rank" autocomplete="off" placeholder="排列顺序" class="layui-input" style="width:100px;" value="{$sort_num}" disabled="disabled">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">支持投稿</label>
+            <div class="layui-input-block">
+                <input type="checkbox" checked="" name="issend" lay-skin="switch" lay-filter="switchTest" lay-verify="is_send" lay-text="是|否">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">浏览权限</label>
+            <div class="layui-input-block">
+                {volist name="member_level" id="vo"}
+                    <input type="checkbox" name="like[{$vo.id}]" title="{$vo.level_name}">
+                {/volist}
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">栏目关键词</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入栏目关键词" lay-verify="keywords" name="keywords" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div style="height:170px;">
+            <div class="layui-form" style="float:left;">
+                <label class="layui-form-label">栏目目录</label>
+                <div class="layui-input-block">
+                    <input type="text" name="type_dir" lay-verify="type_dir" autocomplete="off" placeholder="请输入栏目目录" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-left:50px;">
+                <label class="layui-form-label">首页名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="defaultname" lay-verify="defaultname" autocomplete="off" placeholder="请输入首页名称" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-top:20px;">
+                <label class="layui-form-label">模板封面</label>
+                <div class="layui-input-block">
+                    <input type="text" name="default_index" autocomplete="off" lay-verify="default_index" placeholder="请输入模板封面" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-left:50px;margin-top:20px;">
+                <label class="layui-form-label">列表封面</label>
+                <div class="layui-input-block">
+                    <input type="text" name="templist" autocomplete="off" lay-verify="templist" placeholder="请输入列表封面" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+            <div class="layui-form" style="float:left;margin-top:20px;">
+                <label class="layui-form-label">文章封面</label>
+                <div class="layui-input-block">
+                    <input type="text" name="temparticle" autocomplete="off" lay-verify="temparticle" placeholder="请输入文章封面" class="layui-input" style="width:200px;">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">文章命名规则</label>
+            <div class="layui-input-block">
+                <input type="text" name="namerule" autocomplete="off" lay-verify="templist" id="name_rule" placeholder="请输入文章命名规则" style="width:250px;" class="layui-input" style="width:200px;">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">列表命名规则</label>
+            <div class="layui-input-block">
+                <input type="text" name="listrule" autocomplete="off" lay-verify="listrule" id="list_rule" placeholder="请输入列表命名规则" style="width:250px;" class="layui-input" style="width:200px;">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <label class="layui-form-label">模板名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="modename" autocomplete="off" lay-verify="modename" placeholder="请输入模板名称" style="width:250px;" class="layui-input" style="width:200px;">
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">栏目介绍</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入栏目介绍" lay-verify="description" name="description" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <button class="layui-btn" lay-submit="" lay-filter="add">提交</button>
+        </div>
+    </form>
+</article>
+<script type="text/javascript" src="/public/layui/layui.js"></script>
+<script type="text/javascript" src="/public/js/admin/Column.js"></script>
+</body>
+</html>

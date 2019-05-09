@@ -42,13 +42,13 @@
         </a>
     </ul>
     <div class="top-btn">
-        <button class="layui-btn  layui-btn-small add-column layui-btn-normal">发布文档</button>
-        <button class="layui-btn  layui-btn-small update-html layui-btn-normal">我的文档</button>
-        <button class="layui-btn  layui-btn-small update-html layui-btn-normal">文档审核</button>
-        <button class="layui-btn  layui-btn-small update-html layui-btn-normal column">栏目管理</button>
-        <button class="layui-btn  layui-btn-small update-html layui-btn-normal">更新列表</button>
-        <button class="layui-btn  layui-btn-small update-html layui-btn-normal">更新文档</button>
-        <button class="layui-btn  layui-btn-small update-html layui-btn-normal recycled">文档回收站</button>
+        <button class="layui-btn  layui-btn-sm add-column layui-btn-normal">发布文档</button>
+        <button class="layui-btn  layui-btn-sm update-html layui-btn-normal">我的文档</button>
+        <button class="layui-btn  layui-btn-sm update-html layui-btn-normal">文档审核</button>
+        <button class="layui-btn  layui-btn-sm update-html layui-btn-normal column">栏目管理</button>
+        <button class="layui-btn  layui-btn-sm update-html layui-btn-normal">更新列表</button>
+        <button class="layui-btn  layui-btn-sm update-html layui-btn-normal">更新文档</button>
+        <button class="layui-btn  layui-btn-sm update-html layui-btn-normal recycled">文档回收站</button>
     </div>
 </header>
 <article id="article" lay-filter="demo"></article>
@@ -76,12 +76,12 @@
         // 表格渲染
         var tableIns = table.render({
             elem: '#article'                  //指定原始表格元素选择器（推荐id选择器）
-            , height: vipTable.getFullHeight(80)    //容器高度
+            , height: vipTable.getFullHeight(82)    //容器高度
             , cols: [[                  //标题栏
                 {type:'checkbox',fixed:'left'}
                 , {field: 'id', title: 'ID', align:'center', width: 100}
                 , {field: 'title', title: '文章标题', align:'left', width: 300}
-                , {field: 'senddate', title: '更新时间', align:'center', width: 200}
+                , {field: 'pubdate', title: '发布时间', align:'center', width: 200}
                 , {field: 'column_id', title: '类目', align:'center', width: 180}
                 , {field: 'click', title: '点击', align:'center', width: 100}
                 , {field: 'is_make', title: 'HTML', align:'center', width: 100}

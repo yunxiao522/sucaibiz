@@ -8,12 +8,16 @@
 
 namespace app\admin\controller;
 
-
+use app\common\controller\ArticlePush;
+use app\model\Search as Search_Model;
+use app\model\SearchColumn;
+use app\model\SearchHistory;
+use app\model\Column;
 use think\Db;
 use think\Request;
 use think\View;
 
-class Search extends Common
+class Search extends Common implements ArticlePush
 {
     public function __construct()
     {
@@ -24,24 +28,22 @@ class Search extends Common
         return view('column');
     }
 
-    //获取分类数据
+    /**
+     * @return false|string
+     * Description 获取搜索分类数据
+     */
     public function getColumn(){
-        $list = Model('searchcolumn')->getList([],'*',' id desc ');
+        $list = SearchColumn::getList([],'*',' id desc ');
         foreach ($list['data'] as $key => $value){
-            $list['data'][$key]['column'] = Model('column')->getField(['id'=>$value['cid']],'type_name');
-            $list['data'][$key]['type'] = Model('channeltype')->getField(['id'=>$value['tid']],'typename');
-            $list['data'][$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
-            if(!empty($value['alter_time'])){
-                $list['data'][$key]['alter_time'] = date('Y-m-d H:i:s',$value['alter_time']);
-            }
+            $list['data'][$key]['cid'] = Column::getField(['id'=>$value['cid']], 'type_name');
         }
-        return $this->ajaxOkdata($list);
+        return $this->ajaxOkdata($list, 'get data success');
     }
 
-    public function keyword(){
-        return view('keyword');
-    }
-
+    /**
+     * @return false|string
+     * Description 获取搜索列表数据
+     */
     public function getKeyword(){
         $keyword = input('keyword');
         $where = [];
@@ -53,13 +55,7 @@ class Search extends Common
                 ]
             ];
         }
-        $list = Model('search')->getList($where,'*',' id desc ');
-        foreach ($list['data'] as $key => $value){
-            $list['data'][$key]['create_time'] = date('Y-m-d H:i:s',$value['create_time']);
-            if(!empty($value['alter_time'])){
-                $list['data'][$key]['alter_time'] = date('Y-m-d H:i:s',$value['alter_time']);
-            }
-        }
+        $list = Search_Model::getList($where,'*','alter_time desc');
         return $this->ajaxOkdata($list);
     }
 
@@ -73,12 +69,12 @@ class Search extends Common
             return $this->ajaxError('参数错误');
         }
         Db::startTrans();
-        $res = Model('search')->del(['id'=>$id]);
+        $res = Search_Model::del(['id'=>$id]);
         if(!$res){
             Db::rollback();
             return $this->ajaxError('删除失败');
         }
-        $res = Model('searchhistory')->del(['sid'=>$id]);
+        $res = SearchHistory::del(['sid'=>$id]);
         if($res){
             Db::commit();
             return $this->ajaxOk('删除成功');
@@ -94,14 +90,14 @@ class Search extends Common
      */
     public function altercolumnstatus(){
         $id = input('id');
-        if(!$id){
+        if(empty($id) || !is_numeric($id)){
             return $this->ajaxError('参数错误');
         }
         $status = input('status');
         if(!$status){
             return $this->ajaxError('参数错误');
         }
-        $res = Model('searchcolumn')->edit(['id'=>$id],['status'=>$status,'alter_time'=>time()]);
+        $res = SearchColumn::edit(['id'=>$id],['status'=>$status,'alter_time'=>time()]);
         if($res){
             return $this->ajaxOk('修改成功');
         }else{
@@ -118,7 +114,7 @@ class Search extends Common
         if(!$id){
             return $this->ajaxError('参数错误');
         }
-        $res = Model('searchcolumn')->del(['cid'=>$id]);
+        $res = SearchColumn::del(['cid'=>$id]);
         if($res){
             return $this->ajaxOk('删除成功');
         }else{
@@ -136,7 +132,7 @@ class Search extends Common
             if(!$cid){
                 return $this->ajaxError('参数错误');
             }
-            $tid = Model('column')->getField(['id'=>$cid],'channel_type');
+            $tid = Column::getField(['id'=>$cid],'channel_type');
             if(!$tid){
                 return $this->ajaxError('文档分类不存在');
             }
@@ -158,7 +154,7 @@ class Search extends Common
                 'create_time'=>time(),
                 'alter_time'=>0
             ];
-            $res = Model('searchcolumn')->add($a);
+            $res = SearchColumn::add($a);
             if($res){
                 return $this->ajaxOk('添加成功');
             }else{
@@ -166,9 +162,9 @@ class Search extends Common
             }
         }else{
             //获取文档顶级分类
-            $article_column = Model('column')->getAll(['parent_id'=>0],'id,type_name,channel_type');
+            $article_column = Column::getAll(['parent_id'=>0],'id,type_name,channel_type');
             //获取搜索分类列表
-            $search_column = Model('searchcolumn')->getAll([],'name,cid,tid,id');
+            $search_column = SearchColumn::getAll([],'name,cid,tid,id');
             foreach($article_column as $key => $value){
                 foreach($search_column as $k => $v){
                     if($v['cid'] == $value['id']){
@@ -188,19 +184,31 @@ class Search extends Common
      */
     public function editcolumnname(){
         $name = input('name');
-        if(!$name){
+        if(empty($name)){
             return $this->ajaxError('参数错误');
+        }
+        if(mb_strlen($name, 'UTF-8') > 10){
+            return self::ajaxError('分类名称不能超过10个字符');
         }
         $id = input('id');
-        if(!$id){
+        if(empty($id) || !is_numeric($id)){
             return $this->ajaxError('参数错误');
         }
-        $res = Model('searchcolumn')->edit(['id'=>$id],['name'=>$name]);
+        $res = SearchColumn::edit(['id'=>$id],['name'=>$name]);
         if($res){
             return $this->ajaxOk('修改成功');
         }else{
             return $this->ajaxError('修改失败');
         }
+    }
 
+    public static function add($article_info, $data)
+    {
+        // TODO: Implement add() method.
+    }
+
+    public static function edit($article_info, $data)
+    {
+        // TODO: Implement edit() method.
     }
 }

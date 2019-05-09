@@ -7,8 +7,9 @@
  * Description: 新浪微博管理
  */
 
-
 namespace app\admin\controller;
+
+use app\common\controller\ArticlePush;
 use app\sina\controller\Api;
 use Sina\Sae\SaeTClientV2;
 use SucaiZ\config;
@@ -17,7 +18,7 @@ use Sina\Sae\SaeTOAuthV2;
 use think\Collection;
 use think\Request;
 
-class Sina extends Collection
+class Sina extends Collection implements ArticlePush
 {
     //微博access_token
     public $access_token = null;
@@ -93,5 +94,15 @@ class Sina extends Collection
         $sae = new SaeTClientV2(config::get('oauth-sina-appid') ,config::get('oauth-sina-appkey') ,$this->access_token);
         $list = $sae->mentions();
         dump($list);
+    }
+
+    public static function add($article_id, $data)
+    {
+        // TODO: Implement add() method.
+    }
+
+    public static function edit($article_id, $data)
+    {
+        // TODO: Implement edit() method.
     }
 }

@@ -60,14 +60,14 @@
             , height: vipTable.getFullHeight(25)    //容器高度
             , cols: [[                  //标题栏
                 {field: 'id', title: 'ID', align:'center', width: 100,sort:true}
-                ,{field:'keyword',title:'名称',align:'center',width:150}
+                ,{field:'keyword',title:'名称',align:'center',width:250}
                 ,{field:'num',title:'搜索次数',align:'center',width:100,sort:true}
                 ,{field:'create_time',title:'创建时间',align:'center',width:200}
                 ,{field:'alter_time',title:'最后搜索时间',align:'center',width:200}
-                ,{fixed: 'right', title: '操作', width:1000, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
+                ,{fixed: 'right', title: '操作', width:600, align: 'center', toolbar: '#barOption'} //这里的toolbar值是模板元素的选择器
             ]]
             , id: 'dataCheck'
-            , url: '/admin/search/getkeyword.html'
+            , url: '/admin/search/getkeywordList.html'
             , parseData:function (res) {
                 return {
                     'code':res.data.code,

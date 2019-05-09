@@ -34,29 +34,18 @@ $(function () {
         form.on('select(class)', function (data) {
             var id = data.value;
             //发送ajax请求,获取对应分类的顶级菜单
-            $.ajax({
-                url: '/admin/sysconfig/getparentmenu.html',
-                type: 'post',
-                data: {class: id},
-                beforeSend: function () {
-                    loading = layer.load(0, {shade: false});
-                },
-                success: function (e) {
-                    layer.close(loading);
-                    //清空父级菜单数据
-                    $('select[name="parent_id"]').html('');
-                    var data = JSON.parse(e);
-                    $("<option value='0'>顶级菜单</option>").appendTo('select[name="parent_id"]');
-                    if (data.errorcode == 0) {
-                        //循环添加数据到父级菜单中
-                        for (var i = 0; i < data.data.length; i++) {
-                            var item = data.data[i];
-                            $("<option value='" + item.id + "'>" + item.name + "</option>").appendTo('select[name="parent_id"]');
-                        }
+            var url = '/admin/sysconfig/getparentmenu.html';
+            $.sc.ajax(url, 'post', {class:id}, function (e) {
+                $("<option value='0'>顶级菜单</option>").appendTo('select[name="parent_id"]');
+                if (e.success) {
+                    //循环添加数据到父级菜单中
+                    for (var i = 0; i < e.data.length; i++) {
+                        var item = e.data[i];
+                        $("<option value='" + item.id + "'>" + item.name + "</option>").appendTo('select[name="parent_id"]');
                     }
-                    form.render('select');
                 }
-            });
+                form.render('select');
+            })
 
         });
         //监听提交

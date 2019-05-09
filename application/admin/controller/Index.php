@@ -2,9 +2,15 @@
 
 namespace app\admin\controller;
 
-use app\admin\model\Click;
-use app\admin\model\Menu;
-use think\Model;
+use app\model\ArticleHot;
+use app\model\Click;
+use app\model\AdminUser;
+use app\model\Menu;
+use app\model\Article;
+use app\model\User;
+use app\model\Upload;
+use app\model\Comment;
+use app\model\Queue;
 use think\Request;
 use think\Session;
 use think\View;
@@ -45,27 +51,23 @@ class Index extends Common
                 $a['msg'] = "输入的真实姓名不能超过10个字符";
                 return json_encode($a, JSON_UNESCAPED_UNICODE);
             }
-            $user = model('user');
             $arr = [
                 'user_name' => input('username'),
                 'real_name' => input('realname'),
                 'nick_name' => input('nickname')
             ];
             $admin_id = Session::get('admin')['id'];
-            if ($user->editUserInfo(['id' => $admin_id], $arr)) {
-                $a['errorcode'] = 0;
-                $a['msg'] = "修改成功";
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+            $res = AdminUser::edit(['id' => $admin_id], $arr);
+            if ($res) {
+                return self::ajaxOk('修改成功');
             } else {
-                $a['errorcode'] = 1;
-                $a['msg'] = "修改失败";
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         } else {
             //根据用户id获取用户信息
             $admin_id = Session::get('admin')['id'];
-            $admin_info = model('user')->getUserInfoOne(['id' => $admin_id]);
-            $this->assign('admin_info', $admin_info);
+            $Admin_Info = AdminUser::getOne(['id' => $admin_id]);
+            $this->assign('admin_info', $Admin_Info);
             return View();
         }
     }
@@ -93,15 +95,11 @@ class Index extends Common
         $arr = [
             'user_password' => getAdminPassword(input('password'))
         ];
-        $user = model('user');
-        if ($user->editUserInfo(['id' => $admin_id], $arr)) {
-            $a['errorcode'] = 0;
-            $a['msg'] = "修改成功";
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+        $res = AdminUser::edit(['id' => $admin_id], $arr);
+        if ($res) {
+            return self::ajaxOk('修改成功');
         } else {
-            $a['errorcode'] = 1;
-            $a['msg'] = "修改失败";
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('修改失败');
         }
     }
 
@@ -120,49 +118,44 @@ class Index extends Common
                 'image/png'
             ];
             if (!in_array(strtolower($_FILES['file']['type']), $img_type)) {
-                $a['errorcode'] = 1;
-                $a['msg'] = "文件类型不在允许的范围内";
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('文件类型不在允许范围内');
             }
             $admin_face_img_type = str_replace('image/', '', $_FILES['file']['type']);
             $admin_face_img_newfile = $admin_face_img_path . getNewFileName() . '.' . $admin_face_img_type;
             $admin_face_img_url = ltrim($admin_face_img_newfile, '.');
             if (move_uploaded_file($_FILES['file']['tmp_name'], $admin_face_img_newfile)) {
                 $admin_id = Session::get('admin')['id'];
-                $user = model('user');
-                if ($user->editUserInfo(['id' => $admin_id], ['face' => $admin_face_img_url])) {
+                $res = AdminUser::edit(['id' => $admin_id], ['face' => $admin_face_img_url]);
+                if ($res) {
                     $a['errorcode'] = 0;
                     $a['msg'] = "上传成功";
                     $a['face_url'] = $admin_face_img_url;
                     return json($a);
                 }
             }
-            $a['errorcode'] = 1;
-            $a['msg'] = "上传失败";
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
-        } else {
-            $a['errorcode'] = 1;
-            $a['msg'] = "用户头像上传失败";
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+
         }
+        return self::ajaxError('上传失败');
     }
 
-    //获取菜单数据方法
+    /**
+     * @return false|string
+     * Description 获取菜单数据方法
+     */
     public function getMenuInfo()
     {
         //验证数据
         $class = input('class');
         if (!isset($class) || empty($class) || !is_numeric($class)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
         //组合查询条件
         $where = ['class' => $class];
         //获取菜单列表
-        $menu = new Menu();
-        $menu_list = $menu->getMenuList($where, ' id,ico,name,url,parent_id ', 1000, ' id asc ');
+        $Menu_List = Menu::getAll($where, ' id,ico,name,url,parent_id ', 1000, ' id asc ');
         $data = [];
-        foreach ($menu_list as $key => $value) {
+        //查询一级菜单
+        foreach ($Menu_List as $key => $value) {
             if ($value['parent_id'] == 0) {
                 $data[] = [
                     'text' => $value['name'],
@@ -175,7 +168,7 @@ class Index extends Common
         //查询二级菜单
         foreach ($data as $key => $value) {
             $subset = [];
-            foreach ($menu_list as $k => $v) {
+            foreach ($Menu_List as $k => $v) {
                 if ($value['id'] == $v['parent_id']) {
                     $subset[] = [
                         'text' => $v['name'],
@@ -191,30 +184,25 @@ class Index extends Common
             }
             unset($subset);
         }
-        return json_encode(['data' => $data], JSON_UNESCAPED_UNICODE);
+        return self::ajaxOkdata($data, 'get data success');
     }
 
     //后台欢迎页面
     public function welcome()
     {
         //获取文档总数
-        $article = new \app\admin\model\Article();
-        $article_count = $article->getArticleCount(['is_delete' => 1]);
-        $info['article_count'] = $article_count;
+        $Article_Count = Article::getCount(['is_delete' => 1]);
+        $info['article_count'] = $Article_Count;
         //获取会员总数
-        $member = new \app\admin\model\Member();
-        $info['member_count'] = $member->getMemberCount([]);
+        $info['member_count'] = User::getCount([]);
         //获取附件总数
-        $upload = new \app\admin\model\Upload();
-        $info['upload_count'] = $upload->getUploadCount([]);
+        $info['upload_count'] = Upload::getCount([]);
         //获取评论总数
-        $comment = new \app\admin\model\Comment();
-        $info['comment_count'] = $comment->getCommentCount([]);
+        $info['comment_count'] = Comment::getCount([]);
         //获取未执行队列列表
-        $queue = new \app\admin\model\Queue();
-        $info['queue_count'] = $queue->getQueueCount(['status' => 1]);
+        $info['queue_count'] = Queue::getCount(['status' => 1]);
         //获取附总共大小
-        $info['upload_size'] = round($upload->getUploadSize(["oss_bucket"=>['neq','']]) / (1024 * 1024 * 1024), 2);
+        $info['upload_size'] = round(Upload::getSum(["oss_bucket" => ['neq', '']], 'filesize') / (1024 * 1024 * 1024), 2);
         //获取前七天发布文档数据
         $week = [];
         $article_sum = [];
@@ -237,50 +225,46 @@ class Index extends Common
                 'is_audit' => 1,
                 'draft' => 2
             ];
-            $article_sum[] = '"' . $article->getArticleCount($where) . '"';
+            $article_sum[] = '"' . Article::getCount($where) . '"';
             unset($where);
             $where = [
                 "create_time" => ['<', $end],
-                "oss_bucket"=>['neq','']
+                "oss_bucket" => ['neq', '']
             ];
-            $upload_sum[] = round($upload->getUploadSize($where) / (1024 * 1024 * 1024), 2);
+            $upload_sum[] = round(Upload::getSum($where, 'filesize') / (1024 * 1024 * 1024), 2);
             unset($where);
         }
         $info['article_week'] = implode(',', $week);
         $info['article_sum'] = implode(',', $article_sum);
         $info['upload_sum'] = implode(',', $upload_sum);
         //获取最新发布的文档
-        $article_list = $article->getArticleList(['is_delete' => 1], ' id,title,create_time ', 10, ' id desc ');
-        //循环处理列表数据
-        foreach ($article_list as $key => $value) {
-            $article_list[$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
-        }
-        $info['article_list'] = $article_list;
+        $info['article_list'] = Article::getAll(['is_delete' => 1], ' id,title,create_time ', 10, ' id desc ');
         //获取最新发表的评论
-        $comment = new \app\admin\model\Comment();
-        $comment_list = $comment->getCommentList([], ' * ', 10, ' c.id desc ');
-        foreach ($comment_list as $key => $value) {
-            $comment_list[$key]['create_time'] = date('Y-m-d H:i:s', $value['create_time']);
-            $comment_list[$key]['content'] = cut_str($value['content'], 80);
+        $Comment_List = Comment::getAll([], ' * ', 10, ' id desc ');
+        foreach ($Comment_List as $key => $value) {
+            $Comment_List[$key]['content'] = cut_str($value['content'], 80);
+            $Comment_List[$key]['nickname'] = User::getField(['id' => $value['uid']], 'nickname');
         }
-        $info['comment_list'] = $comment_list;
+        $info['comment_list'] = $Comment_List;
         //获取前一个月日期
-
         View::share('info', $info);
         return View('welcome');
     }
 
-    //获取点击数据
+    /**
+     * @return false|string
+     * Description 获取点击数据
+     */
     public function getclick()
     {
-        $click_list = Model('click')->getAll([], '*', 30);
-        $click_list_click_arr = array_column($click_list, 'click');
-        $click_list_day_arr = array_column($click_list, 'day');
+        $Click_List = Click::getAll([], '*', 30);
+        $Click_List_Click_Arr = array_column($Click_List, 'click');
+        $Click_List_Day_Arr = array_column($Click_List, 'day');
         $click_info = [
-            'click' => $click_list_click_arr,
-            'day' => $click_list_day_arr
+            'click' => $Click_List_Click_Arr,
+            'day' => $Click_List_Day_Arr
         ];
-        return $this->ajaxOkdata($click_info);
+        return $this->ajaxOkdata($click_info, 'get data success');
     }
 
     //获取上传文件个数数据
@@ -290,12 +274,12 @@ class Index extends Common
         $upload_monuth_sum = [];
         for ($i = 1; $i <= 30; $i++) {
             $mnuoth[] = date('Y-m-d', strtotime(date('Y-m-d')) - ($i * 86400));
-            $start = strtotime(date('Y-m-d H:i:s', strtotime("-$i day")));
+//            $start = strtotime(date('Y-m-d H:i:s', strtotime("-$i day")));
+            $start = strtotime(date('Y-m-d' ,strtotime("+1 day"))) - $i * 86400;
             $end = $start + 86400;
             //组合查询条件
             $where = " create_time > $start and create_time < $end  ";
-            $upload_monuth_sum[] = Model('upload')->getCount($where);
-
+            $upload_monuth_sum[] = Upload::getCount($where);
         }
         $data = [
             'mounth' => $mnuoth,
@@ -312,14 +296,14 @@ class Index extends Common
     {
         $type = input('type');
         //获取年份数据
-        $select = Model('ArticleHot')->getAll(['type' => 1], 'id,time', 1000, 'time desc');
+        $select = ArticleHot::getAll(['type' => 1], 'id,time', 1000, 'time desc');
         $data['select'] = $select;
         //获取年份点击分布
-        $data['year'] = Model('ArticleHot')->getAll(['type' => 1], 'time as name,click as value');
+        $data['year'] = ArticleHot::getAll(['type' => 1], 'time as name,click as value');
         if (empty($type) || !is_numeric($type)) {
-            $type = Model('ArticleHot')->getField([], 'id', 'time desc');
+            $type = ArticleHot::getField([], 'id', 'time desc');
         }
-        $data['month'] = Model('ArticleHot')->getAll(['parent_id' => $type], 'time as name,click as value');
+        $data['month'] = ArticleHot::getAll(['parent_id' => $type], 'time as name,click as value');
         return self::ajaxOkdata($data, '', 'get data success');
     }
 }

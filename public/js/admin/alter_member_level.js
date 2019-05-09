@@ -20,9 +20,9 @@ layui.use(['form','upload'], function(){
         ,data:{id:$('input[name="id"]').val()}
         ,done: function(res){
             //上传完毕回调
-            if(res.errorcode == 0){
+            if(res.success){
                 layer.msg('上传成功',{time:1000} ,function () {
-                    $('#level_img').attr('src',res.url);
+                    $('#level_img').attr('src',res.data.url);
                 });
             }else{
                 layer.msg('上传失败',{time:2000});

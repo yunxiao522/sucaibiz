@@ -18,7 +18,6 @@ class Mobile extends Common
         if(Request::instance()->isGet()){
             return view('coverManage');
         }
-
     }
 
     //栏目管理

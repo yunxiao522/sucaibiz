@@ -4,25 +4,31 @@
  * User: ww
  * Date: 2017/12/31
  * Time: 17:38
- * Description：文章控制器
+ * Description：文档控制器
  */
 
 namespace app\admin\controller;
 
-use app\admin\model\Attribute;
+use app\model\Article as article_model;
+use app\model\ArticleAuthor;
+use app\model\ArticleSource;
+use app\model\Attribute;
+use app\validate\Attribute as Attribute_Validate;
 use app\common\model\Base;
+use app\model\Article as Articles_Model;
+use app\model\Column;
 use Baidu\Baidu\BaiduPush;
+use Phpml\Clustering\DBSCAN;
 use Sina\Sae\SaeTClientV2;
 use SucaiZ\File;
 use SucaiZ\Zip;
+use SucaiZ\config;
 use think\Exception;
 use think\Image;
 use think\Request;
 use think\Db;
 use think\Session;
-use SucaiZ\config;
-use app\admin\model\Column;
-use app\admin\model\Article as article_model;
+use think\view;
 
 class Article extends Common
 {
@@ -41,6 +47,12 @@ class Article extends Common
     private $column;
     //前台提交的数据
     private $input;
+    //存储文档信息
+    private $article_info;
+    //储存发布文档时需要通知的观察者
+    private $pushServers = [];
+    //文档模型错误信息
+    private $error = '';
 
     public function __construct()
     {
@@ -60,6 +72,81 @@ class Article extends Common
     }
 
     /**
+     * Description 添加发布文档的观察者方法
+     */
+    private function addPushServers(){
+        //增加tag标签内容
+        $this->pushServers[] = new Tag();
+        //发布新浪微博
+        $this->pushServers[] = new Sina();
+        //生成迅搜索引信息
+        $this->pushServers[] = new Search();
+    }
+
+    /**
+     * Description 执行发布文档通知
+     */
+    private function pushNotify(){
+        foreach ($this->pushServers as $pushServer){
+            $res = $pushServer->add($this->article_info, input());
+            if(!$res){
+                $this->error = $pushServer->error;
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function push(){
+        Db::startTrans();
+        //添加文档基础信息
+        $this->add();
+        if(!empty($this->error)){
+            return self::ajaxError($this->error);
+        }
+        //添加扩展表数据
+        $extend = new ArticleExtends($this->article_info['channel']);
+        $res = $extend->dealInfo($this->article_info, input())->add();
+        if(!$res){
+            Db::rollback();
+            return self::ajaxError($extend->error);
+        }
+        //执行发布通知
+        $res = $this->pushNotify();
+        if(!$res){
+            Db::rollback();
+            return self::ajaxError($this->error);
+        }
+        Db::commit();
+        return self::ajaxOk('发布成功');
+    }
+
+    /**
+     * @return bool
+     * Description 添加基础文档信息
+     */
+    public function add(){
+        //验证前台提交数据
+        $data = $this->checkArticleForm();
+        if (is_string($data)) {
+            $this->error = $data;
+            return false;
+        }
+        $data['is_delete'] = 1;
+        $data['is_audit'] = 1;
+        $data['create_time'] = time();
+        $data['alter_time'] = '';
+        $data['delete_time'] = '';
+        $this->article_info = $data;
+        //添加数据到文档基本数据表
+        $article_id = Article_Model::add($data);
+        if(!$article_id){
+            $this->error = '发布失败';
+        }
+        $this->article_info['id'] = $article_id;
+    }
+
+    /**
      * @return false|string
      * Description 获取文档列表数据
      */
@@ -75,6 +162,9 @@ class Article extends Common
             $keyword_arr = explode(',', $keyword);
             foreach ($keyword_arr as $value) {
                 $keyword_arr_info = explode(':', $value);
+                if(!isset($keyword_arr_info[1])){
+                    return self::ajaxOkdata([], '搜索条件错误');
+                }
                 if ($keyword_arr_info[0] == 'title') {
                     $where[$keyword_arr_info[0]] = ['like', "%$keyword_arr_info[1]%"];
                 } else {
@@ -86,9 +176,11 @@ class Article extends Common
         if (!empty($is_my)) {
             $where['userid'] = Session::get('admin')['id'];
         }
-        $article_list = Model('article')->getList($where, '*');
-        $article_list['data'] = $this->dealArticleList($article_list['data']);
-        return json_encode($article_list, JSON_UNESCAPED_UNICODE);
+        $Article_List = Articles_Model::getList($where, 'id,title,pubdate,column_id,arcatt,click,comment_num,is_make,is_audit,author,source,alter_time,arcrank');
+        foreach ($Article_List['data'] as $key => $value) {
+            $Article_List['data'][$key]['column_id'] = Column::getField(['id' => $value['column_id']], 'type_name', 'id desc', true);
+        }
+        return json_encode($Article_List, JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -108,7 +200,7 @@ class Article extends Common
             'is_delete' => 2,
             'delete_time' => time()
         ];
-        $result = $this->article->edit($where, $arr, true);
+        $result = Articles_Model::edit($where, $arr, true, true);
         if ($result === false) {
             return self::ajaxError('删除失败');
         } else {
@@ -124,22 +216,16 @@ class Article extends Common
      */
     public function delarticleall()
     {
-        $data = input()['data'];
-        if (!isset($data) || !is_array($data)) {
-            echo '非法访问';
-            die;
+        $ids = input()['data'];
+        if (empty($ids) || !is_array($ids)) {
+            return self::ajaxError('非法访问');
         }
-        //开启事务
-        Db::startTrans();
-        foreach ($data as $key => $value) {
-            $result = $this->article->edit(['id' => $value], $arr = ['is_delete' => 2, 'delete_time' => time()], true);
-            if ($result === false) {
-                Db::rollback();
-                return self::ajaxError('删除失败');
-            }
+        $res = Articles_Model::edit(['id'=>['in',$ids]],['is_delete'=>2,'delete_time'=>time()], true, true);
+        if($res){
+            return self::ajaxOk('删除成功');
+        }else{
+            return self::ajaxError('删除失败');
         }
-        Db::commit();
-        return self::ajaxOk('删除成功');
     }
 
     /**
@@ -151,51 +237,50 @@ class Article extends Common
     public function restoreone()
     {
         $id = input('id');
-        if (!isset($id) || !is_numeric($id)) {
+        if (empty($id) || !is_numeric($id)) {
             return self::ajaxError('非法访问');
         }
-        //开启事务
-        Db::startTrans();
-        $where = ['id' => $id];
         $arr = [
             'is_delete' => 1,
             'delete_time' => ''
         ];
-        $result = $this->article->edit($where, $arr, true);
-        if ($result === false) {
-            Db::rollback();
+        $where = [
+            'id'=>$id
+        ];
+        $result = Articles_Model::edit($where, $arr, true, true);
+        if (!$result) {
             return self::ajaxError('还原失败');
         } else {
-            Db::commit();
             return self::ajaxOk('还原成功');
         }
     }
 
     /**
      * @return false|string
-     * @throws Exception
-     * @throws \think\exception\PDOException
      * Description 还原多篇文档
      */
     public function restoreall()
     {
-        $data = input()['data'];
-        if (!isset($data) || !is_array($data)) {
+        $ids = input()['data'];
+        if (empty($ids) || !is_array($ids)) {
             return self::ajaxError('非法访问');
         }
         $arr = [
             'is_delete' => 1,
             'delete_time' => ''
         ];
-        foreach ($data as $key => $value) {
-            $result = $this->article->edit(['id' => $value], $arr, true);
-            if ($result === false) {
-                Db::rollback();
-                return $this->ajaxError('还原失败');
-            }
+        $where = [
+            'id'=>[
+                'in',
+                $ids
+            ]
+        ];
+        $res = Articles_Model::edit($where, $arr, true, true);
+        if($res){
+            return self::ajaxOk('还原成功');
+        }else{
+            return self::ajaxError('还原失败');
         }
-        Db::commit();
-        return self::ajaxOk('还原成功');
     }
 
     /**
@@ -210,8 +295,8 @@ class Article extends Common
         }
         $where = ['id' => $id];
         //获取文档信息
-        $article_info = $this->article->getOne($where,'is_delete,is_make');
-        if(empty($article_info)){
+        $article_info = Articles_Model::getOne($where, 'is_delete,is_make');
+        if (empty($article_info)) {
             return self::ajaxError('删除失败');
         }
         $article_delete_status = $article_info['is_delete'];
@@ -221,16 +306,16 @@ class Article extends Common
         }
         Db::startTrans();
         //删除文档html文件
-        if($article_make_status == 1){
-            $url = self::getArticleUrl($id ,true ,false);
-            $article_file = '.'.$url;
+        if ($article_make_status == 1) {
+            $url = self::getArticleUrl($id, true, false);
+            $article_file = '.' . $url;
             $unlink_status = @unlink($article_file);
-            if(!$unlink_status){
+            if (!$unlink_status) {
                 Db::rollback();
                 return self::ajaxError('删除失败');
             }
         }
-        $result = $this->article->del($where,true);
+        $result = Article_Model::del($where, true);
         if ($result) {
             Db::commit();
             return self::ajaxOk('删除成功');
@@ -264,17 +349,14 @@ class Article extends Common
 
     }
 
-    //我发布的文档
-    public function myarticle()
-    {
-        return View();
-    }
-
-    //获取栏目内容方法
+    /**
+     * @return false|string
+     * Description 获取栏目内容方法
+     */
     public function getcolumninfojson()
     {
         $column_id = input('id');
-        $column_list = Model('column')->getAll([], 'id,parent_id');
+        $column_list = Column::getAll([], 'id,parent_id');
         $column_son_list = self::getSonList($column_id, $column_list);
         array_push($column_son_list, $column_id);
         $where = [
@@ -286,7 +368,7 @@ class Article extends Common
             'is_audit' => 1
 
         ];
-        $article_list = Model('article')->getList($where, '*');
+        $article_list = Articles_Model::getList($where, '*');
         $article_list['data'] = $this->dealArticleList($article_list['data']);
         return json_encode($article_list, JSON_UNESCAPED_UNICODE);
     }
@@ -464,121 +546,104 @@ class Article extends Common
         return File::$url;
     }
 
-    //文档属性管理
-    public function attribute()
-    {
-        return View();
-    }
-
-    //获取文档属性json数据
+    /**
+     * @return false|string
+     * Description 获取文档属性json数据
+     */
     public function getattributetreejson()
     {
-        $attribute = model('Attribute');
-        $attribute_list = $attribute->getAttributeList([], ' id,attrname as name');
+        $attribute_list = Attribute::getAll([], ' id,attrname as name');
         foreach ($attribute_list as $key => $value) {
             $attribute_list[$key]['children'] = [];
         }
-        return json_encode($attribute_list, JSON_UNESCAPED_UNICODE);
+        return self::ajaxReturn($attribute_list);
     }
 
-    //编辑文档属性
+    /**
+     * @return false|string|\think\response\View
+     * Description 编辑文档属性
+     */
     public function alterattribute()
     {
         $id = input('id');
         if (!isset($id) || !is_numeric($id)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
+        $where = ['id' => $id];
         if (Request::instance()->isPost()) {
-            $attribute = model('Attribute');
-            $where = ['id' => $id];
-            $att_name = input('att_name');
-            $att = input('att');
-            $arr = [
-                'attrname' => $att_name,
-                'mark' => $att
-            ];
-            $res = $attribute->alterAtt($where, $arr);
-            if ($res === false) {
-                $a['errorcode'] = 1;
-                $a['msg'] = '修改失败';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+            $validate = new Attribute_Validate();
+            if(!$validate->check(input())){
+                return self::ajaxError($validate->getError());
+            }
+            $data = $validate->getData('', function($data, $input){
+                $arr = [
+                    'attrname'=>$input['att_name'],
+                    'mark'=>$input['att']
+                ];
+                return $arr;
+            });
+            $res = Attribute::edit($where, $data, true, true);
+            if ($res) {
+                return self::ajaxOk('修改成功');
             } else {
-                $a['errorcode'] = 0;
-                $a['msg'] = '修改成功';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         } else {
-            $attribute = model('Attribute');
-            $where = ['id' => $id];
-            $attribute_info = $attribute->getAttributeInfo($where);
-            $this->assign('attribute_info', $attribute_info);
+            $attribute_info = Attribute::getOne($where);
+            view::share('attribute_info', $attribute_info);
             return View();
         }
     }
 
-//添加文档属性
+    /**
+     * @return false|string|\think\response\View
+     * Description 添加文档属性
+     */
     public function addattribute()
     {
         if (Request::instance()->isPost()) {
-            $att = input('att');
-            $att_name = input('att_name');
-            if (!isset($att) || !isset($att_name)) {
-                $a['errorcode'] = 1;
-                $a['msg'] = '数据不完整';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+            $validate = new Attribute_Validate();
+            if(!$validate->check(input())){
+                return self::ajaxError($validate->getError());
             }
-            if (mb_strlen($att) > 2 || empty($att)) {
-                $a['errorcode'] = 1;
-                $a['msg'] = '输入的属性值不能为空并且不能超过2个字符';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
-            }
-            if (mb_strlen($att_name) > 10 || empty($att_name)) {
-                $a['errorcode'] = 1;
-                $a['msg'] = '输入的属性名不能为空并且不能超过10个字符';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
-            }
-            $attribute = model('Attribute');
-            $arr = [
-                'att' => $att,
-                'att_name' => $att_name
-            ];
-            $res = $attribute->addAttribute($arr);
-            if ($res === false) {
-                $a['errorcode'] = 1;
-                $a['msg'] = '添加失败';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+            $data = $validate->getData('', function($data, $input){
+                $arr = [
+                    'attrname'=>$input['att_name'],
+                    'mark'=>$input['att']
+                ];
+                return $arr;
+            });
+            $res = Attribute::add($data);
+            if ($res) {
+                return self::ajaxOk('添加成功');
             } else {
-                $a['errorcode'] = 0;
-                $a['msg'] = '添加成功';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('添加失败');
             }
         } else {
             return View();
         }
     }
 
-    //根据栏目id获取栏目文档类型
+    /**
+     * @return false|string
+     * Description 根据栏目id获取栏目文档类型
+     */
     public function getcolumnchannel()
     {
         $column_id = input('column_id');
-        if (!isset($column_id) || !is_numeric($column_id)) {
-            echo '非法访问';
-            die;
+        if (empty($column_id) || !is_numeric($column_id)) {
+            return self::ajaxError('非法访问');
         }
-        $column = model('Column');
         $where = ['id' => $column_id];
-        $column_info = $column->getColumnInfo($where, 'channel_type ,temparticle');
+        $column_info = Column::getOne($where, 'channel_type ,temparticle');
         if ($column_info) {
             $a['errorcode'] = 0;
             $a['msg'] = '获取数据成功';
             $a['channel_type'] = $column_info['channel_type'];
             $a['template'] = $column_info['temparticle'];
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+            return self::ajaxReturn($a);
         } else {
-            $a['errorcode'] = 1;
-            $a['msg'] = '获取数据失败';
-            return json_encode($a, JSON_UNESCAPED_UNICODE);
+            return self::ajaxError('获取数据失败');
         }
     }
 
@@ -600,29 +665,33 @@ class Article extends Common
         }
     }
 
-//显示文档作者方法
-    public
-    function showarticleauthor()
+    /**
+     * @return \think\response\View
+     * Description 显示文档作者方法
+     */
+    public function showarticleauthor()
     {
-        $author = model('Author');
-        $author_list = $author->getArticleAuthorList();
-        $this->assign('author_list', $author_list);
+        $author_list = ArticleAuthor::getAll([], '*', 1000, '');
+        view::share('author_list', $author_list);
         return View('article_author_show');
     }
 
-//显示文档来源方法
-    public
-    function showarticlesource()
+    /**
+     * @return \think\response\View
+     * Description 显示文档来源方法
+     */
+    public function showarticlesource()
     {
-        $source = model('Source');
-        $source_list = $source->getArticleSourceList();
-        $this->assign('source_list', $source_list);
+        $source_list = ArticleSource::getAll([], '*', 1000, '');
+        view::share('source_list', $source_list);
         return View('article_source_show');
     }
 
-//设置文章作者方法
-    public
-    function setarticleauthor()
+    /**
+     * @return \think\response\View
+     * Description 设置文章作者方法
+     */
+    public function setarticleauthor()
     {
         if (Request::instance()->isPost()) {
             $auname = input('auname');
@@ -632,24 +701,30 @@ class Article extends Common
             foreach ($auname_arr as $key => $value) {
                 $auname_list[$key]['auname'] = $value;
             }
-            $author = model('Author');
-            $author->setArticleAuthor($auname_list);
+            $res = ArticleAuthor::edit([1=>1], $auname_list, true, true);
+            if($res){
+                return self::ajaxOk('修改成功');
+            }else{
+                return self::ajaxError('修改失败');
+            }
+
         } else {
-            $author = model('Author');
-            $author_list = $author->getArticleAuthorList();
+            $author_list = ArticleAuthor::getAll();
             $author_arr = [];
             foreach ($author_list as $key => $value) {
                 $author_arr[] = $value['auname'];
             }
             $author_string = implode(',', $author_arr);
-            $this->assign('author', $author_string);
+            view::share('author', $author_string);
             return View('article_author_set');
         }
     }
 
-//设置文档来源方法
-    public
-    function setarticlesource()
+    /**
+     * @return false|mixed|string
+     * Description 设置文档来源方法
+     */
+    public function setarticlesource()
     {
         if (Request::instance()->isPost()) {
             $soname = input('soname');
@@ -659,20 +734,14 @@ class Article extends Common
             foreach ($soname_arr as $key => $value) {
                 $soname_list[$key]['soname'] = $value;
             }
-            $source = model('Source');
-            $res = $source->setArticleSource($soname_list);
+            $res = ArticleSource::edit([1=>1], $soname_list);
             if ($res === false) {
-                $a['errorcode'] = 1;
-                $a['msg'] = '保存失败';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+                return self::ajaxOk('修改成功');
             } else {
-                $a['errorcode'] = 0;
-                $a['msg'] = '修改成功';
-                return json_encode($a, JSON_UNESCAPED_UNICODE);
+                return self::ajaxError('修改失败');
             }
         } else {
-            $source = model('Source');
-            $source_list = $source->getArticleSourceList();
+            $source_list = ArticleSource::getAll();
             $source_arr = [];
             foreach ($source_list as $key => $value) {
                 $source_arr[] = $value['soname'];
@@ -683,13 +752,18 @@ class Article extends Common
         }
     }
 
-    //检测文档标题是否已经存在方法
+    /**
+     * @return false|string
+     * Description 检测文档是否已经存在方法
+     */
     public function examinearticletitle()
     {
         $title = input('title');
-        $article = model('Article');
-        $where = ['title' => $title];
-        $article_info = $article->getArticleInfo($where, ' id ');
+        $where = [
+            'title' => $title,
+            'is_delete'=>1
+        ];
+        $article_info = Article_Model::getOne($where, 'id');
         if ($article_info) {
             $a['errorcode'] = 0;
             $a['msg'] = '获取到相应数据';
@@ -702,15 +776,14 @@ class Article extends Common
         }
     }
 
-//上传资源展示图像方法
+    //上传资源展示图像方法
     public function uploadSourceImgOne()
     {
 
         //获取文章token
         $token = input('token');
         if (!isset($token) || empty($token)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
 
         //设置用户信息
@@ -727,7 +800,7 @@ class Article extends Common
         }
     }
 
-//上传资源展示多张图片方法
+    //上传资源展示多张图片方法
     public function uploadSourceImgMore()
     {
         //获取文章token
@@ -785,9 +858,8 @@ class Article extends Common
         }
     }
 
-//添加离线任务方法
-    public
-    function addLiXian()
+    //添加离线任务方法
+    public function addLiXian()
     {
 
         //获取资源网址
@@ -837,7 +909,7 @@ class Article extends Common
         $file = $d['bucket'] . ':' . $d['object'];
 
         //相关信息只存储1个小时
-        $this->redis->set($token, $value, 3600);
+//        $this->redis->set($token, $value, 3600);
         task('liXianDown', $d);
         $a = [
             'errorcode' => 0,
@@ -851,9 +923,6 @@ class Article extends Common
 
     /**
      * @return false|string|\think\response\View
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      * Description 编辑文档
      */
     public function alterArticle()
@@ -863,12 +932,12 @@ class Article extends Common
             return self::ajaxError('非法访问');
         }
         //取出文档栏目所属类型
-        $article_info = $this->article->getArticleInfo(['id' => $id], ' channel,column_id ');
+        $article_info = Article_Model::getOne(['id' => $id], ' channel,column_id ');
         $channel = $article_info['channel'];
         if (!isset($channel)) {
             return self::ajaxError('非法访问');
         }
-        $info = $this->article->getArticleInfoAll(['a.id' => $id], $channel);
+        $info = Model('article')->getArticleInfoAll(['a.id' => $id], $channel);
         if (Request::instance()->isPost()) {
             $data = $this->checkArticleForm();
             if (is_string($data)) {
@@ -1131,47 +1200,14 @@ class Article extends Common
         }
     }
 
-    //显示待审核文档
+    //获取未审核的文档数据
     public function auditArticle()
     {
         if (Request::instance()->isPost()) {
             //获取数据
             $limit = (input('page') - 1) * input('limit') . ',' . input('limit');
-        } else {
-            return View('audit_article');
         }
 
-    }
-
-    //获取文档数据方法
-    private function getArticleLis($where, $limit)
-    {
-        $article_list = $this->article->getArticleList($where, ' * ', $limit);
-        $column_list = $this->column->getColumnList([], ' id,type_name ');
-        $column_arr = array_column($column_list, 'type_name', 'id');
-        //处理数据
-        foreach ($article_list as $key => $value) {
-            $article_list[$key]['senddate'] = date('Y-m-d H:i:s', $value['create_time']);
-            $article_list[$key]['column_id'] = $column_arr[$value['column_id']];
-            if ($value['is_make'] == 1) {
-                $article_list[$key]['is_make'] = '已生成';
-            } else {
-                $article_list[$key]['is_make'] = '未生成';
-            }
-            if ($value['arcrank'] == 0) {
-                $article_list[$key]['arcrank'] = '游客';
-            }
-            if ($value['is_audit'] == 1) {
-                $article_list[$key]['is_audit'] = '已审核';
-            } else {
-                $article_list[$key]['is_audit'] = '未审核';
-            }
-            if (!empty($value['alter_time'])) {
-                $article_list[$key]['alter_time'] = date('Y-m-d H:i:s', $value['alter_time']);
-            }
-            $article_list[$key]['delete_time'] = date('Y-m-d H:i:s', $value['delete_time']);
-        }
-        return $article_list;
     }
 
     /**
@@ -1270,12 +1306,10 @@ class Article extends Common
     {
         $id = input('id');
         if (!isset($id)) {
-            echo '非法访问';
-            die;
+            return self::ajaxError('非法访问');
         }
         $where = ['id' => $id];
         $data = input();
-        $article = new \app\admin\model\Article();
         if (Request::instance()->isPost()) {
             //验证数据
             if (isset($data['att'])) {
@@ -1285,7 +1319,7 @@ class Article extends Common
                 $att = '';
             }
             //组合数据更新数据库信息
-            if ($article->alterArticleInfo($where, ['arcatt' => $att, 'alter_time' => time()])) {
+            if (Article_Model::edit($where, ['arcatt' => $att, 'alter_time' => time()])) {
                 $a = [
                     'errorcode' => 0,
                     'msg' => '修改成功'
@@ -1299,17 +1333,11 @@ class Article extends Common
                 return json_encode($a, JSON_UNESCAPED_UNICODE);
             }
         } else {
-            $info = $article->getArticleInfo($where, ' id,arcatt ');
-            $this->assign('info', $info);
-            $this->assign('attribute', $this->getAttribute());
+            $info = Article_Model::getOne($where, ' id,arcatt ');
+            view::share('info', $info);
+            view::share('attribute', $this->getAttribute());
             return View('alter_article_attribute');
         }
-    }
-
-    //更新附件表信息
-    private function updateUploadInfo($uid, $article_title, $article_id)
-    {
-
     }
 
     //上传幻灯片图像
@@ -1816,12 +1844,6 @@ class Article extends Common
         }
         $push = new BaiduPush();
         $push->pushUrl([$url]);
-    }
-
-    public function test()
-    {
-        $this->input['makehtml'] = 1;
-        $this->makeHtml(7365, 2, 19);
     }
 
     //生成文档手机二维码

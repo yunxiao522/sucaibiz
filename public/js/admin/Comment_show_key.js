@@ -10,7 +10,7 @@ layui.use(['tree', 'table', 'vip_table', 'layer' , 'vip_tab'], function () {
     // 表格渲染
     var tableIns = table.render({
         elem: '#commentkey'                  //指定原始表格元素选择器（推荐id选择器）
-        , height: vipTable.getFullHeight(27)    //容器高度
+        , height: vipTable.getFullHeight(32)    //容器高度
         , cols: [[                  //标题栏
             {type:'checkbox',fixed:'left'}
             , {field: 'id', title: 'ID', align:'center', width: 80}
@@ -22,6 +22,14 @@ layui.use(['tree', 'table', 'vip_table', 'layer' , 'vip_tab'], function () {
         ]]
         , id: 'keylist'
         , url: '/admin/get_Comment_key.html'
+        , parseData:function (res) {
+            return {
+                'code':res.data.code,
+                'msg':res.msg,
+                'count':res.data.count,
+                "data":res.data.data
+            }
+        }
         , method: 'get'
         , page: true
         , limits: [20, 40, 60, 80, 100]
