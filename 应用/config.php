@@ -262,16 +262,6 @@ return [
     //上传文件配置
     'UPLOAD_DIR' => 'upload/', //相对于网站根目录的文件夹名称
 
-    //阿里云oss配置信息
-    'OSS_ACCESS_ID' => 'LTAIU1AZHrs4lA0V',                 //阿里云账号ACCESS_ID
-    'OSS_ACCESS_KEY' => 'eDGi6S1rnq343DWfEz2S7qeoyfj2of',   //阿里云账号ACCESS_KEY
-    'OSS_ENDPOINT' => 'sucaizblog.oss-cn-zhangjiakou.aliyuncs.com',//阿里云oss上传地址
-    'OSS_BUCKET' => 'sucaiz',                           //阿里云oss Bucket
-
-    //阿里云smsapi
-    'ALIYUN_API' => 'LTAIU1AZHrs4lA0V',
-    'ALIYUN_KEY' => 'eDGi6S1rnq343DWfEz2S7qeoyfj2of',
-
     //Rbac权限配置
     'rbac' => [
         'user_table' => 'admin_user',
